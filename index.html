@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>K-Sisters Kingdom</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #111;
+    }
+
+    /* 🔥 배너 */
+    .main-banner {
+      text-align: center;
+      padding: 20px 0 10px;
+    }
+
+    .main-banner img {
+      width: 100%;
+      max-width: 900px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+
+    /* 제목 */
+    header {
+      padding: 12px 20px 0;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.9rem;
+      font-weight: 700;
+      margin: 12px 0 0;
+    }
+
+    /* 테스트 그리드 */
+    .grid {
+      max-width: 980px;
+      margin: 40px auto;
+      display: grid;
+      gap: 24px;
+      padding: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+
+    .card {
+      background: #fafafa;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+      padding: 28px 22px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+    }
+
+    /* 🔥 초대형 이모지 버튼 스타일 */
+    .emoji {
+      font-size: 12rem;
+      display: block;
+      text-align: center;
+      margin-bottom: 40px;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .card-title {
+      font-size: 2.3rem;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 🔥 메인 상단 배너 -->
+ 
+<div class="main-banner">
+  <img src="images/banner-main2.png" alt="K-Sisters Banner">
+</div>
+
+  <header>
+    <h1>K-MINI GAME</h1>
+  </header>
+
+  <div class="grid">
+
+    <div class="card" onclick="location.href='korean-name.html'">
+      <div class="emoji">😁</div>
+      <div class="card-title">Random Korean Name</div>
+    </div>
+
+    <div class="card" onclick="location.href='korean-swear.html'">
+      <div class="emoji">🤬</div>
+      <div class="card-title">Korean Swear Test</div>
+    </div>
+
+    <div class="card" onclick="location.href='Korean Slang Flip Game.html'">
+      <div class="emoji">🤪</div>
+      <div class="card-title">Korean Slang Flip Game</div>
+    </div>
+
+    <div class="card" onclick="location.href='korean-ramen-vibes-test.html'">
+      <div class="emoji">🍜</div>
+      <div class="card-title">Korean Ramen Vibes Test</div>
+    </div>
+
+    <div class="card" onclick="location.href='snack-jungle-quest.html'">
+      <div class="emoji">🍪</div>
+      <div class="card-title">SNACK JUNGLE QUEST</div>
+    </div>
+
+    <div class="card" onclick="location.href='yootnori-hangul-quest.html'">
+      <div class="emoji">🎲</div>
+      <div class="card-title">YOOTNORI HANGUL QUEST</div>
+    </div>
+
+    <div class="card" onclick="location.href='K-TAROT-THE-HWATU.html'">
+      <div class="emoji">🔮</div>
+      <div class="card-title">K-TAROT: THE HWATU</div>
+    </div>
+
+    <div class="card" onclick="location.href='kdrama-character.html'">
+      <div class="emoji">📺</div>
+      <div class="card-title">K-Drama Line Trainer</div>
+    </div>
+
+
+
+  </div>
+
+</body>
+</html>

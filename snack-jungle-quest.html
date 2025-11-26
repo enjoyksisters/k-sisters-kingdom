@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Korean Snack Jungle Quest – K-SISTERS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Pretendard -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+
+    /* Gmarket Sans Bold */
+    @font-face {
+      font-family: 'GmarketSansBold';
+      src: url('https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+  </style>
+
+  <style>
+    :root {
+      --card-bg: #fffdf7;
+      --text-main: #15202b;
+      --text-sub: #5d6472;
+      --shadow-deep: rgba(1, 9, 6, 0.85);
+    }
+
+    * { box-sizing: border-box; }
+
+    /* 🔵🟢 파란+초록 배경 (박스 밖) */
+    body {
+      margin: 0;
+      font-family: "Pretendard", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 14px;
+      color: var(--text-main);
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 0% 0%, #1e6b7a 0, transparent 55%),
+        radial-gradient(circle at 100% 0%, #0d6f4d 0, transparent 55%),
+        radial-gradient(circle at 50% 100%, #084f46 0, transparent 60%),
+        linear-gradient(145deg, #02101c, #032c3a, #021813);
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 520px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: rgba(255, 253, 247, 0.95);
+      border-radius: 26px;
+      padding: 20px 20px 22px;
+      box-shadow:
+        0 22px 65px var(--shadow-deep),
+        0 0 40px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255,255,255,0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-pill {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background:
+        linear-gradient(120deg, rgba(255,217,74,1), rgba(83,216,255,1));
+      border: 1px solid rgba(255,255,255,0.95);
+      margin-bottom: 10px;
+      box-shadow:
+        0 4px 0 rgba(7,40,24,0.75),
+        0 0 18px rgba(255,255,255,0.9);
+    }
+    .header-pill span.logo-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 0%, #ff6ad5, #ff7b6b);
+      box-shadow: 0 0 10px rgba(255,122,200,0.95);
+    }
+
+    /* 공통 */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .title-main {
+      font-family: "GmarketSansBold", "Pretendard", system-ui, sans-serif;
+      font-size: 1.8rem;
+      line-height: 1.1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #071522;
+      text-shadow:
+        0 0 12px rgba(190,227,255,0.95),
+        0 0 22px rgba(255,122,215,0.75);
+    }
+
+    .title-highlight {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.75);
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-top: 4px;
+      color: #415061;
+    }
+
+    .subtitle {
+      margin-top: 9px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+    }
+
+    .secondary-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      background: #f1f4ff;
+      color: var(--text-sub);
+      box-shadow: 0 4px 0 rgba(8,28,45,0.22);
+      transition: transform 0.08s, box-shadow 0.08s, filter 0.1s;
+    }
+    .secondary-btn:hover {
+      filter: brightness(1.04);
+      transform: translateY(-1px);
+    }
+    .secondary-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(8,28,45,0.22);
+    }
+    .secondary-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+      transform: none;
+    }
+
+    .primary-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 11px 20px;
+      background: linear-gradient(120deg, #ff7b6b, #ffd94a, #b5ff4b, #53d8ff, #ff6ad5);
+      background-size: 280% 280%;
+      color: #071522;
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow:
+        0 8px 0 rgba(4,24,18,0.9),
+        0 0 20px rgba(255,255,255,0.9);
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+      animation: btn-rainbow 9s ease-in-out infinite alternate;
+    }
+    @keyframes btn-rainbow {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .primary-btn:hover {
+      filter: brightness(1.05);
+      transform: translateY(-2px);
+      box-shadow:
+        0 11px 0 rgba(4,24,18,0.9),
+        0 0 24px rgba(255,255,255,1);
+    }
+    .primary-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 4px 0 rgba(4,24,18,0.9);
+    }
+
+    .screen-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .tag-pill {
+      font-size: 0.75rem;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #eefdf3;
+      color: #1d5a3c;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 🔥 1. 첫 화면: 박스 안에 정글 사진 */
+    .hero-welcome {
+      position: relative;
+      min-height: 270px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 14px 20px;
+      overflow: hidden;
+
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.7)),
+        url("images/jungle-bg.jpg") center center / cover no-repeat;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #fffbe8;
+    }
+
+    .hero-title-main {
+      font-family: "GmarketSansBold", "Pretendard", system-ui, sans-serif;
+      font-size: 2.1rem;
+      line-height: 1.1;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #fffbe0;
+      text-shadow:
+        0 3px 0 #0c3717,
+        0 7px 0 #031104,
+        0 0 18px rgba(255,255,255,0.9),
+        0 0 26px rgba(104,255,196,0.95);
+    }
+
+    .hero-title-sub {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #eafff3;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    }
+
+    .hero-badge-row {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .hero-badge {
+      font-size: 0.75rem;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.5);
+      color: #fffbde;
+      box-shadow: 0 3px 0 rgba(0,0,0,0.6);
+      white-space: nowrap;
+    }
+
+    .hero-start-btn {
+      margin-top: 18px;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      color: #241000;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: linear-gradient(135deg, #ffe06a, #ffd043, #ffb400);
+      box-shadow:
+        0 6px 0 #7c4f00,
+        0 0 18px rgba(255,225,140,0.95),
+        0 0 32px rgba(255,220,120,0.9);
+      position: relative;
+      overflow: hidden;
+      animation: hero-button-pulse 2.2s ease-in-out infinite;
+    }
+
+    .hero-start-btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255,255,255,0.7) 40%,
+        transparent 70%
+      );
+      transform: translateX(-130%);
+      animation: hero-button-shine 2.6s ease-in-out infinite;
+    }
+
+    .hero-start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 8px 0 #5d3a00,
+        0 0 26px rgba(255,230,150,1);
+    }
+
+    .hero-start-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 3px 0 #5d3a00;
+    }
+
+    @keyframes hero-button-pulse {
+      0%   { transform: translateY(0) scale(1); }
+      40%  { transform: translateY(-1px) scale(1.03); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    @keyframes hero-button-shine {
+      0%   { transform: translateX(-130%); opacity: 0; }
+      40%  { opacity: 1; }
+      100% { transform: translateX(130%); opacity: 0; }
+    }
+
+    .hero-hint {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: #e8fff3;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    }
+
+    .hero-emoji-floating {
+      position: absolute;
+      font-size: 1.8rem;
+      z-index: 1;
+      text-shadow: 0 4px 0 rgba(0,0,0,0.6);
+      animation: hero-emoji-float 5.5s ease-in-out infinite alternate;
+    }
+
+    .hero-emoji-1 { top: 6%;  left: 4%;  }
+    .hero-emoji-2 { top: 12%; right: 8%; }
+    .hero-emoji-3 { bottom: 10%; left: 10%; }
+    .hero-emoji-4 { bottom: 4%;  right: 6%; }
+    .hero-emoji-5 { top: 45%; left: -2%; }
+    .hero-emoji-6 { top: 55%; right: -2%; }
+
+    .hero-emoji-2 { animation-delay: 0.4s; }
+    .hero-emoji-3 { animation-delay: 0.8s; }
+    .hero-emoji-4 { animation-delay: 1.2s; }
+    .hero-emoji-5 { animation-delay: 1.6s; }
+    .hero-emoji-6 { animation-delay: 2.0s; }
+
+    @keyframes hero-emoji-float {
+      0%   { transform: translateY(0) scale(1) rotate(0deg);   opacity: 0.9; }
+      50%  { transform: translateY(-10px) scale(1.05) rotate(-4deg); opacity: 1; }
+      100% { transform: translateY(4px) scale(1.0) rotate(2deg); opacity: 0.9; }
+    }
+
+    /* 2. Intro */
+    .master-bubble {
+      margin-top: 10px;
+      border-radius: 18px;
+      padding: 10px 11px;
+      background: linear-gradient(120deg, #042e20, #0b5236);
+      color: #f7fffb;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      box-shadow:
+        0 8px 0 rgba(1,9,5,0.9),
+        0 0 22px rgba(135,255,193,0.6);
+      position: relative;
+      overflow: hidden;
+    }
+    .master-bubble::before {
+      content: "🧙‍♀️🍿";
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    /* 3. Quest */
+    .step-badge {
+      margin-top: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f1edff, #ffe9ff);
+      color: #433a88;
+      border: 1px solid rgba(126,110,215,0.9);
+      box-shadow: 0 4px 0 rgba(67,57,142,0.35);
+    }
+    .step-emoji { font-size: 1rem; }
+
+    .quest-map {
+      margin-top: 12px;
+      margin-bottom: 10px;
+      padding: 10px 12px;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at top left, #f6ffe5 0, #fff7da 50%, #ffe9d2 100%);
+      border: 1px solid rgba(143,191,115,0.9);
+      box-shadow:
+        0 7px 0 rgba(40,82,51,0.45),
+        0 0 20px rgba(143,191,115,0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quest-map::after {
+      content: "🍪";
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+
+    .quest-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      font-size: 0.8rem;
+    }
+
+    .quest-label {
+      font-weight: 700;
+      color: #385a3f;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .quest-label span { font-size: 1.1rem; }
+
+    .quest-master {
+      font-size: 0.74rem;
+      color: #705130;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .quest-master .master-name { font-weight: 700; }
+
+    .quest-track {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4px;
+      position: relative;
+      padding-top: 10px;
+    }
+
+    .quest-track::before {
+      content: "";
+      position: absolute;
+      top: 19px;
+      left: 10%;
+      right: 10%;
+      height: 3px;
+      border-radius: 999px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(71,112,71,0.5),
+        rgba(71,112,71,0.5) 8px,
+        rgba(255,255,255,0.9) 8px,
+        rgba(255,255,255,0.9) 14px
+      );
+      z-index: 0;
+    }
+
+    .quest-node {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.7rem;
+      color: #4f634f;
+      transition: transform 0.15s ease;
+    }
+
+    .quest-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid #8fbd7b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      box-shadow: 0 3px 0 rgba(71,112,71,0.4);
+      transition: 0.18s;
+    }
+
+    .quest-node .quest-text { font-size: 0.7rem; }
+
+    .quest-node.done .quest-circle {
+      background: #8fbd7b;
+      color: #123120;
+      box-shadow: 0 3px 0 rgba(38,75,47,0.6);
+    }
+
+    .quest-node.active { transform: translateY(-2px); }
+
+    .quest-node.active .quest-circle {
+      background: radial-gradient(circle at 30% 0%, #fff9c0, #ffeb7a);
+      border-color: #f2a93b;
+      box-shadow:
+        0 4px 0 rgba(177,121,34,0.7),
+        0 0 14px rgba(255,215,112,0.95);
+      animation: quest-pulse 1.4s ease-in-out infinite;
+    }
+
+    @keyframes quest-pulse {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    .hint-text {
+      margin-top: 6px;
+      font-size: 0.78rem;
+      color: #7a8191;
+    }
+
+    .snack-grid {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .snack-card {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      border-radius: 18px;
+      padding: 8px 8px 9px;
+      background: linear-gradient(135deg, #ffffff, #fff6e6);
+      border: 1px solid rgba(255,217,74,0.9);
+      box-shadow:
+        0 5px 0 rgba(7,40,24,0.35),
+        0 0 12px rgba(255,217,74,0.7);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease,
+        border 0.16s ease,
+        background 0.16s ease;
+    }
+
+    .snack-card:nth-child(4n+1) {
+      background: linear-gradient(135deg, #ffffff, #fff6e6);
+    }
+    .snack-card:nth-child(4n+2) {
+      background: linear-gradient(135deg, #ffffff, #e9f9ff);
+    }
+    .snack-card:nth-child(4n+3) {
+      background: linear-gradient(135deg, #ffffff, #eafff0);
+    }
+    .snack-card:nth-child(4n+4) {
+      background: linear-gradient(135deg, #ffffff, #ffe9f7);
+    }
+
+    .snack-card:hover {
+      transform: translateY(-2px) scale(1.02) rotate(-0.4deg);
+      box-shadow:
+        0 8px 0 rgba(7,40,24,0.4),
+        0 0 16px rgba(255,217,74,0.9);
+      border-color: rgba(255,123,107,0.95);
+    }
+
+    .snack-card:active {
+      transform: translateY(2px) scale(0.98);
+      box-shadow: 0 3px 0 rgba(7,40,24,0.4);
+    }
+
+    .snack-image-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 15px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .snack-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .snack-name-kor {
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: #101a2a;
+      margin-bottom: 1px;
+    }
+
+    .snack-name-roman {
+      font-size: 0.75rem;
+      color: #646b7a;
+      margin-bottom: 2px;
+    }
+
+    .snack-tagline {
+      font-size: 0.72rem;
+      color: #9b5dbe;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 4. Result */
+    .result-card {
+      margin-top: 12px;
+      padding: 14px 12px 12px;
+      border-radius: 18px;
+      background: radial-gradient(circle at top left, #fffdf5 0, #ffeccb 45%, #ffd0b0 100%);
+      border: 1px solid rgba(255,205,130,0.95);
+      box-shadow:
+        0 10px 0 rgba(148,96,58,0.55),
+        0 0 20px rgba(255,205,130,0.9);
+    }
+
+    .result-title {
+      font-family: "GmarketSansBold", "Pretendard", system-ui, sans-serif;
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .result-title .emoji { font-size: 1.5rem; }
+
+    .result-subtitle {
+      font-size: 0.85rem;
+      color: #8b6640;
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+
+    .result-desc {
+      font-size: 0.86rem;
+      color: var(--text-main);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .result-snack-picked {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      padding-top: 7px;
+      border-top: 1px dashed rgba(133,92,60,0.5);
+      font-size: 0.8rem;
+    }
+
+    .result-snack-thumb {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: #fff;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 3px 0 rgba(133,92,60,0.5);
+    }
+
+    .result-snack-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .result-snack-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .result-snack-kor { font-weight: 600; }
+
+    .result-snack-list-title {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #7b5d2b;
+    }
+
+    .result-snack-list {
+      font-size: 0.8rem;
+      color: #6d6f80;
+      line-height: 1.4;
+      margin-top: 2px;
+      white-space: pre-line;
+    }
+
+    .nav-row-bottom {
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color:#7a8191;
+    }
+
+    @media (max-width: 400px) {
+      .card { padding: 16px 14px 18px; border-radius: 22px; }
+      .hero-title-main { font-size: 1.9rem; }
+      .title-main { font-size: 1.6rem; }
+      .snack-grid { gap: 8px; }
+      .snack-card { padding: 7px 7px 8px; }
+      .hero-badge { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="header-pill">
+        <span class="logo-dot"></span>
+        K-SISTERS · KOREAN SNACK JUNGLE QUEST
+      </div>
+
+      <!-- 1️⃣ Jungle Hero Welcome Screen -->
+      <div class="screen active" id="screen-welcome">
+        <div class="hero-welcome">
+          <!-- 떠다니는 이모지 -->
+          <div class="hero-emoji-floating hero-emoji-1">🍌</div>
+          <div class="hero-emoji-floating hero-emoji-2">🍓</div>
+          <div class="hero-emoji-floating hero-emoji-3">🍪</div>
+          <div class="hero-emoji-floating hero-emoji-4">🍍</div>
+          <div class="hero-emoji-floating hero-emoji-5">🧁</div>
+          <div class="hero-emoji-floating hero-emoji-6">🌴</div>
+
+          <div class="hero-inner">
+            <div class="hero-title-main">
+              KOREAN SNACK<br>JUNGLE QUEST
+            </div>
+            <div class="hero-title-sub">
+              Tropical arcade vibes · Korean snacks · fortune jungle
+            </div>
+
+            <div class="hero-badge-row">
+              <div class="hero-badge">🙈🍌🍑🍎🍫 Tropical Snack Jungle</div>
+              <div class="hero-badge">🎮 Arcade-style mini game</div>
+            </div>
+
+            <button class="hero-start-btn" id="btn-start">
+              🔮 게임 시작하기
+            </button>
+
+            <div class="hero-hint">
+              Follow the glowing path, pick your K-snacks,<br>
+              and let K-snacki-pookie read today’s fortune. ✨
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2️⃣ Master 설명 Screen -->
+      <div class="screen" id="screen-intro">
+        <div class="screen-header">
+          <div>
+            <div class="title-main" style="font-size: 1.5rem;">
+              Meet K-snacki-pookie
+            </div>
+            <div class="title-highlight">k-snack jungle master</div>
+          </div>
+          <div class="tag-pill">
+            🎲 Board game style
+          </div>
+        </div>
+
+        <div class="subtitle">
+          Travel through the K-snack jungle like a board game 🎲<br>
+          At each tile (morning, afternoon, night), K-snacki-pookie the Master
+          will show you <b>4 random K-snacks</b>.<br>
+          You choose <b>one</b> each time, and together they create your snack fortune of the day.
+        </div>
+
+        <div class="master-bubble">
+          “I’ll give you four snacks for morning, four for afternoon, and four for night.  
+          Follow your 손이 가는 대로 — your hand will choose your real mood.”
+        </div>
+
+        <div style="margin-top:14px; display:flex; justify-content:flex-end;">
+          <button class="primary-btn" id="btn-go-quest">
+            🍪 Go to K-snack jungle board
+          </button>
+        </div>
+      </div>
+
+      <!-- 3️⃣ Quest + 과자 선택 Screen -->
+      <div class="screen" id="screen-quest">
+        <div class="screen-header">
+          <div>
+            <div class="title-main" style="font-size: 1.45rem;">
+              K-snack Jungle Board
+            </div>
+            <div class="title-highlight">morning · afternoon · night</div>
+          </div>
+          <button class="secondary-btn" id="btn-back-intro">
+            ⏪ Back
+          </button>
+        </div>
+
+        <div class="step-badge">
+          <span class="step-emoji" id="step-emoji">🌤️</span>
+          <span id="step-label">Quest 1 · Morning tile</span>
+        </div>
+
+        <div class="quest-map">
+          <div class="quest-header-row">
+            <div class="quest-label">
+              <span>🌴</span> Snack Jungle Board
+            </div>
+            <div class="quest-master">
+              <span class="master-name">K-snacki-pookie</span> 🧙‍♀️🍿
+            </div>
+          </div>
+          <div class="quest-track">
+            <div class="quest-node" data-step="1">
+              <div class="quest-circle">1</div>
+              <span class="quest-text">Morning</span>
+            </div>
+            <div class="quest-node" data-step="2">
+              <div class="quest-circle">2</div>
+              <span class="quest-text">Afternoon</span>
+            </div>
+            <div class="quest-node" data-step="3">
+              <div class="quest-circle">3</div>
+              <span class="quest-text">Night</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="subtitle" id="quest-story">
+          The sun rises in the K-snack jungle. For the <b>Morning tile</b>,
+          K-snacki-pookie shows you 4 snacks. Which one feels like your morning mood?
+        </div>
+
+        <div class="hint-text" id="quest-hint">
+          Read the Korean name + pronunciation, then tap exactly one snack for this tile. 💬
+        </div>
+
+        <div class="snack-grid" id="snack-grid"></div>
+      </div>
+
+      <!-- 4️⃣ 결과 Screen -->
+      <div class="screen" id="screen-result">
+        <div class="screen-header">
+          <div>
+            <div class="title-main" style="font-size: 1.45rem;">
+              Your K-snack<br>jungle fortune
+            </div>
+            <div class="title-highlight">morning · afternoon · night energy</div>
+          </div>
+          <button class="secondary-btn" id="btn-back-quest">
+            ⏪ See tiles
+          </button>
+        </div>
+
+        <div class="result-card">
+          <div class="result-title">
+            <span class="emoji" id="result-emoji">🍿</span>
+            <span id="result-title-main">Your K-snack jungle type</span>
+          </div>
+          <div class="result-subtitle" id="result-title-en"></div>
+          <div class="result-desc" id="result-desc"></div>
+
+          <div class="result-snack-picked">
+            <div class="result-snack-thumb">
+              <img id="result-snack-image" src="" alt="chosen snack">
+            </div>
+            <div class="result-snack-text">
+              <div class="result-snack-kor" id="result-snack-kor">새우깡</div>
+              <div class="result-snack-roman" id="result-snack-roman">sae-u-ggang</div>
+              <div class="result-snack-tag" id="result-snack-tagline">classic salty shrimp chips</div>
+            </div>
+          </div>
+
+          <div class="result-snack-list-title">
+            Snacks you picked today:
+          </div>
+          <div class="result-snack-list" id="result-snack-list"></div>
+        </div>
+
+        <div class="nav-row-bottom">
+          <div>
+            Share your result & ask friends to play the K-snack jungle too. ✨
+          </div>
+          <button class="primary-btn" id="btn-restart">
+            🔁 Play again
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Snack data (이미지 경로: images/snacks/)
+   const snacks = [
+  { id: "saeukkang", korean: "새우깡", roman: "sae-u-ggang", image: "images/snacks/새우깡.jpeg", vibe: "classic", tagline: "classic salty shrimp chips" },
+  { id: "gamjakkang", korean: "감자깡", roman: "gam-ja-ggang", image: "images/snacks/감자깡.jpeg", vibe: "classic", tagline: "simple, crunchy potato snack" },
+  { id: "gogumakkang", korean: "고구마깡", roman: "go-gu-ma-ggang", image: "images/snacks/고구마깡.jpeg", vibe: "cozy", tagline: "sweet & crunchy sweet potato sticks" },
+  { id: "yangparing", korean: "양파링", roman: "yang-pa-ring", image: "images/snacks/양파링.jpeg", vibe: "party", tagline: "onion rings for chatting with friends" },
+  { id: "goraebap", korean: "고래밥", roman: "go-rae-bap", image: "images/snacks/고래밥.jpeg", vibe: "cute", tagline: "whale-shaped childhood favorite" },
+  { id: "ggoggalkon", korean: "꼬깔콘", roman: "ggo-ggal-kon", image: "images/snacks/꼬깔콘.jpeg", vibe: "cute", tagline: "witch-hat cone chips (finger fashion!)" },
+  { id: "konchip", korean: "콘칩", roman: "kon-chip", image: "images/snacks/콘칩.jpeg", vibe: "chill", tagline: "corn chips, simple but reliable" },
+  { id: "pocachip", korean: "포카칩", roman: "po-ka-chip", image: "images/snacks/포카칩.jpeg", vibe: "chill", tagline: "classic potato chips, drama snack" },
+  { id: "sumichip", korean: "수미칩", roman: "su-mi-chip", image: "images/snacks/수미칩.jpeg", vibe: "classic", tagline: "thin & salty, OG Korean chip" },
+  { id: "honeybutterchip", korean: "허니버터칩", roman: "heo-ni-beo-teo-chip", image: "images/snacks/허니버터칩.jpeg", vibe: "sweet", tagline: "honey + butter = soft chaos" },
+  { id: "ggobukchip", korean: "꼬북칩", roman: "ggo-buk-chip", image: "images/snacks/꼬북칩.jpeg", vibe: "trendy", tagline: "4-layer crunchy turtle chips" },
+  { id: "ggotgerang", korean: "꽃게랑", roman: "ggot-ge-rang", image: "images/snacks/꽃게랑.jpeg", vibe: "retro", tagline: "crab-shaped salty snack" },
+  { id: "jagalchi", korean: "자갈치", roman: "ja-gal-chi", image: "images/snacks/자갈치.jpeg", vibe: "retro", tagline: "seafood snack with Busan vibes" },
+  { id: "ojingeottangkong", korean: "오징어땅콩", roman: "o-jing-eo-ttang-kong", image: "images/snacks/오징어땅콩.jpeg", vibe: "classic", tagline: "squid shell with a peanut inside" },
+  { id: "matddongsan", korean: "맛동산", roman: "mat-ddong-san", image: "images/snacks/맛동산.jpeg", vibe: "retro", tagline: "sweet & crunchy festival snack" },
+  { id: "homerunball", korean: "홈런볼", roman: "hom-reon-bol", image: "images/snacks/홈런볼.jpeg", vibe: "cute", tagline: "cream-filled soft puff balls" },
+  { id: "mongshell", korean: "몽쉘", roman: "mong-swel", image: "images/snacks/몽쉘.jpeg", vibe: "sweet", tagline: "soft cake with chocolate & cream" },
+  { id: "chocopie", korean: "초코파이", roman: "cho-ko-pai", image: "images/snacks/초코파이.jpeg", vibe: "cozy", tagline: "marshmallow cake of Korean childhood" },
+  { id: "ppeppero", korean: "빼빼로", roman: "ppe-ppe-ro", image: "images/snacks/빼빼로.jpeg", vibe: "sweet", tagline: "stick cookie shared on 11/11" },
+  { id: "kancho", korean: "칸쵸", roman: "kan-chyo", image: "images/snacks/칸쵸.jpeg", vibe: "cute", tagline: "tiny heart-print chocolate biscuits" },
+  { id: "kukdas", korean: "쿠크다스", roman: "ku-keu-da-seu", image: "images/snacks/쿠크다스.jpeg", vibe: "classy", tagline: "soft butter cookies for tea time" },
+  { id: "eommasonpie", korean: "엄마손파이", roman: "eom-ma-son-pai", image: "images/snacks/엄마손파이.jpeg", vibe: "cozy", tagline: "warm mom’s-hand pie energy" },
+  { id: "ivy", korean: "아이비", roman: "a-i-bi", image: "images/snacks/아이비.jpeg", vibe: "chill", tagline: "plain crackers for cheese & jam" },
+  { id: "ace", korean: "에이스", roman: "e-i-seu", image: "images/snacks/에이스.jpeg", vibe: "classic", tagline: "simple office snack with coffee" },
+  { id: "mychew", korean: "마이쮸", roman: "ma-i-jjyu", image: "images/snacks/마이쮸.jpeg", vibe: "party", tagline: "chewy fruit candy, share with friends" },
+  { id: "mygummy", korean: "마이구미", roman: "ma-i-gu-mi", image: "images/snacks/마이구미.jpeg", vibe: "party", tagline: "grape gummies for movie night" },
+  { id: "saekomdalkom", korean: "새콤달콤", roman: "sae-kom-dal-kom", image: "images/snacks/새콤달콤.jpeg", vibe: "party", tagline: "sweet & sour strip candy" },
+  { id: "joripong", korean: "죠리퐁", roman: "jyo-ri-pong", image: "images/snacks/죠리퐁.jpeg", vibe: "retro", tagline: "puffed rice snack, also cereal" },
+  { id: "gosomi", korean: "고소미", roman: "go-so-mi", image: "images/snacks/고소미.jpeg", vibe: "cozy", tagline: "nutty biscuits for rainy days" },
+  { id: "ohyes", korean: "오예스", roman: "o-ye-seu", image: "images/snacks/오예스.jpeg", vibe: "sweet", tagline: "chocolate cake square, rich & soft" },
+  { id: "jayusigan", korean: "자유시간", roman: "ja-yu-si-gan", image: "images/snacks/자유시간.jpeg", vibe: "chill", tagline: "chocolate bar for study break" },
+  { id: "honeytongtong", korean: "허니통통", roman: "heo-ni-tong-tong", image: "images/snacks/허니통통.jpeg", vibe: "sweet", tagline: "honey-flavored mini chips" },
+  { id: "cheetos", korean: "치토스", roman: "chi-to-seu", image: "images/snacks/치토스.jpeg", vibe: "spicy", tagline: "cheesy & sometimes spicy crunch" },
+  { id: "dakdari", korean: "닭다리", roman: "dak-da-ri", image: "images/snacks/닭다리.jpeg", vibe: "spicy", tagline: "fried chicken drumstick snack" },
+  { id: "sseonchip", korean: "썬칩", roman: "sseon-chip", image: "images/snacks/썬칩.jpeg", vibe: "trendy", tagline: "sunshine-style crunchy chips" },
+  { id: "gogumachip", korean: "고구마칩", roman: "go-gu-ma-chip", image: "images/snacks/고구마칩.jpeg", vibe: "cozy", tagline: "thin sweet potato chips" },
+  { id: "postick", korean: "포스틱", roman: "po-seu-tik", image: "images/snacks/포스틱.jpeg", vibe: "classic", tagline: "thin potato sticks for nibbling" },
+  { id: "greenteachocopie", korean: "녹차초코파이", roman: "nok-cha-cho-ko-pai", image: "images/snacks/녹차초코파이.jpeg", vibe: "classy", tagline: "green tea twist on chocopie" },
+  { id: "bananakick", korean: "바나나킥", roman: "ba-na-na-kik", image: "images/snacks/바나나킥.jpeg", vibe: "cute", tagline: "sweet banana puff snack" }
+];
+
+
+    const vibeMeta = {
+      classic: { emoji: "🥨", enTitle: "Classic Comfort Snack", desc: "You like reliable, no-drama comfort. You’re the friend everyone trusts, just like OG Korean snacks that never disappear from the shelves." },
+      sweet:   { emoji: "🍫", enTitle: "Sweet Softie", desc: "You bring warm, cozy energy. People feel safe and loved around you — like cake and chocolate after a long day." },
+      cute:    { emoji: "🧸", enTitle: "Cute Snack Fairy", desc: "You’re playful, a little chaotic, and secretly very soft. You make everyday moments feel like a K-drama scene." },
+      retro:   { emoji: "📼", enTitle: "Retro Nostalgia Soul", desc: "You love old-school vibes and inside jokes. You remind people of childhood memories and simpler times." },
+      party:   { emoji: "🎉", enTitle: "Party Energy Booster", desc: "You’re fun, loud (in a good way), and you turn any boring day into a mini-festival. Group hangouts need you." },
+      spicy:   { emoji: "🌶️", enTitle: "Spicy Main Character", desc: "You’re bold and honest. Sometimes intense, but never boring. People remember you, just like a spicy snack kick." },
+      chill:   { emoji: "🛋️", enTitle: "Chill Homebody", desc: "You love comfy vibes, chill playlists, and simple snacks. You’re low-key but super comforting to be around." },
+      trendy:  { emoji: "✨", enTitle: "Trendy K-snack Lover", desc: "You’re always trying new things, from viral snacks to new cafes. Your vibe is very soft influencer energy." },
+      cozy:    { emoji: "☁️", enTitle: "Cozy Heart", desc: "You love warm, slow days and quiet happiness. You’re like a soft blanket with snacks on the side." },
+      classy:  { emoji: "🍰", enTitle: "Classy Tea-time Soul", desc: "You enjoy calm conversations, pretty plates, and aesthetic moments. You’re secretly a little fancy." }
+    };
+
+    const steps = [
+      { id: "morning",   label: "Quest 1 · Morning tile",   emoji: "🌤️", story: "The sun rises in the K-snack jungle. For the Morning tile, K-snacki-pookie shows you 4 snacks. Which one feels like your morning mood?" },
+      { id: "afternoon", label: "Quest 2 · Afternoon tile", emoji: "☕",  story: "It’s lazy afternoon energy. Choose the snack that matches your mid-day vibe in the snack forest." },
+      { id: "night",     label: "Quest 3 · Night tile",     emoji: "🌙", story: "The jungle starts to glow at night. Pick the one last snack that feels like your night mood." }
+    ];
+
+    const screenWelcome = document.getElementById("screen-welcome");
+    const screenIntro   = document.getElementById("screen-intro");
+    const screenQuest   = document.getElementById("screen-quest");
+    const screenResult  = document.getElementById("screen-result");
+
+    const btnStart      = document.getElementById("btn-start");
+    const btnGoQuest    = document.getElementById("btn-go-quest");
+    const btnBackIntro  = document.getElementById("btn-back-intro");
+    const btnBackQuest  = document.getElementById("btn-back-quest");
+    const btnRestart    = document.getElementById("btn-restart");
+
+    const stepEmojiEl   = document.getElementById("step-emoji");
+    const stepLabelEl   = document.getElementById("step-label");
+    const questStoryEl  = document.getElementById("quest-story");
+    const questHintEl   = document.getElementById("quest-hint");
+    const snackGrid     = document.getElementById("snack-grid");
+    const questNodes    = document.querySelectorAll(".quest-node");
+
+    const resultEmoji       = document.getElementById("result-emoji");
+    const resultTitleMain   = document.getElementById("result-title-main");
+    const resultTitleEn     = document.getElementById("result-title-en");
+    const resultDesc        = document.getElementById("result-desc");
+    const resultSnackImage  = document.getElementById("result-snack-image");
+    const resultSnackKor    = document.getElementById("result-snack-kor");
+    const resultSnackRoman  = document.getElementById("result-snack-roman");
+    const resultSnackTag    = document.getElementById("result-snack-tagline");
+    const resultSnackListEl = document.getElementById("result-snack-list");
+
+    let currentStepIndex = 0;
+    let chosenSnacks = [];
+    let usedSnackIds = new Set();
+
+    function showScreen(which) {
+      [screenWelcome, screenIntro, screenQuest, screenResult].forEach(s => s.classList.remove("active"));
+      which.classList.add("active");
+    }
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function pickRandomSnacks(count) {
+      const available = snacks.filter(s => !usedSnackIds.has(s.id));
+      const pool = available.length >= count ? available : snacks.slice();
+      return shuffle(pool).slice(0, count);
+    }
+
+    function updateQuestTrack() {
+      questNodes.forEach(node => {
+        node.classList.remove("active", "done");
+        const stepNum = parseInt(node.getAttribute("data-step"), 10);
+        const logicalIndex = stepNum - 1;
+        if (logicalIndex < currentStepIndex) {
+          node.classList.add("done");
+        } else if (logicalIndex === currentStepIndex) {
+          node.classList.add("active");
+        }
+      });
+    }
+
+    function renderStep() {
+      const step = steps[currentStepIndex];
+      stepEmojiEl.textContent = step.emoji;
+      stepLabelEl.textContent = step.label;
+      questStoryEl.textContent = step.story;
+      questHintEl.textContent =
+        "Read the Korean name + pronunciation, then tap exactly one snack for this tile. 💬";
+
+      updateQuestTrack();
+
+      const picks = pickRandomSnacks(4);
+      snackGrid.innerHTML = "";
+      picks.forEach(snack => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "snack-card";
+        card.innerHTML = `
+          <div class="snack-image-wrap">
+            <img src="${snack.image}" alt="${snack.korean}">
+          </div>
+          <div class="snack-name-kor">${snack.korean}</div>
+          <div class="snack-name-roman">${snack.roman}</div>
+          <div class="snack-tagline">${snack.tagline}</div>
+        `;
+        card.addEventListener("click", () => handleSnackChoice(snack));
+        snackGrid.appendChild(card);
+      });
+    }
+
+    function handleSnackChoice(snack) {
+      chosenSnacks.push(snack);
+      usedSnackIds.add(snack.id);
+
+      if (currentStepIndex < steps.length - 1) {
+        currentStepIndex++;
+        renderStep();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const vibeScores = {};
+      chosenSnacks.forEach(snack => {
+        const v = snack.vibe || "classic";
+        vibeScores[v] = (vibeScores[v] || 0) + 1;
+      });
+
+      let bestVibe = "classic";
+      let bestScore = -1;
+      Object.keys(vibeScores).forEach(v => {
+        if (vibeScores[v] > bestScore) {
+          bestScore = vibeScores[v];
+          bestVibe = v;
+        }
+      });
+
+      const meta = vibeMeta[bestVibe] || vibeMeta["classic"];
+      const mainSnack = chosenSnacks[chosenSnacks.length - 1];
+
+      resultEmoji.textContent = meta.emoji;
+      resultTitleMain.textContent = "Your K-snack jungle type";
+      resultTitleEn.textContent = `K-snacki-pookie the master says: ${meta.enTitle}`;
+      resultDesc.textContent = meta.desc;
+
+      if (mainSnack) {
+        resultSnackImage.src = mainSnack.image;
+        resultSnackKor.textContent = mainSnack.korean;
+        resultSnackRoman.textContent = mainSnack.roman;
+        resultSnackTag.textContent = mainSnack.tagline;
+      }
+
+      const listText = chosenSnacks
+        .map((s, idx) => {
+          const label = idx === 0 ? "Morning" : idx === 1 ? "Afternoon" : "Night";
+          return `• ${label}: ${s.korean} (${s.roman})`;
+        })
+        .join("\n");
+      resultSnackListEl.textContent = listText;
+
+      showScreen(screenResult);
+    }
+
+    function resetGameState() {
+      currentStepIndex = 0;
+      chosenSnacks = [];
+      usedSnackIds = new Set();
+    }
+
+    btnStart.addEventListener("click", () => {
+      showScreen(screenIntro);
+    });
+
+    btnGoQuest.addEventListener("click", () => {
+      resetGameState();
+      showScreen(screenQuest);
+      renderStep();
+    });
+
+    btnBackIntro.addEventListener("click", () => {
+      showScreen(screenIntro);
+    });
+
+    btnBackQuest.addEventListener("click", () => {
+      showScreen(screenQuest);
+      renderStep();
+    });
+
+    btnRestart.addEventListener("click", () => {
+      resetGameState();
+      showScreen(screenWelcome);
+    });
+  </script>
+</body>
+</html>
+

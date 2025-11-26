@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>K-Drama Line Trainer – Pastel</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, #fdf8ff, #f7fbff, #fffdf7);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .card {
+      background: #ffffffee;
+      border-radius: 30px;
+      padding: 26px 22px 22px;
+      border: 2px solid #f8e9ff;
+      box-shadow:
+        0 8px 18px rgba(177, 181, 201, 0.25),
+        0 0 0 6px rgba(255, 214, 245, 0.4);
+    }
+
+    /* 제목 영역 */
+    .cute-title {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .cute-title .line1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #5163ff;
+      text-shadow:
+        0 1px 0 #fff,
+        0 2px 3px rgba(81, 99, 255, 0.25);
+    }
+    .cute-title .line2 {
+      font-size: 2.0rem;
+      font-weight: 800;
+      color: #ff6aa9;
+      text-shadow:
+        0 1px 0 #fff,
+        0 2px 3px rgba(255, 106, 169, 0.25);
+    }
+    .cute-title .icon {
+      font-size: 1.4rem;
+      margin-left: 4px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      margin-bottom: 18px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      background: #ffeef7;
+      border: 1px solid #ffd6ea;
+      color: #ff6aa9;
+      margin-bottom: 18px;
+    }
+
+    .korean-phrase {
+      text-align: center;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #3f3f3f;
+      margin-bottom: 6px;
+    }
+
+    .roman {
+      text-align: center;
+      font-size: 1rem;
+      color: #7d7d7d;
+      margin-bottom: 4px;
+    }
+
+    .meaning {
+      text-align: center;
+      font-size: 0.92rem;
+      color: #6b6b6b;
+      margin-bottom: 16px;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, #e0defb, transparent);
+      margin: 8px 0 12px;
+    }
+
+    .section-title {
+      font-size: 0.9rem;
+      color: #6c5ce7;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-title::before {
+      content: "📘";
+      font-size: 0.95rem;
+    }
+
+    .syllables {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .syllable-card {
+      flex: 1 1 90px;
+      min-width: 90px;
+      background: #fdfaff;
+      border-radius: 18px;
+      padding: 10px 8px;
+      border: 1px solid #e7ddff;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(180, 170, 240, 0.15);
+    }
+
+    .syllable-block {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #5a4cd6;
+      margin-bottom: 5px;
+    }
+
+    .syllable-jamo {
+      font-size: 0.8rem;
+      color: #7c6af5;
+      line-height: 1.4;
+    }
+
+    .emotion {
+      font-size: 0.8rem;
+      color: #8a8a8a;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .btn-wrapper {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      transition: 0.1s;
+    }
+
+    #jamoToggleBtn {
+      background: #ffeaf4;
+      color: #ff5fa8;
+      border: 1px solid #ffd6ea;
+    }
+
+    #nextBtn {
+      background: #dcd5ff;
+      color: #5a4cd6;
+      border: 1px solid #c5b8ff;
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.98);
+      opacity: 0.96;
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: #8b8b8b;
+      text-align: center;
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 480px) {
+      .card { padding: 22px 16px 18px; border-radius: 24px; }
+      .cute-title .line1 { font-size: 2rem; }
+      .cute-title .line2 { font-size: 1.8rem; }
+      .korean-phrase { font-size: 2.1rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+
+      <div class="cute-title">
+        <div class="line1">K-Drama</div>
+        <div class="line2">Line Trainer <span class="icon">🎬</span></div>
+      </div>
+
+      <div class="subtitle">
+        Cute pastel K-drama lines for easy Hangul practice 🌸
+      </div>
+
+      <div class="tag">
+        <span id="tagEmoji">😆</span>
+        <span id="tagText">Mood</span>
+      </div>
+
+      <div class="korean-phrase" id="koreanText">...</div>
+      <div class="roman" id="romanText">...</div>
+      <div class="meaning" id="meaningText">...</div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">Break it down (Hangul blocks & letters)</div>
+      <div class="syllables" id="syllablesContainer"></div>
+
+      <div class="emotion" id="emotionText"></div>
+
+      <div class="btn-wrapper">
+        <button id="jamoToggleBtn">Hide / Show breakdown</button>
+        <button id="nextBtn">Next Line ✨</button>
+      </div>
+
+      <div class="hint">Tip: Read it aloud softly 💗</div>
+
+    </div>
+  </div>
+
+  <script>
+    /* ------------ 1) 표현 데이터 50개 ------------ */
+    const phrases = [
+      // 😆 귀여움/장난/친한 사이 (10)
+      { id: "babo", korean: "바보", roman: "ba-bo",
+        english: "You dummy (playful)", emotion: "teasing / playful", emoji: "😆", tag: "Teasing" },
+      { id: "mwohae", korean: "뭐해?", roman: "mwo-hae?",
+        english: "What are you doing?", emotion: "casual / friendly", emoji: "🙂", tag: "Casual" },
+      { id: "eodiya", korean: "어디야?", roman: "eo-di-ya?",
+        english: "Where are you?", emotion: "casual / check-in", emoji: "🙂", tag: "Casual" },
+      { id: "jinjjaya", korean: "진짜야?", roman: "jin-jja-ya?",
+        english: "Really?", emotion: "surprised / curious", emoji: "😳", tag: "Surprise" },
+      { id: "daebak", korean: "대박!", roman: "dae-bak!",
+        english: "Awesome! / No way!", emotion: "excited / amazed", emoji: "🔥", tag: "Wow" },
+      { id: "heol", korean: "헐…", roman: "heol...",
+        english: "What the... / Omg", emotion: "shocked / speechless", emoji: "😮", tag: "Shock" },
+      { id: "utgine", korean: "웃기네", roman: "ut-gi-ne",
+        english: "That's funny", emotion: "amused", emoji: "😆", tag: "Funny" },
+      { id: "jangnan", korean: "장난하지 마", roman: "jang-nan-ha-ji ma",
+        english: "Don't mess with me", emotion: "annoyed / playful", emoji: "😑", tag: "Don't joke" },
+      { id: "gwiyeowo", korean: "귀여워!", roman: "gwi-yeo-wo!",
+        english: "So cute!", emotion: "soft / loving", emoji: "🥺", tag: "Cute" },
+      { id: "joha", korean: "좋아!", roman: "jo-a!",
+        english: "I like it! / Okay!", emotion: "positive", emoji: "😄", tag: "Like" },
+
+      // 😱 놀람/충격 리액션 (10)
+      { id: "mworago", korean: "뭐라고?", roman: "mwo-ra-go?",
+        english: "What did you say?", emotion: "confused / shocked", emoji: "😮", tag: "What!?" },
+      { id: "jinjja", korean: "진짜?", roman: "jin-jja?",
+        english: "Really?", emotion: "surprised / skeptical", emoji: "👀", tag: "Really?" },
+      { id: "michyeosseo", korean: "미쳤어?", roman: "mi-cheot-sseo?",
+        english: "Are you crazy?", emotion: "shocked / dramatic", emoji: "😱", tag: "Drama reaction" },
+      { id: "eomeo", korean: "어머!", roman: "eo-meo!",
+        english: "Oh my!", emotion: "shocked", emoji: "🫢", tag: "Surprise" },
+      { id: "eomeoeomeo", korean: "어머어머!", roman: "eo-meo eo-meo!",
+        english: "Oh my gosh!", emotion: "shocked / gossip mode", emoji: "🫢", tag: "Gossip" },
+      { id: "aigo", korean: "아이고…", roman: "a-i-go...",
+        english: "Oh no / Oh dear", emotion: "tired / dramatic", emoji: "😮‍💨", tag: "Sigh" },
+      { id: "seolma", korean: "설마…", roman: "seol-ma...",
+        english: "No way… / It can’t be…", emotion: "doubt / disbelief", emoji: "😨", tag: "Doubt" },
+      { id: "wadaebak", korean: "와… 대박", roman: "wa... dae-bak",
+        english: "Wow… amazing", emotion: "amazed", emoji: "🤯", tag: "Wow" },
+      { id: "mwoji", korean: "뭐지?", roman: "mwo-ji?",
+        english: "What is this?", emotion: "confused", emoji: "🤔", tag: "Confused" },
+      { id: "maldoandae", korean: "말도 안 돼", roman: "mal-do an-dwae",
+        english: "That’s impossible / No way", emotion: "disbelief", emoji: "🙄", tag: "No way" },
+
+      // 😡 화남/짜증 표현 (10)
+      { id: "jjajeungna", korean: "짜증나!", roman: "jja-jeung-na!",
+        english: "So annoying!", emotion: "annoyed", emoji: "😤", tag: "Annoyed" },
+      { id: "ajinjja", korean: "아, 진짜!", roman: "a, jin-jja!",
+        english: "Ugh, seriously!", emotion: "frustrated", emoji: "😩", tag: "Frustration" },
+      { id: "waegeurae", korean: "왜 그래!", roman: "wae geu-rae!",
+        english: "What’s wrong with you!", emotion: "upset", emoji: "😠", tag: "Upset" },
+      { id: "hajima", korean: "하지 마!", roman: "ha-ji ma!",
+        english: "Don’t do that!", emotion: "warning", emoji: "🛑", tag: "Warning" },
+      { id: "geumanhae", korean: "그만해", roman: "geu-man-hae",
+        english: "Stop it", emotion: "annoyed", emoji: "😑", tag: "Stop" },
+      { id: "michyeotna", korean: "미쳤냐?", roman: "mi-chyeot-nya?",
+        english: "Are you insane?", emotion: "angry / shocked", emoji: "😡", tag: "Angry" },
+      { id: "eoieopne", korean: "어이없네", roman: "eo-i-eop-ne",
+        english: "That’s ridiculous", emotion: "annoyed / shocked", emoji: "😮‍💨", tag: "Ridiculous" },
+      { id: "dwaesseo", korean: "됐어", roman: "dwae-sseo",
+        english: "Forget it", emotion: "dismissive", emoji: "😒", tag: "Dismiss" },
+      { id: "molla", korean: "몰라", roman: "mol-la",
+        english: "I don’t know / Whatever", emotion: "annoyed / giving up", emoji: "😮‍💨", tag: "Whatever" },
+      { id: "singyeongkkeo", korean: "신경 꺼", roman: "sin-gyeong-kkeo",
+        english: "Mind your own business", emotion: "cold / annoyed", emoji: "🧊", tag: "Cold" },
+
+      // 😢 감정·슬픔·위로 (10)
+      { id: "mianhae", korean: "미안해", roman: "mi-an-hae",
+        english: "I’m sorry", emotion: "apologetic", emoji: "🥺", tag: "Apology" },
+      { id: "gwaenchana", korean: "괜찮아?", roman: "gwaen-cha-na?",
+        english: "Are you okay?", emotion: "concerned", emoji: "😟", tag: "Concern" },
+      { id: "angwaenchana", korean: "안 괜찮아…", roman: "an gwaen-cha-na...",
+        english: "I’m not okay…", emotion: "sad / vulnerable", emoji: "🥺", tag: "Sad" },
+      { id: "eotteokhae", korean: "어떡해…", roman: "eo-tteok-hae...",
+        english: "What do I do…", emotion: "sad / worried", emoji: "😢", tag: "Worried" },
+      { id: "uljima", korean: "울지 마", roman: "ul-ji ma",
+        english: "Don’t cry", emotion: "comforting", emoji: "🤍", tag: "Comfort" },
+      { id: "bogosipeo", korean: "보고 싶어", roman: "bo-go si-peo",
+        english: "I miss you", emotion: "longing", emoji: "💔", tag: "Missing" },
+      { id: "himnae", korean: "힘내", roman: "him-nae",
+        english: "Stay strong", emotion: "encouraging", emoji: "💪", tag: "Encouragement" },
+      { id: "sugohaesseo", korean: "수고했어", roman: "su-go-haess-eo",
+        english: "Good job / You worked hard", emotion: "supportive", emoji: "🤗", tag: "Support" },
+      { id: "gwaenchantanikka", korean: "괜찮다니까", roman: "gwaen-chan-ta-ni-kka",
+        english: "I said it’s okay", emotion: "gentle reassurance", emoji: "🙂", tag: "Reassurance" },
+      { id: "naegadawajulge", korean: "내가 도와줄게", roman: "nae-ga do-wa-jul-ge",
+        english: "I’ll help you", emotion: "supportive", emoji: "🤝", tag: "Help" },
+
+      // 😍 사랑·설렘·로맨스 (10)
+      { id: "joahae", korean: "좋아해", roman: "jo-a-hae",
+        english: "I like you", emotion: "romantic / shy", emoji: "😊", tag: "Romance" },
+      { id: "saranghae", korean: "사랑해", roman: "sa-rang-hae",
+        english: "I love you", emotion: "romantic / warm", emoji: "❤️", tag: "Love" },
+      { id: "bogosipeosseo", korean: "보고 싶었어", roman: "bo-go si-peot-seo",
+        english: "I missed you", emotion: "sweet / emotional", emoji: "💗", tag: "Missing" },
+      { id: "nadojoa", korean: "나도 좋아", roman: "na-do jo-a",
+        english: "I like you too", emotion: "cute / shy", emoji: "☺️", tag: "Romance" },
+      { id: "waeireohge", korean: "왜 이렇게 귀여워?", roman: "wae i-reo-ke gwi-yeo-wo?",
+        english: "Why are you so cute?", emotion: "flirty", emoji: "😍", tag: "Flirty" },
+      { id: "simkung", korean: "심쿵…", roman: "sim-kung...",
+        english: "Heart-fluttering…", emotion: "shy / flustered", emoji: "💘", tag: "Heart-flutter" },
+      { id: "neottaemun", korean: "너 때문이야", roman: "neo ttae-mun-i-ya",
+        english: "It’s because of you", emotion: "romantic / dramatic", emoji: "💞", tag: "Romantic" },
+      { id: "geokjeongdoe", korean: "걱정돼", roman: "geok-jeong-dwae",
+        english: "I’m worried about you", emotion: "caring", emoji: "💗", tag: "Worry" },
+      { id: "yeogibwa", korean: "여기 봐", roman: "yeo-gi bwa",
+        english: "Look here", emotion: "sweet", emoji: "👉", tag: "Sweet" },
+      { id: "ddobogosipeo", korean: "또 보고 싶어", roman: "tto bo-go si-peo",
+        english: "I want to see you again", emotion: "romantic longing", emoji: "💞", tag: "Longing" }
+    ];
+
+    /* ------------ 2) 한글 자모 분해 ------------ */
+    const CHOSEONG = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+    const JUNGSEONG = ["ㅏ","ㅐ","ㅑ","ㅒ","ㅓ","ㅔ","ㅕ","ㅖ","ㅗ","ㅘ","ㅙ","ㅚ","ㅛ","ㅜ","ㅝ","ㅞ","ㅟ","ㅠ","ㅡ","ㅢ","ㅣ"];
+    const JONGSEONG = ["","ㄱ","ㄲ","ㄳ","ㄴ","ㄵ","ㄶ","ㄷ","ㄹ","ㄺ","ㄻ","ㄼ","ㄽ","ㄾ","ㄿ","ㅀ","ㅁ","ㅂ","ㅄ","ㅅ","ㅆ","ㅇ","ㅈ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+
+    const JAMO_ROMAN = {
+      "ㄱ":"g","ㄲ":"kk","ㄴ":"n","ㄷ":"d","ㄸ":"tt","ㄹ":"r/l","ㅁ":"m",
+      "ㅂ":"b","ㅃ":"pp","ㅅ":"s","ㅆ":"ss","ㅇ":"ng","ㅈ":"j","ㅉ":"jj",
+      "ㅊ":"ch","ㅋ":"k","ㅌ":"t","ㅍ":"p","ㅎ":"h",
+      "ㅏ":"a","ㅐ":"ae","ㅑ":"ya","ㅒ":"yae","ㅓ":"eo","ㅔ":"e","ㅕ":"yeo","ㅖ":"ye",
+      "ㅗ":"o","ㅘ":"wa","ㅙ":"wae","ㅚ":"oe","ㅛ":"yo","ㅜ":"u","ㅝ":"wo","ㅞ":"we","ㅟ":"wi","ㅠ":"yu","ㅡ":"eu","ㅢ":"ui","ㅣ":"i",
+      "ㄳ":"gs","ㄵ":"nj","ㄶ":"nh","ㄺ":"lg","ㄻ":"lm","ㄼ":"lb","ㄽ":"ls","ㄾ":"lt","ㄿ":"lp","ㅀ":"lh","ㅄ":"ps"
+    };
+
+    function isHangulSyllable(ch) {
+      const code = ch.charCodeAt(0);
+      return code >= 0xac00 && code <= 0xd7a3;
+    }
+
+    function decomposeHangul(ch) {
+      if (!isHangulSyllable(ch)) return null;
+      const code = ch.charCodeAt(0) - 0xac00;
+      const jongIndex = code % 28;
+      const jungIndex = Math.floor((code % (21 * 28)) / 28);
+      const choIndex = Math.floor(code / (21 * 28));
+
+      const cho = CHOSEONG[choIndex];
+      const jung = JUNGSEONG[jungIndex];
+      const jong = JONGSEONG[jongIndex];
+
+      const res = [];
+      res.push({ h: cho, pos: "initial" });
+      res.push({ h: jung, pos: "medial" });
+      if (jong !== "") res.push({ h: jong, pos: "final" });
+      return res;
+    }
+
+    // 받침 ㅎ, ㅆ, ㅈ, ㅊ, ㅌ → t 발음
+    function romanForJamo(j) {
+      if (j.pos === "initial" && j.h === "ㅇ") return "";
+      if (j.pos === "final" && ["ㅎ","ㅆ","ㅈ","ㅊ","ㅌ"].includes(j.h)) return "t";
+      return JAMO_ROMAN[j.h] || "";
+    }
+
+    /* ------------ 3) DOM / 인터랙션 ------------ */
+    const koreanText   = document.getElementById("koreanText");
+    const romanText    = document.getElementById("romanText");
+    const meaningText  = document.getElementById("meaningText");
+    const emotionText  = document.getElementById("emotionText");
+    const tagEmoji     = document.getElementById("tagEmoji");
+    const tagText      = document.getElementById("tagText");
+    const syllablesContainer = document.getElementById("syllablesContainer");
+    const nextBtn      = document.getElementById("nextBtn");
+    const jamoToggleBtn= document.getElementById("jamoToggleBtn");
+
+    let currentIndex = 0;
+
+    function renderPhrase(index) {
+      const p = phrases[index];
+      koreanText.textContent  = p.korean;
+      romanText.textContent   = p.roman;
+      meaningText.textContent = p.english;
+      emotionText.textContent = `Mood: ${p.emotion}`;
+      tagEmoji.textContent    = p.emoji;
+      tagText.textContent     = p.tag;
+
+      syllablesContainer.innerHTML = "";
+
+      for (const ch of p.korean) {
+        if (!isHangulSyllable(ch)) continue;
+        const jamos = decomposeHangul(ch);
+        if (!jamos) continue;
+
+        const card = document.createElement("div");
+        card.className = "syllable-card";
+
+        const block = document.createElement("div");
+        block.className = "syllable-block";
+        block.textContent = ch;
+
+        const jamoDiv = document.createElement("div");
+        jamoDiv.className = "syllable-jamo";
+        jamoDiv.textContent = jamos
+          .map(j => {
+            const r = romanForJamo(j);
+            return r ? `${j.h} /${r}/` : `${j.h}`;
+          })
+          .join("  +  ");
+
+        card.appendChild(block);
+        card.appendChild(jamoDiv);
+        syllablesContainer.appendChild(card);
+      }
+    }
+
+    function getRandomIndex(exclude) {
+      if (phrases.length === 1) return 0;
+      let idx = Math.floor(Math.random() * phrases.length);
+      while (idx === exclude) idx = Math.floor(Math.random() * phrases.length);
+      return idx;
+    }
+
+    nextBtn.addEventListener("click", () => {
+      currentIndex = getRandomIndex(currentIndex);
+      renderPhrase(currentIndex);
+    });
+
+    jamoToggleBtn.addEventListener("click", () => {
+      syllablesContainer.classList.toggle("hidden");
+    });
+
+    // 첫 화면 렌더링
+    renderPhrase(currentIndex);
+  </script>
+</body>
+</html>
+

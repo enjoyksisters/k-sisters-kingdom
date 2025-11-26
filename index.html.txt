@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>K-SISTERS Mini Tests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* 전체 톤: 아주 심플한 화이트 포트폴리오 스타일 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 40px auto 80px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+      padding: 32px 40px 48px;
+    }
+
+    /* 상단 브라우저 바 느낌 (회색 점 3개) */
+    .browser-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .browser-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ddd;
+    }
+
+    .title {
+      text-align: center;
+      margin: 16px 0 32px;
+    }
+
+    .title h1 {
+      font-size: 1.6rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+    }
+
+    .title p {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    /* 그리드: 레퍼런스처럼 넉넉한 여백 + 정사각형에 가까운 썸네일 */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    @media (max-width: 840px) {
+      .page {
+        margin: 20px auto 40px;
+        padding: 20px 16px 32px;
+        border-radius: 0;
+      }
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .grid-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .thumb {
+      position: relative;
+      width: 100%;
+      padding-top: 72%; /* 비율 유지용 (4:3 정도) */
+      overflow: hidden;
+      background: #eee;
+    }
+
+    .thumb img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.25s ease-out;
+    }
+
+    .grid-item:hover .thumb img {
+      transform: scale(1.04);
+    }
+
+    .caption-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .caption-sub {
+      font-size: 0.8rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <!-- 위쪽 브라우저창 느낌 -->
+    <div class="browser-bar">
+      <span class="browser-dot"></span>
+      <span class="browser-dot"></span>
+      <span class="browser-dot"></span>
+    </div>
+
+    <!-- 타이틀: 레퍼런스처럼 심플하게 -->
+    <header class="title">
+      <h1>K-SISTERS MINI TESTS</h1>
+      <p>랜덤 한국 이름부터 김치, 드라마, 욕까지. 작고 웃긴 K-테스트 모음.</p>
+    </header>
+
+    <!-- 3×3 느낌 포트폴리오 그리드 (7개 + 빈칸 2개 가능) -->
+    <section class="grid">
+      <!-- (1) 랜덤 한국 이름 -->
+      <a href="#korean-name" class="grid-item">
+        <div class="thumb">
+          <!-- 여기에 실제 썸네일 이미지 경로 넣기 -->
+          <img src="images/test-korean-name.jpg" alt="랜덤 한국 이름" />
+        </div>
+        <div class="caption-title">랜덤 한국 이름</div>
+        <div class="caption-sub">K-drama 주인공 같은 한국어 이름 뽑기</div>
+      </a>
+
+      <!-- (2) 라면 Baby -->
+      <a href="#ramen-baby" class="grid-item">
+        <div class="thumb">
+          <img src="images/test-ramen-baby.jpg" alt="라면 Baby" />
+        </div>
+        <div class="caption-title">라면 Baby</div>
+        <div class="caption-sub">당신의 라면 성향: 순둥이 vs 매운 악마</div>
+      </a>
+
+      <!-- (3) 과자 Monster -->
+      <a href="#snack-monster" class="grid-item">
+        <div class="thumb">
+          <img src="images/test-snack-monster.jpg" alt="과자 Monster" />
+        </div>
+        <div class="caption-title">과자 Monster</div>
+        <div class="caption-sub">달콤·짭짤·매운맛 중 당신의 과자 소울은?</div>
+      </a>
+
+      <!-- (4) 한국어 욕! -->
+      <a href="#korean-swear" class="grid-item">
+        <div class="thumb">
+          <img src="images/test-korean-swear.jpg" alt="한국어 욕!" />
+        </div>
+        <div class="caption-title">한국어 욕!</div>
+        <div class="caption-sub">실제 욕 안 하고, K-욕 감각만 체크하기</div>
+      </a>
+
+      <!-- (5) 김치 종류 -->
+      <a href="#kimchi" class="grid-item">
+        <div class="thumb">
+          <img src="images/test-kimchi.jpg" alt="김치 종류" />
+        </div>
+        <div class="caption-title">김치 종류</div>
+        <div class="caption-sub">배추, 총각, 파김치… 나는 어떤 김치 타입?</div>
+      </a>
+
+      <!-- (6) 한국 드라마 -->
+      <a href="#k-drama" class="grid-item">
+        <div class="thumb">
+          <img src="images/test-kdrama.jpg" alt="한국 드라마" />
+        </div>
+        <div class="caption-title">한국 드라마</div>
+        <div class="caption-sub">내 인생 장르는 로코? 사극? 막장?</div>
+      </a>
+
+      <!-- (7) 술게임 유튜브 -->
+      <a href="#drinking-game" class="grid-item">
+        <div class="thumb">
+          <img src="images/test-drinking-game.jpg" alt="술게임 유튜브" />
+        </div>
+        <div class="caption-title">술게임 유튜브</div>
+        <div class="caption-sub">나에게 딱 맞는 K-술게임 콘텐츠 찾기</div>
+      </a>
+
+      <!-- (8, 9) 여유 슬롯: 나중 테스트 추가하거나 그냥 비워둬도 됨 -->
+      <div class="grid-item">
+        <div class="thumb">
+          <!-- 빈칸은 연한 회색 배경 그대로 두기 -->
+        </div>
+        <div class="caption-title">Coming soon</div>
+        <div class="caption-sub">새로운 K-테스트 준비 중…</div>
+      </div>
+
+      <div class="grid-item">
+        <div class="thumb"></div>
+        <div class="caption-title">Coming soon</div>
+        <div class="caption-sub">아이디어 떠오르면 바로 추가하기</div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+

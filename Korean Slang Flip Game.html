@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Korean Slang Flip Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Brand Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <style>
+    /* Pretendard */
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+
+    /* Gmarket Sans Bold */
+    @font-face {
+      font-family: 'GmarketSansBold';
+      src: url('https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+  </style>
+
+  <style>
+    :root {
+      --primary-navy: #273355;
+      --primary-cream: #FEF9F3;
+
+      --secondary-peach:   #FFB7C5;
+      --secondary-milk:    #FFE9A8;
+      --secondary-mint:    #C9F5E7;
+      --secondary-sky:     #BEE3FF;
+      --secondary-lavender:#E2D5FF;
+      --secondary-melon:   #DAF7C8;
+
+      --accent-orange: #FF8B3C;
+      --accent-yellow: #FFE27A;
+      --accent-sky:    #86C5FF;
+
+      --text-main: #273355;
+      --text-sub:  #5f6780;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Pretendard", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 0% 0%,  rgba(255,183,197,0.55), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(190,227,255,0.7), transparent 55%),
+        radial-gradient(circle at 15% 100%,rgba(255,233,168,0.7), transparent 55%),
+        linear-gradient(145deg, #fef3e8, #fef9f3);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -40px;
+      pointer-events: none;
+      opacity: 0.35;
+      mix-blend-mode: multiply;
+      background-image:
+        radial-gradient(1px 1px at 20% 30%, rgba(39,51,85,0.14) 0, transparent 60%),
+        radial-gradient(1px 1px at 80% 70%, rgba(255,183,197,0.25) 0, transparent 60%);
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+      border-radius: 26px;
+      padding: 18px 18px 20px;
+      background: #ffffff;
+      box-shadow:
+        0 16px 30px rgba(39,51,85,0.18),
+        0 0 24px rgba(190,227,255,0.6);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(39,51,85,0.06);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .app::before {
+      content: "🤐";
+      position: absolute;
+      font-size: 72px;
+      right: -4px;
+      top: -12px;
+      opacity: 0.15;
+      transform: rotate(10deg);
+      pointer-events: none;
+    }
+
+    /* 🔤 language toggle */
+    .lang-toggle {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      display: flex;
+      gap: 6px;
+      z-index: 10;
+    }
+    .lang-btn {
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 0.72rem;
+      border: 1px solid rgba(39,51,85,0.18);
+      background: rgba(255,255,255,0.9);
+      color: #7c859c;
+      cursor: pointer;
+      box-shadow: 0 3px 0 rgba(39,51,85,0.08);
+    }
+    .lang-btn.active {
+      background: linear-gradient(135deg, #FFE27A, #BEE3FF);
+      color: var(--primary-navy);
+      font-weight: 600;
+      box-shadow:
+        0 3px 0 rgba(39,51,85,0.18),
+        0 0 8px rgba(190,227,255,0.9);
+    }
+
+    .lab-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(39,51,85,0.15);
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #7c859c;
+      margin-bottom: 8px;
+    }
+    .lab-badge span:first-child { font-size: 0.95rem; }
+
+    .title-main {
+      font-family: "GmarketSansBold","Pretendard",system-ui,sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 1.9rem;
+      line-height: 1.1;
+      letter-spacing: 0.08em;
+      margin: 0 0 6px;
+      color: var(--primary-navy);
+      text-shadow: 0 0 10px rgba(190,227,255,0.7);
+    }
+    .title-main span {
+      color: var(--accent-orange);
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      margin: 0 0 12px;
+    }
+    .subtitle strong { color: var(--accent-orange); }
+
+    .level-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      font-size: 0.8rem;
+    }
+
+    .level-tab {
+      flex: 1;
+      border-radius: 999px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(39,51,85,0.1);
+      color: var(--text-sub);
+      box-shadow: 0 4px 0 rgba(39,51,85,0.05);
+      cursor: pointer;
+    }
+    .level-tab span.emoji { font-size: 1rem; }
+
+    .level-tab.active {
+      background: linear-gradient(135deg, var(--secondary-milk), var(--secondary-sky));
+      color: var(--primary-navy);
+      box-shadow:
+        0 4px 0 rgba(39,51,85,0.15),
+        0 0 10px rgba(190,227,255,0.8);
+      font-weight: 600;
+    }
+
+    /* Card wrapper */
+    .card-shell {
+      border-radius: 22px;
+      padding: 14px 14px 16px;
+      background: linear-gradient(135deg, rgba(255,233,168,0.6), rgba(190,227,255,0.7));
+      box-shadow:
+        0 10px 20px rgba(39,51,85,0.2),
+        0 0 10px rgba(255,233,168,0.7);
+      position: relative;
+    }
+
+    .card-shell::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 18px;
+      border: 1px dashed rgba(255,255,255,0.7);
+      pointer-events: none;
+    }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.78rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(39,51,85,0.12);
+      color: var(--text-sub);
+      font-size: 0.75rem;
+    }
+    .chip.soft { color: #ff7b54; }
+    .chip.usage { color: #5c6ac4; }
+
+    .flip-wrapper {
+      margin-top: 6px;
+      perspective: 1200px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .flip-card {
+      position: relative;
+      width: 100%;
+      border-radius: 18px;
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease;
+      cursor: pointer;
+      min-height: 190px;
+    }
+    .flip-card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      padding: 18px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backface-visibility: hidden;
+      box-shadow:
+        0 10px 16px rgba(39,51,85,0.18),
+        0 0 14px rgba(255,255,255,0.7);
+    }
+
+    .card-front {
+      background: radial-gradient(circle at 0% 0%, #ffffff, var(--secondary-sky));
+    }
+    .card-back {
+      background: radial-gradient(circle at 0% 0%, #ffffff, var(--secondary-milk));
+      transform: rotateY(180deg);
+    }
+
+    .slang-emoji {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 0%, #ffffff, #ffe4c0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin-bottom: 6px;
+      box-shadow:
+        0 4px 0 rgba(255,193,119,0.7),
+        0 0 10px rgba(255,255,255,0.9);
+    }
+
+    .front-korean {
+      font-family: "GmarketSansBold","Pretendard",system-ui,sans-serif;
+      font-size: 2.1rem;
+      margin-bottom: 4px;
+      letter-spacing: 0.04em;
+      color: var(--primary-navy);
+    }
+
+    .front-pron {
+      font-size: 0.96rem;
+      color: var(--accent-sky);
+      margin-bottom: 4px;
+    }
+    .front-pron span.slash { color: rgba(39,51,85,0.4); }
+
+    .front-hint {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      margin-top: 4px;
+      text-align: center;
+    }
+    .front-hint span { color: var(--accent-orange); }
+
+    .back-title {
+      font-family: "GmarketSansBold","Pretendard",system-ui,sans-serif;
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+      color: var(--accent-orange);
+    }
+    .back-meaning {
+      font-size: 0.98rem;
+      margin-bottom: 4px;
+      text-align: center;
+      color: var(--primary-navy);
+    }
+    .back-usage-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #8a94b5;
+      margin-top: 6px;
+    }
+    .back-usage {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    .btn-row {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-outline {
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      border: 1px solid rgba(39,51,85,0.18);
+      background: rgba(255,255,255,0.9);
+      color: var(--text-sub);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 0 rgba(39,51,85,0.08);
+      transition: transform 0.08s, box-shadow 0.1s, filter 0.1s;
+    }
+    .btn-outline:hover {
+      filter: brightness(1.03);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 0 rgba(39,51,85,0.15);
+    }
+    .btn-outline:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 0 rgba(39,51,85,0.18);
+    }
+
+    .btn-primary {
+      width: 100%;
+      border-radius: 16px;
+      padding: 12px 18px;
+      margin-top: 12px;
+      font-size: 0.96rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      color: #1b1220;
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-yellow));
+      box-shadow:
+        0 10px 0 rgba(255,166,87,0.8),
+        0 0 16px rgba(255,183,197,0.6);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.08s, box-shadow 0.1s, filter 0.1s;
+      font-family: "Pretendard",system-ui,sans-serif;
+    }
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+    .btn-primary:active {
+      transform: translateY(2px);
+      box-shadow:
+        0 6px 0 rgba(255,166,87,0.9),
+        0 0 12px rgba(255,183,197,0.6);
+    }
+
+    .tip {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      text-align: center;
+    }
+    .tip span { color: var(--accent-orange); }
+
+    @media (max-width: 430px) {
+      .title-main { font-size: 1.7rem; }
+      .front-korean { font-size: 1.9rem; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- 언어 토글 -->
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="fr">FR</button>
+    </div>
+
+    <div class="lab-badge">
+      <span>🤐</span>
+      <span id="labBadgeText">K-SISTERS · K-SLANG LAB</span>
+    </div>
+
+    <h1 class="title-main" id="titleMain">
+      KOREAN <span>SLANG</span> FLIP GAME
+    </h1>
+    <p class="subtitle" id="subtitle">
+      Learn how Koreans talk in memes, chats, and dramas with
+      <strong>real slang</strong>. Tap the card to flip for meaning! 😳
+    </p>
+
+    <div class="level-tabs">
+      <div class="level-tab active">
+        <span class="emoji">😡</span><span id="tabLabel0">Emotions</span>
+      </div>
+      <div class="level-tab">
+        <span class="emoji">😎</span><span id="tabLabel1">Trendy</span>
+      </div>
+      <div class="level-tab">
+        <span class="emoji">💸</span><span id="tabLabel2">Daily / Money</span>
+      </div>
+    </div>
+
+    <div class="card-shell">
+      <div class="card-header-row">
+        <div class="chip soft">
+          <span>🧠</span>
+          <span id="categoryLabel">Emotion · reaction</span>
+        </div>
+        <div class="chip usage">
+          <span>📚</span><span id="chipUsage">For study only</span>
+        </div>
+      </div>
+
+      <div class="flip-wrapper">
+        <div id="flipCard" class="flip-card">
+          <!-- FRONT -->
+          <div class="card-face card-front">
+            <div id="slangEmoji" class="slang-emoji">😡</div>
+            <div id="frontKorean" class="front-korean">빡치네</div>
+            <div id="frontPron" class="front-pron">
+              <span class="slash">/</span>bbak-chi-ne<span class="slash">/</span>
+            </div>
+            <div class="front-hint" id="frontHint">
+              Tap to flip & see the <span>meaning + when to use</span> 🤭
+            </div>
+          </div>
+
+          <!-- BACK -->
+          <div class="card-face card-back">
+            <div id="backKorean" class="back-title">빡치네</div>
+            <div id="backMeaning" class="back-meaning">
+              I’m pissed / annoyed
+            </div>
+            <div class="back-usage-label" id="backUsageLabel">When to use</div>
+            <div id="backUsage" class="back-usage">
+              When something makes you angry or frustrated.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button id="flipBtn" class="btn-outline">🔁 Flip card</button>
+        <button id="hintBtn" class="btn-outline">😳 Tone tip</button>
+        <!-- 🔊 발음 듣기 버튼 -->
+        <button id="speakBtn" class="btn-outline">🔊 Listen in Korean</button>
+      </div>
+
+      <button id="nextBtn" class="btn-primary">
+        Next slang 🔥
+      </button>
+
+      <p class="tip" id="tipText">
+        Tip: Practice it quietly as if you’re acting. <span>Don’t actually yell this at people!</span> 😅
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // === UI 텍스트 (EN / FR) ===
+    const UI_STRINGS = {
+      en: {
+        labBadge: "K-SISTERS · K-SLANG LAB",
+        title: "KOREAN <span>SLANG</span> FLIP GAME",
+        subtitle:
+          'Learn how Koreans talk in memes, chats, and dramas with <strong>real slang</strong>. Tap the card to flip for meaning! 😳',
+        tabs: ["Emotions", "Trendy", "Daily / Money"],
+        chipUsage: "For study only",
+        frontHint: 'Tap to flip & see the <span>meaning + when to use</span> 🤭',
+        backUsageLabel: "When to use",
+        flipBtn: "🔁 Flip card",
+        hintBtn: "😳 Tone tip",
+        speakBtn: "🔊 Listen in Korean",
+        nextBtn: "Next slang 🔥",
+        tip: 'Tip: Practice it quietly as if you’re acting. <span>Don’t actually yell this at people!</span> 😅',
+        hintAlert:
+          "Listen to how Koreans say it in dramas or YouTube, then copy the emotion and rhythm — not just the words 😳"
+      },
+      fr: {
+        labBadge: "K-SISTERS · LABO K-SLANG",
+        title: "JEU DE <span>SLANG</span> CORÉEN",
+        subtitle:
+          'Apprends comment les Coréens parlent dans les memes, chats et dramas avec du <strong>vrai slang</strong>. Tape sur la carte pour voir le sens ! 😳',
+        tabs: ["Émotions", "Tendance", "Quotidien / Argent"],
+        chipUsage: "Pour l’étude uniquement",
+        frontHint:
+          'Tape pour retourner et voir <span>le sens + quand l’utiliser</span> 🤭',
+        backUsageLabel: "Quand l’utiliser",
+        flipBtn: "🔁 Retourner la carte",
+        hintBtn: "😳 Astuce de ton",
+        speakBtn: "🔊 Écouter en coréen",
+        nextBtn: "Slang suivant 🔥",
+        tip: 'Astuce : entraîne-toi doucement comme si tu jouais un rôle. <span>Ne crie pas vraiment ça aux gens !</span> 😅',
+        hintAlert:
+          "Écoute comment les Coréens le disent dans les dramas ou sur YouTube, puis copie surtout l’émotion et le rythme, pas seulement les mots 😳"
+      }
+    };
+
+    // ===== Slang data (축약 버전: 감정 10 + 트렌디 10 + 데일리 10) =====
+    const SLANG_DATA = [
+      // Emotion / reaction
+      {
+        kor:"빡치네", pron:"bbak-chi-ne", group:"emotion",
+        meaning_en:"I’m pissed / annoyed",
+        meaning_fr:"Je suis vénère / saoulé(e)",
+        use_en:"When something makes you angry or frustrated.",
+        use_fr:"Quand quelque chose t’énerve ou te frustre.",
+        category_en:"Emotion · reaction",
+        category_fr:"Émotion · réaction"
+      },
+      {
+        kor:"개빡쳐", pron:"ge-bbak-chyuh", group:"emotion",
+        meaning_en:"I’m really pissed",
+        meaning_fr:"Je suis grave énervé(e)",
+        use_en:"Stronger version of 빡치네 when you’re super mad.",
+        use_fr:"Version plus forte de 빡치네 quand tu es vraiment furieux·se.",
+        category_en:"Emotion · reaction",
+        category_fr:"Émotion · réaction"
+      },
+      {
+        kor:"개웃겨", pron:"ge-ut-kkyeo", group:"emotion",
+        meaning_en:"That’s so funny",
+        meaning_fr:"C’est trop drôle",
+        use_en:"When something is ridiculously funny.",
+        use_fr:"Quand quelque chose est ridiculement drôle.",
+        category_en:"Emotion · reaction",
+        category_fr:"Émotion · réaction"
+      },
+      {
+        kor:"빵터졌어", pron:"bbang-tuh-jyeo-sseo", group:"emotion",
+        meaning_en:"I burst out laughing",
+        meaning_fr:"J’ai explosé de rire",
+        use_en:"When you suddenly laugh really hard.",
+        use_fr:"Quand tu éclates de rire d’un coup.",
+        category_en:"Emotion · reaction",
+        category_fr:"Émotion · réaction"
+      },
+      {
+        kor:"킹받네", pron:"king-bat-ne", group:"emotion",
+        meaning_en:"That’s so annoying (in a funny way)",
+        meaning_fr:"C’est trop agaçant (mais drôle)",
+        use_en:"When you’re annoyed but also joking or laughing.",
+        use_fr:"Quand ça t’énerve mais tu rigoles en même temps.",
+        category_en:"Emotion · reaction",
+        category_fr:"Émotion · réaction"
+      },
+      {
+        kor:"현타 온다", pron:"hyun-ta on-da", group:"emotion",
+        meaning_en:"Reality hits me",
+        meaning_fr:"Le retour à la réalité",
+        use_en:"When you suddenly feel empty or realize harsh reality.",
+        use_fr:"Quand tu réalises d’un coup la réalité et tu te sens vide.",
+        category_en:"Emotion · reaction",
+        category_fr:"Émotion · réaction"
+      },
+      {
+        kor:"얼탱이 없네", pron:"eol-taeng-i eop-ne", group:"emotion",
+        meaning_en:"I’m speechless / unbelievable",
+        meaning_fr:"Je suis choqué(e) / sans voix",
+        use_en:"When someone does something ridiculous or dumb.",
+        use_fr:"Quand quelqu’un fait un truc vraiment abusé ou débile.",
+        category_en:"Emotion · reaction",
+        category_fr:"Émotion · réaction"
+      },
+      {
+        kor:"심쿵", pron:"sim-koong", group:"emotion",
+        meaning_en:"Heart-flutter moment",
+        meaning_fr:"Mon cœur a fait boum",
+        use_en:"When someone or something is super adorable or attractive.",
+        use_fr:"Quand quelqu’un ou quelque chose est trop mignon / attirant.",
+        category_en:"Emotion · reaction",
+        category_fr:"Émotion · réaction"
+      },
+      {
+        kor:"설레버려", pron:"seol-le-beo-ryeo", group:"emotion",
+        meaning_en:"I feel butterflies",
+        meaning_fr:"J’ai des papillons dans le ventre",
+        use_en:"Cute way to say you feel romantic excitement.",
+        use_fr:"Façon mignonne de dire que tu es tout(e) excité(e) romantiquement.",
+        category_en:"Emotion · reaction",
+        category_fr:"Émotion · réaction"
+      },
+      {
+        kor:"쫄린다", pron:"jjal-lin-da", group:"emotion",
+        meaning_en:"I’m nervous / scared",
+        meaning_fr:"Je flippe / je stresse",
+        use_en:"Before something risky or scary, like an exam or confession.",
+        use_fr:"Avant un truc stressant : examen, aveu, compétition, etc.",
+        category_en:"Emotion · reaction",
+        category_fr:"Émotion · réaction"
+      },
+
+      // Trendy
+      {
+        kor:"레전드", pron:"le-jeon-deu", group:"trendy",
+        meaning_en:"Legendary / iconic",
+        meaning_fr:"Légendaire / iconique",
+        use_en:"When something is unbelievably good or epic.",
+        use_fr:"Quand quelque chose est incroyablement stylé ou épique.",
+        category_en:"Trendy · compliment",
+        category_fr:"Tendance · compliment"
+      },
+      {
+        kor:"혜자롭다", pron:"hye-ja-rop-da", group:"trendy",
+        meaning_en:"Great value",
+        meaning_fr:"Super bon plan",
+        use_en:"When something is way better than what you paid.",
+        use_fr:"Quand la qualité est bien au-dessus du prix.",
+        category_en:"Trendy · compliment",
+        category_fr:"Tendance · compliment"
+      },
+      {
+        kor:"창렬이다", pron:"chang-ryeol-i-da", group:"trendy",
+        meaning_en:"Overpriced and disappointing",
+        meaning_fr:"Cher pour rien / éclaté",
+        use_en:"When the quality is bad compared to the price.",
+        use_fr:"Quand c’est nul alors que c’est cher.",
+        category_en:"Trendy · review",
+        category_fr:"Tendance · avis"
+      },
+      {
+        kor:"금손", pron:"geum-son", group:"trendy",
+        meaning_en:"Golden hands (very talented)",
+        meaning_fr:"Mains en or (très doué·e)",
+        use_en:"For someone really good at drawing, cooking, etc.",
+        use_fr:"Pour quelqu’un de très doué en dessin, cuisine, DIY, etc.",
+        category_en:"Trendy · compliment",
+        category_fr:"Tendance · compliment"
+      },
+      {
+        kor:"똥손", pron:"ttong-son", group:"trendy",
+        meaning_en:"Clumsy hands (bad at making things)",
+        meaning_fr:"Mains en carton (pas doué·e)",
+        use_en:"Opposite of 금손. For someone who always messes up.",
+        use_fr:"Opposé de 금손. Pour quelqu’un qui rate toujours tout.",
+        category_en:"Trendy · self-deprecating",
+        category_fr:"Tendance · auto-dérision"
+      },
+      {
+        kor:"갓생", pron:"gat-saeng", group:"trendy",
+        meaning_en:"Productive, disciplined life",
+        meaning_fr:"Vie ultra-disciplinée (mode moine)",
+        use_en:"When someone wakes early, works out, studies hard.",
+        use_fr:"Quand quelqu’un vit super sainement, lève-tôt, sport, étude, etc.",
+        category_en:"Trendy · lifestyle",
+        category_fr:"Tendance · lifestyle"
+      },
+      {
+        kor:"노답", pron:"no-dap", group:"trendy",
+        meaning_en:"Hopeless / no answer",
+        meaning_fr:"Y’a pas de solution / c’est mort",
+        use_en:"When a situation or person is beyond help.",
+        use_fr:"Quand une situation ou une personne est irrécupérable.",
+        category_en:"Trendy · reaction",
+        category_fr:"Tendance · réaction"
+      },
+      {
+        kor:"사바사", pron:"sa-ba-sa", group:"trendy",
+        meaning_en:"Depends on the person",
+        meaning_fr:"Ça dépend des gens",
+        use_en:"When everyone reacts differently; no single right answer.",
+        use_fr:"Quand ça dépend vraiment de la personne, pas de règle unique.",
+        category_en:"Trendy · phrase",
+        category_fr:"Tendance · expression"
+      },
+      {
+        kor:"갑분싸", pron:"gap-boon-ssa", group:"trendy",
+        meaning_en:"Sudden awkward vibe",
+        meaning_fr:"Gros malaise d’un coup",
+        use_en:"When someone says something that kills the mood.",
+        use_fr:"Quand quelqu’un sort une phrase qui casse totalement l’ambiance.",
+        category_en:"Trendy · situation",
+        category_fr:"Tendance · situation"
+      },
+      {
+        kor:"갑분띠", pron:"gap-boon-ddi", group:"trendy",
+        meaning_en:"Suddenly… huh? (lighter)",
+        meaning_fr:"Hein ?! d’un coup (version plus légère)",
+        use_en:"Funnier, lighter version of 갑분싸.",
+        use_fr:"Version plus légère / fun de 갑분싸.",
+        category_en:"Trendy · situation",
+        category_fr:"Tendance · situation"
+      },
+
+      // Daily / money / relationship
+      {
+        kor:"플렉스", pron:"peul-lek-seu", group:"daily",
+        meaning_en:"Flex / show off",
+        meaning_fr:"Flexer / se faire plaisir (show off)",
+        use_en:"When buying something expensive or treating yourself.",
+        use_fr:"Quand tu t’achètes un truc cher ou tu montres que tu peux.",
+        category_en:"Daily · money",
+        category_fr:"Quotidien · argent"
+      },
+      {
+        kor:"탕진잼", pron:"tang-jin-jaem", group:"daily",
+        meaning_en:"The fun of blowing money",
+        meaning_fr:"Le kiff de claquer son argent",
+        use_en:"When you happily spend a lot of money shopping.",
+        use_fr:"Quand tu dépenses à fond en mode shopping thérapie.",
+        category_en:"Daily · money",
+        category_fr:"Quotidien · argent"
+      },
+      {
+        kor:"개이득", pron:"ge-i-deuk", group:"daily",
+        meaning_en:"Huge benefit / so worth it",
+        meaning_fr:"Gros bénéfice / trop rentable",
+        use_en:"When you get an amazing deal or benefit.",
+        use_fr:"Quand tu fais une super bonne affaire.",
+        category_en:"Daily · money",
+        category_fr:"Quotidien · argent"
+      },
+      {
+        kor:"득템", pron:"deuk-tem", group:"daily",
+        meaning_en:"Scored a good item",
+        meaning_fr:"J’ai chopé un super item",
+        use_en:"When you find something valuable, rare, or on big sale.",
+        use_fr:"Quand tu trouves un truc rare ou super bien soldé.",
+        category_en:"Daily · money",
+        category_fr:"Quotidien · argent"
+      },
+      {
+        kor:"적금 깨기", pron:"jeok-geum kkae-gi", group:"daily",
+        meaning_en:"Breaking your savings",
+        meaning_fr:"Casser son épargne",
+        use_en:"When you end up using the money you were saving.",
+        use_fr:"Quand tu touches à l’argent que tu devais laisser de côté.",
+        category_en:"Daily · money",
+        category_fr:"Quotidien · argent"
+      },
+      {
+        kor:"존버", pron:"jon-beo", group:"daily",
+        meaning_en:"Hold / endure (slang)",
+        meaning_fr:"Tenir bon / hold (slang)",
+        use_en:"When you endure a tough situation waiting for a better result.",
+        use_fr:"Quand tu serres les dents en attendant que ça paye.",
+        category_en:"Daily · mindset",
+        category_fr:"Quotidien · mindset"
+      },
+      {
+        kor:"양심 없다", pron:"yang-sim eop-da", group:"daily",
+        meaning_en:"No shame",
+        meaning_fr:"Il/elle n’a aucune honte",
+        use_en:"When someone is rude, selfish, or asks for too much.",
+        use_fr:"Quand quelqu’un abuse totalement, sans gêne.",
+        category_en:"Daily · complaint",
+        category_fr:"Quotidien · plainte"
+      },
+      {
+        kor:"빡세다", pron:"bbak-se-da", group:"daily",
+        meaning_en:"Tough / intense",
+        meaning_fr:"C’est hardcore",
+        use_en:"When work, study, or workout is really hard.",
+        use_fr:"Quand le boulot, les études ou le sport sont super durs.",
+        category_en:"Daily · difficulty",
+        category_fr:"Quotidien · difficulté"
+      },
+      {
+        kor:"눈치 게임", pron:"nun-chi game", group:"daily",
+        meaning_en:"Social waiting game",
+        meaning_fr:"Jeu de « qui bouge en premier »",
+        use_en:"When everyone waits for someone else to act first.",
+        use_fr:"Quand tout le monde attend que quelqu’un fasse le premier pas.",
+        category_en:"Daily · social",
+        category_fr:"Quotidien · social"
+      },
+      {
+        kor:"케미 좋다", pron:"ke-mi jo-ta", group:"daily",
+        meaning_en:"They have good chemistry",
+        meaning_fr:"Ils/elles ont une super alchimie",
+        use_en:"When two people match well and have great vibes.",
+        use_fr:"Quand deux personnes vont super bien ensemble, bonne vibe.",
+        category_en:"Daily · relationship",
+        category_fr:"Quotidien · relation"
+      }
+    ];
+
+    // === 요소 선택 ===
+    const flipCard     = document.getElementById("flipCard");
+    const frontKorEl   = document.getElementById("frontKorean");
+    const frontPronEl  = document.getElementById("frontPron");
+    const backKorEl    = document.getElementById("backKorean");
+    const backMeaningEl= document.getElementById("backMeaning");
+    const backUsageEl  = document.getElementById("backUsage");
+    const backUsageLabelEl = document.getElementById("backUsageLabel");
+    const categoryLabel= document.getElementById("categoryLabel");
+    const slangEmojiEl = document.getElementById("slangEmoji");
+
+    const flipBtn  = document.getElementById("flipBtn");
+    const hintBtn  = document.getElementById("hintBtn");
+    const nextBtn  = document.getElementById("nextBtn");
+    const speakBtn = document.getElementById("speakBtn");
+
+    const levelTabs = document.querySelectorAll(".level-tab");
+    const labBadgeText = document.getElementById("labBadgeText");
+    const titleMainEl  = document.getElementById("titleMain");
+    const subtitleEl   = document.getElementById("subtitle");
+    const chipUsageEl  = document.getElementById("chipUsage");
+    const frontHintEl  = document.getElementById("frontHint");
+    const tipTextEl    = document.getElementById("tipText");
+    const tabLabel0    = document.getElementById("tabLabel0");
+    const tabLabel1    = document.getElementById("tabLabel1");
+    const tabLabel2    = document.getElementById("tabLabel2");
+    const langBtns     = document.querySelectorAll(".lang-btn");
+
+    const EMOJI_EMOTION = ["😡","🤬","😭","🤣","🤯","😳","🤐","😱"];
+    const EMOJI_TRENDY  = ["😎","✨","🤩","🤙","😏"];
+    const EMOJI_DAILY   = ["💸","🛒","😵‍💫","🤝","📉"];
+
+    let currentLang = "en";
+    let currentIndex = 0;
+
+    function pickEmojiFor(item) {
+      if (item.group === "emotion") {
+        return EMOJI_EMOTION[Math.floor(Math.random()*EMOJI_EMOTION.length)];
+      }
+      if (item.group === "trendy") {
+        return EMOJI_TRENDY[Math.floor(Math.random()*EMOJI_TRENDY.length)];
+      }
+      return EMOJI_DAILY[Math.floor(Math.random()*EMOJI_DAILY.length)];
+    }
+
+    function renderSlang(item) {
+      frontKorEl.textContent = item.kor;
+      frontPronEl.innerHTML =
+        `<span class="slash">/</span>${item.pron}<span class="slash">/</span>`;
+      backKorEl.textContent = item.kor;
+      backMeaningEl.textContent =
+        currentLang === "en" ? item.meaning_en : item.meaning_fr;
+      backUsageEl.textContent =
+        currentLang === "en" ? item.use_en : item.use_fr;
+      categoryLabel.textContent =
+        currentLang === "en" ? item.category_en : item.category_fr;
+      slangEmojiEl.textContent = pickEmojiFor(item);
+    }
+
+    function getActiveGroupKey() {
+      let idxActive = 0;
+      levelTabs.forEach((tab, idx) => {
+        if (tab.classList.contains("active")) idxActive = idx;
+      });
+      if (idxActive === 0) return "emotion";
+      if (idxActive === 1) return "trendy";
+      return "daily";
+    }
+
+    function getRandomIndexByGroup(groupKey) {
+      const list = SLANG_DATA
+        .map((it, idx) => ({it, idx}))
+        .filter(obj => obj.it.group === groupKey);
+      if (!list.length) return 0;
+      const picked = list[Math.floor(Math.random()*list.length)];
+      return picked.idx;
+    }
+
+    function showRandomSlang() {
+      const groupKey = getActiveGroupKey();
+      currentIndex = getRandomIndexByGroup(groupKey);
+      renderSlang(SLANG_DATA[currentIndex]);
+      flipCard.classList.remove("flipped");
+    }
+
+    // 🔊 한국어 읽기 함수
+    function speakKorean(text) {
+      if (!("speechSynthesis" in window)) {
+        alert(currentLang === "en"
+          ? "Sorry, your browser doesn’t support speech yet 😢"
+          : "Désolé, ton navigateur ne supporte pas encore la synthèse vocale 😢");
+        return;
+      }
+      window.speechSynthesis.cancel();
+
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "ko-KR";
+      utter.rate = 1.0;
+      utter.pitch = 1.0;
+
+      window.speechSynthesis.speak(utter);
+    }
+
+    // 🈳 언어 변경
+    function applyLanguage(lang) {
+      currentLang = lang;
+      const t = UI_STRINGS[lang];
+
+      labBadgeText.textContent = t.labBadge;
+      titleMainEl.innerHTML = t.title;
+      subtitleEl.innerHTML = t.subtitle;
+      chipUsageEl.textContent = t.chipUsage;
+      frontHintEl.innerHTML = t.frontHint;
+      backUsageLabelEl.textContent = t.backUsageLabel;
+      flipBtn.textContent = t.flipBtn;
+      hintBtn.textContent = t.hintBtn;
+      speakBtn.textContent = t.speakBtn;
+      nextBtn.textContent = t.nextBtn;
+      tipTextEl.innerHTML = t.tip;
+
+      tabLabel0.textContent = t.tabs[0];
+      tabLabel1.textContent = t.tabs[1];
+      tabLabel2.textContent = t.tabs[2];
+
+      langBtns.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+
+      // 현재 선택된 슬랭 다시 렌더
+      renderSlang(SLANG_DATA[currentIndex]);
+    }
+
+    // 초기 렌더
+    renderSlang(SLANG_DATA[0]);
+    applyLanguage("en");
+
+    // 이벤트
+    flipCard.addEventListener("click", () => {
+      flipCard.classList.toggle("flipped");
+    });
+    flipBtn.addEventListener("click", () => {
+      flipCard.classList.toggle("flipped");
+    });
+
+    hintBtn.addEventListener("click", () => {
+      alert(UI_STRINGS[currentLang].hintAlert);
+    });
+
+    speakBtn.addEventListener("click", () => {
+      speakKorean(frontKorEl.textContent);
+    });
+
+    nextBtn.addEventListener("click", () => {
+      showRandomSlang();
+    });
+
+    levelTabs.forEach((tab, idx) => {
+      tab.addEventListener("click", () => {
+        levelTabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        showRandomSlang();
+      });
+    });
+
+    langBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        applyLanguage(btn.dataset.lang);
+      });
+    });
+  </script>
+</body>
+</html>

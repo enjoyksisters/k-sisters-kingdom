@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>K-Tarot · The Hwatu – A+B Short Reading</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg-dark: #050014;
+  --gold-soft: #fde3a9;
+  --gold-strong: #ffc658;
+  --line-gold: #f5c97b;
+  --accent-red: #ff6b6b;
+  --accent-teal: #39d1bf;
+  --text-main: #fdf7ff;
+  --text-soft: #c8c0f0;
+
+  --glow-pink: #ff8ae6;
+  --glow-cyan: #65f8ff;
+  --deep-violet: #2a0b4e;
+}
+
+/* GLOBAL */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 12px;
+  background:
+    radial-gradient(circle at 10% 0%, #5846ff 0, transparent 55%),
+    radial-gradient(circle at 80% 100%, #f74f7a33 0, transparent 60%),
+    radial-gradient(circle at 0% 100%, #16d9ff33 0, transparent 60%),
+    #050014;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text-main);
+  overflow-y: auto;
+  position: relative;
+}
+
+/* K-SISTERS 배지 */
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 224, 170, 0.95);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.2), transparent 55%),
+    linear-gradient(135deg, rgba(60,34,8,0.95), rgba(120,76,20,0.95));
+  color: var(--gold-soft);
+  font-size: 1.0rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 12px rgba(255, 215, 160, 0.7),
+    0 0 26px rgba(255, 174, 200, 0.5);
+  text-shadow:
+    0 0 4px rgba(0,0,0,0.9),
+    0 0 10px rgba(255,215,160,0.8);
+  backdrop-filter: blur(4px);
+}
+.badge span:first-child { font-size: 1rem; }
+
+/* language toggle */
+.lang-toggle {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  display: flex;
+  gap: 4px;
+  z-index: 3;
+}
+.lang-btn {
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(6,3,20,0.6);
+  color: #f8ecff;
+  font-size: 0.65rem;
+  padding: 2px 7px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+.lang-btn.active {
+  background: linear-gradient(135deg, #ffc658, #ff8ae6);
+  color: #1b0d1f;
+  border-color: rgba(255,248,210,0.95);
+}
+
+/* 오로라 배경 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -40%;
+  background: conic-gradient(
+    from 120deg,
+    rgba(255,138,230,0.15),
+    rgba(101,248,255,0.18),
+    rgba(132,96,255,0.2),
+    rgba(255,200,141,0.18),
+    rgba(255,138,230,0.15)
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: aurora-move 18s linear infinite alternate;
+}
+@keyframes aurora-move {
+  0%   { transform: translate3d(-6%, -4%, 0) rotate(0deg); opacity: 0.7; }
+  50%  { transform: translate3d(4%, 6%, 0) rotate(4deg); opacity: 1; }
+  100% { transform: translate3d(-3%, 2%, 0) rotate(-3deg); opacity: 0.8; }
+}
+
+/* APP SHELL */
+.app-shell {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 30px;
+  padding: 34px 18px 22px;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.09), transparent 60%),
+    radial-gradient(circle at bottom, rgba(0,0,0,0.95), transparent 70%),
+    linear-gradient(145deg, #1a0f3b 0%, #070315 50%, #240628 100%);
+  box-shadow:
+    0 26px 80px rgba(0,0,0,0.95),
+    0 0 140px rgba(217,98,255,0.7);
+  border: 1px solid rgba(255,255,255,0.12);
+  overflow: hidden;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.app-title {
+  font-family: "Cinzel", "Times New Roman", serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  color: var(--gold-soft);
+  text-shadow:
+    0 0 6px rgba(255,248,205,0.9),
+    0 0 18px rgba(255,138,230,0.7);
+}
+.app-title::after {
+  content: "✶";
+  display: block;
+  font-size: 2.0rem;
+  letter-spacing: 0.6em;
+  margin-top: 4px;
+  color: var(--glow-cyan);
+  text-shadow: 0 0 10px rgba(101,248,255,0.9);
+}
+.app-tagline {
+  margin-top: 6px;
+  font-size: 0.82rem;
+  color: #9fd6ff;
+  text-shadow: 0 0 6px rgba(29,117,189,0.7);
+}
+
+/* SCREEN 공통 */
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+.hidden { display: none !important; }
+
+.step-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+  color: #ffe8b6;
+  text-shadow: 0 0 8px rgba(255,213,150,0.7);
+}
+.step-text {
+  font-size: 1.1rem;
+  color: var(--text-soft);
+  line-height: 1.5;
+  text-align: center;
+}
+.helper-text {
+  font-size: 1.1rem;
+  color: var(--text-soft);
+  opacity: 0.9;
+  text-align: center;
+}
+
+/* 숫자 버튼 줄 */
+.btn-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.btn-row::-webkit-scrollbar { height: 4px; }
+.btn-row::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 999px;
+}
+
+/* 숫자 버튼 */
+.num-btn {
+  flex: 0 0 auto;
+  min-width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,214,140,0.8);
+  background:
+    radial-gradient(circle at 30% 0%, rgba(255,255,255,0.2), transparent 60%),
+    linear-gradient(140deg, #2d214d, #15152f);
+  color: var(--gold-soft);
+  font-weight: 600;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow:
+    0 0 10px rgba(252,221,160,0.3),
+    inset 0 0 8px rgba(0,0,0,0.7);
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.num-btn.active {
+  background:
+    radial-gradient(circle at 10% 0%, #fff9d4 0, transparent 60%),
+    linear-gradient(150deg, #ffc958, #ff7f55);
+  color: #2b1200;
+  box-shadow:
+    0 0 20px rgba(255,214,140,1),
+    0 0 40px rgba(255,138,230,0.7);
+  border-color: rgba(255,248,210,0.95);
+}
+
+/* 카드 뒷면 (선택 전) */
+.card-slot { display: flex; justify-content: center; }
+.card-slot.large { margin-top: 4px; }
+.card-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.card-button {
+  background: none;
+  border: none;
+  padding: 3px;
+  cursor: pointer;
+  border-radius: 26px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.card-button:hover:not(.disabled) {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 20px rgba(255,223,185,0.7);
+}
+.card-button.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* 단순 뒷면 카드: 이미지 꽉 채우기 */
+.card {
+  width: 230px;
+  aspect-ratio: 3 / 5;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow:
+    0 18px 70px rgba(0,0,0,1),
+    0 0 80px rgba(240,130,255,0.7);
+}
+.card-slot.small .card { width: 140px; }
+
+.card-back-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ------------------------------
+   RESULT – 3D 카드 + flip + overlay
+--------------------------------*/
+.result-card-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.card-3d {
+  width: 260px;
+  aspect-ratio: 3/5;
+  perspective: 1200px;
+  cursor: pointer;
+  position: relative;
+  border-radius: 20px;
+}
+.card-3d-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+}
+.card-3d.flipped .card-3d-inner {
+  transform: rotateY(180deg);
+}
+
+/* 앞/뒷면 */
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+
+/* 앞면: 화투 이미지 */
+.card-front {
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 18px 70px rgba(0,0,0,1),
+    0 0 80px rgba(240,130,255,0.7);
+}
+
+/* 뒷면: 리딩 텍스트 */
+.card-back {
+  transform: rotateY(180deg);
+  padding: 10px 12px;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.12) 0, transparent 60%),
+    radial-gradient(circle at 0% 100%, rgba(101,248,255,0.15) 0, transparent 55%),
+    linear-gradient(180deg, rgba(6,3,20,0.96), rgba(3,1,10,0.99));
+  border: 1px solid rgba(249,226,176,0.65);
+  box-shadow:
+    inset 0 0 26px rgba(0,0,0,0.9),
+    0 0 24px rgba(0,0,0,0.95);
+  display: flex;
+  flex-direction: column;
+}
+.reading-title {
+  font-size: 1.0rem;
+  letter-spacing: 0.7em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-bottom: 4px;
+  text-shadow: 0 0 8px rgba(255,224,170,0.8);
+}
+.reading-body {
+  font-size: 1.0rem;
+  color: var(--text-main);
+  line-height: 1.55;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+.reading-body::-webkit-scrollbar { width: 4px; }
+.reading-body::-webkit-scrollbar-thumb {
+  background: rgba(250,227,180,0.65);
+  border-radius: 999px;
+}
+
+/* 카드 등장 애니메이션 */
+@keyframes card-rise-glow {
+  0% {
+    transform: translateY(18px) scale(0.96);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 26px 80px rgba(0,0,0,1),
+                0 0 90px rgba(255,214,160,1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 18px 70px rgba(0,0,0,1),
+                0 0 70px rgba(240,130,255,0.7);
+  }
+}
+.card-3d.card-enter {
+  animation: card-rise-glow 0.8s ease-out forwards;
+}
+
+/* subtle pulse */
+@keyframes glowPulse {
+  0%   { box-shadow: 0 0 0 rgba(255,210,150,0.0); }
+  50%  { box-shadow: 0 0 22px rgba(255,210,150,0.85); }
+  100% { box-shadow: 0 0 0 rgba(255,210,150,0.0); }
+}
+.card-3d.pulse {
+  animation: glowPulse 1.4s ease-out 1;
+}
+
+/* TAP TO REVEAL overlay */
+.tap-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: rgba(0,0,0,0.42);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-soft);
+  font-size: 1.0rem;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 0 12px rgba(255,220,160,0.8);
+  transition: opacity 0.35s ease;
+}
+.tap-overlay.show {
+  opacity: 1;
+}
+
+/* 다시 뽑기 버튼 */
+.secondary-btn {
+  margin-top: 12px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(151,132,255,0.9);
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.16), transparent 65%),
+    linear-gradient(140deg, rgba(50,32,120,0.95), rgba(18,11,60,0.98));
+  color: #e2ddff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow:
+    0 0 18px rgba(129,116,255,0.9),
+    0 0 40px rgba(255,138,230,0.65);
+  text-shadow: 0 0 6px rgba(0,0,0,0.9);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+}
+.secondary-btn span { transition: transform 0.25s ease; }
+.secondary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 26px rgba(129,116,255,1),
+    0 0 60px rgba(255,138,230,0.8);
+}
+.secondary-btn:hover span { transform: rotate(180deg); }
+
+@media (max-height: 700px) {
+  .reading-body { font-size: 1rem; }
+}
+</style>
+</head>
+
+<body>
+  <!-- 🔊 카드 flip 사운드 -->
+  <audio id="flip-sound" src="sounds/card-flip-sound.mp3" preload="auto"></audio>
+
+  <div class="app">
+    <div class="badge">
+      <span>🔮</span>
+      <span id="badge-label">K-SISTERS · K-Tarot Reading</span>
+    </div>
+
+    <div class="app-shell">
+      <!-- Lang toggle -->
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+      </div>
+
+      <div class="app-header">
+        <div class="app-title" id="app-title-text">K-TAROT: THE HWATU</div>
+        <div class="app-tagline" id="app-tagline">
+          Focus on a question, choose a number, 
+          then let one Hwatu card find you. ✦
+        </div>
+      </div>
+
+      <!-- SCREEN 1 -->
+      <section id="screen-intro" class="screen">
+        <div class="card-slot large" id="intro-card-slot"></div>
+        <div class="step-title" id="step1-title">
+          1. Choose how many times you want to “shuffle”.
+        </div>
+        <div class="step-text" id="step1-text">
+          Pick a number from 0–9. That number quietly becomes the energetic tone behind your reading.
+        </div>
+        <div class="btn-row" id="number-buttons">
+          <button class="num-btn" data-num="0">0</button>
+          <button class="num-btn" data-num="1">1</button>
+          <button class="num-btn" data-num="2">2</button>
+          <button class="num-btn" data-num="3">3</button>
+          <button class="num-btn" data-num="4">4</button>
+          <button class="num-btn" data-num="5">5</button>
+          <button class="num-btn" data-num="6">6</button>
+          <button class="num-btn" data-num="7">7</button>
+          <button class="num-btn" data-num="8">8</button>
+          <button class="num-btn" data-num="9">9</button>
+        </div>
+        <div class="helper-text" id="helper1">
+          Take a breath, think of your question, then tap the number that feels right.
+        </div>
+      </section>
+
+      <!-- SCREEN 2 -->
+      <section id="screen-pick" class="screen hidden">
+        <div class="step-title" id="step2-title">
+          2. Let one Hwatu card find you.
+        </div>
+        <div class="step-text" id="step2-text">
+          Three cards are waiting. When you’re ready, choose the one that pulls your eye first.
+        </div>
+        <div class="card-row">
+          <div class="card-slot small">
+            <button class="card-button" data-slot="0"></button>
+          </div>
+          <div class="card-slot small">
+            <button class="card-button" data-slot="1"></button>
+          </div>
+          <div class="card-slot small">
+            <button class="card-button" data-slot="2"></button>
+          </div>
+        </div>
+        <div class="helper-text" id="helper2">
+          Only the first card you pick will speak for this reading.
+        </div>
+      </section>
+
+      <!-- SCREEN 3 -->
+      <section id="screen-result" class="screen hidden">
+        <div class="step-title" id="step3-title">
+          3. Your reading for this moment
+        </div>
+        <div class="result-card-wrapper">
+          <div id="result-card-slot"></div>
+        </div>
+        <button class="secondary-btn" id="again-btn">
+          Draw again <span>↻</span>
+        </button>
+      </section>
+    </div>
+  </div>
+
+  <!-- 공통 뒷면 카드 템플릿 -->
+  <template id="card-back-template">
+    <div class="card">
+      <img src="images/hwatu/hwatu_card_back.png" alt="Hwatu card back" class="card-back-img" />
+    </div>
+  </template>
+
+<script>
+/* ============================
+   UI STRINGS (EN / FR)
+===============================*/
+const UI_STRINGS = {
+  en: {
+    badge: "K-SISTERS · K-Tarot Reading",
+    title: "K-TAROT: THE HWATU",
+    tagline: "Focus on a question, choose a number, then let one Hwatu card find you. ✦",
+    step1Title: "1. Choose how many times you want to “shuffle”.",
+    step1Text: "Pick a number from 0–9. That number quietly becomes the energetic tone behind your reading.",
+    helper1: "Take a breath, think of your question, then tap the number that feels right.",
+    step2Title: "2. Let one Hwatu card find you.",
+    step2Text: "Three cards are waiting. When you’re ready, choose the one that pulls your eye first.",
+    helper2: "Only the first card you pick will speak for this reading.",
+    step3Title: "3. Your reading for this moment",
+    againBtn: "Draw again",
+    overlayTap: "Tap to reveal meaning",
+    readingTitle: "MESSAGE",
+    combinedLine: "Together, this combination suggests that these themes may be especially active for you right now. Notice where they show up in your day. ✦"
+  },
+  fr: {
+    badge: "K-SISTERS · Lecture K-Tarot",
+    title: "K-TAROT : LE HWATU",
+    tagline: "Concentre-toi sur une question, choisis un nombre, puis laisse une carte de Hwatu venir à toi. ✦",
+    step1Title: "1. Choisis combien de fois tu veux « mélanger ».",
+    step1Text: "Choisis un nombre de 0 à 9. Ce nombre devient tranquillement le ton énergétique de ta lecture.",
+    helper1: "Inspire doucement, pense à ta question, puis touche le chiffre qui te semble juste.",
+    step2Title: "2. Laisse une carte de Hwatu te choisir.",
+    step2Text: "Trois cartes t’attendent. Quand tu es prêt·e, choisis celle qui attire ton regard en premier.",
+    helper2: "Seule la première carte que tu choisis parlera pour cette lecture.",
+    step3Title: "3. Ton message pour ce moment",
+    againBtn: "Tirer une nouvelle carte",
+    overlayTap: "Tape pour révéler le message",
+    readingTitle: "MESSAGE",
+    combinedLine: "Ensemble, cette combinaison indique que ces thèmes sont particulièrement actifs pour toi en ce moment. Observe où ils apparaissent dans ta journée. ✦"
+  }
+};
+
+let currentLang = "en";
+
+/* ============================
+   DATA – Hwatu + Angel Meanings
+===============================*/
+
+// Hwatu A1~A12 (index 0~11)
+const HWATU_MEANINGS = [
+  {
+    label_en: "The Crane · New message & baby energy",
+    text_en: "New announcements and the energy of fresh beginnings, including the possibility of something like a baby or a new project being born in your life.",
+    label_fr: "La Grue · Nouveau message & énergie de bébé",
+    text_fr: "Nouveaux messages et énergie de commencement, y compris la possibilité qu’un « bébé » apparaisse dans ta vie – un enfant, un projet ou une idée toute neuve."
+  },
+  {
+    label_en: "The Plum Blossom · Lover & new romance",
+    text_en: "The energy of lovers and attraction, suggesting that a new romantic connection or crush may begin or feel warmer.",
+    label_fr: "La Fleur de prunier · Amour & nouvelle romance",
+    text_fr: "L’énergie des amoureux et de l’attirance, qui suggère qu’une nouvelle connexion romantique ou un crush peut commencer ou devenir plus chaleureux."
+  },
+  {
+    label_en: "The Cherry Blossom · Meetings & dates",
+    text_en: "The energy of meetings, dates, and spending time together in ways that deepen connection step by step.",
+    label_fr: "La Fleur de cerisier · Rencontres & rendez-vous",
+    text_fr: "L’énergie des rencontres, des rendez-vous et des moments passés ensemble, qui approfondissent peu à peu la connexion."
+  },
+  {
+    label_en: "The Bush Clover · Gossip & drama",
+    text_en: "The energy of gossip and rumors, hinting that you could be pulled into misunderstandings or drama if you don’t protect your boundaries.",
+    label_fr: "Le Trèfle des buissons · Potins & drama",
+    text_fr: "L’énergie des potins et des rumeurs, qui montre que tu peux être entraîné·e dans des malentendus ou du drama si tu ne protèges pas tes limites."
+  },
+  {
+    label_en: "The Iris · Food, marriage & celebration",
+    text_en: "Shared meals, weddings, and celebrations, showing chances to be invited to happy events or gatherings.",
+    label_fr: "L’Iris · Repas, mariage & célébration",
+    text_fr: "Repas partagés, mariages et célébrations, qui indiquent des invitations à des événements heureux ou des réunions chaleureuses."
+  },
+  {
+    label_en: "The Peony · Good omen & happy surprise",
+    text_en: "A bright, lucky omen that suggests unexpected good news or a pleasant surprise arriving into your day.",
+    label_fr: "La Pivoine · Bon présage & heureuse surprise",
+    text_fr: "Un heureux présage lumineux qui annonce une bonne nouvelle inattendue ou une surprise agréable qui entre dans ta journée."
+  },
+  {
+    label_en: "The Wild Boar · Good fortune & money flow",
+    text_en: "Good luck and increased resources, pointing to situations where money or practical support may come in more easily.",
+    label_fr: "Le Sanglier · Chance & flux d’argent",
+    text_fr: "Bonne chance et ressources qui augmentent, indiquant des situations où l’argent ou le soutien matériel peuvent arriver plus facilement."
+  },
+  {
+    label_en: "The Moon · Late night, worries & pleasure",
+    text_en: "Late-night energy that blends worries with nightlife and fun, hinting at both emotional heaviness and release through play or entertainment.",
+    label_fr: "La Lune · Nuit tardive, soucis & plaisir",
+    text_fr: "Énergie de nuit tardive mêlée de soucis, de sorties et de plaisir, qui montre à la fois un poids émotionnel et un besoin de se libérer par le jeu ou la fête."
+  },
+  {
+    label_en: "The Chrysanthemum · Drinks & socializing",
+    text_en: "The energy of drinking and social gatherings, bringing moments to relax, open up, and share deeper thoughts with others.",
+    label_fr: "Le Chrysanthème · Verres & sociabilité",
+    text_fr: "L’énergie des verres partagés et des rencontres sociales, avec des moments pour se détendre, s’ouvrir et partager des pensées plus profondes."
+  },
+  {
+    label_en: "The Deer · Concern & overthinking",
+    text_en: "The energy of concern and mental load, pointing to worries or burdens that may feel heavier than usual if you carry them alone.",
+    label_fr: "Le Daim · Soucis & trop réfléchir",
+    text_fr: "L’énergie des préoccupations et de la charge mentale, qui signale des soucis ou des poids plus lourds si tu les portes seul·e."
+  },
+  {
+    label_en: "The Kappa · Money luck & resources",
+    text_en: "Strong money luck and material support, suggesting that income, savings, or financial help may increase or stabilise.",
+    label_fr: "Le Kappa · Chance financière & ressources",
+    text_fr: "Une forte chance financière et un soutien matériel, qui suggèrent que tes revenus, économies ou aides financières peuvent augmenter ou se stabiliser."
+  },
+  {
+    label_en: "The Rain · Unexpected visitor",
+    text_en: "The energy of unexpected guests—people, messages, or chances that suddenly appear and gently shift your plans or direction.",
+    label_fr: "La Pluie · Visiteur inattendu",
+    text_fr: "L’énergie des visites inattendues – personnes, messages ou opportunités qui apparaissent soudainement et changent doucement tes plans ou ta direction."
+  }
+];
+
+// Angel B1~B10 (index 0~9)
+const ANGEL_MEANINGS = [
+  {
+    label_en: "000 · Infinite potential",
+    text_en: "Infinite potential and a fresh start. You are deeply connected to the universe, with endless possibilities available to you right now.",
+    label_fr: "000 · Potentiel infini",
+    text_fr: "Potentiel infini et nouveau départ. Tu es profondément connecté·e à l’univers, avec d’innombrables possibilités disponibles pour toi maintenant."
+  },
+  {
+    label_en: "111 · New beginnings & manifestation",
+    text_en: "A powerful sign of new beginnings and manifestation. Your thoughts are turning into reality quickly, so keep your mindset clear and positive.",
+    label_fr: "111 · Nouveau départ & manifestation",
+    text_fr: "Signe puissant de nouveau départ et de manifestation. Tes pensées deviennent réalité très vite, alors garde un esprit clair et positif."
+  },
+  {
+    label_en: "222 · Balance & harmony",
+    text_en: "Balance, harmony, and trust in divine timing. You are in the right place at the right time, especially in relationships and partnerships.",
+    label_fr: "222 · Équilibre & harmonie",
+    text_fr: "Équilibre, harmonie et confiance dans le timing divin. Tu es au bon endroit au bon moment, surtout dans tes relations et partenariats."
+  },
+  {
+    label_en: "333 · Guidance & creativity",
+    text_en: "Your spiritual guides are close, offering support and encouragement. You are invited to express your creativity and unique talents more boldly.",
+    label_fr: "333 · Guidance & créativité",
+    text_fr: "Tes guides spirituels sont proches, t’offrant soutien et encouragement. Tu es invité·e à exprimer ta créativité et tes talents uniques plus ouvertement."
+  },
+  {
+    label_en: "444 · Protection & stability",
+    text_en: "Protection, grounding, and stability. Your efforts to build a strong foundation are supported, and you are allowed to worry less and trust more.",
+    label_fr: "444 · Protection & stabilité",
+    text_fr: "Protection, ancrage et stabilité. Tes efforts pour construire une base solide sont soutenus : tu peux t’inquiéter moins et faire davantage confiance."
+  },
+  {
+    label_en: "555 · Change & transformation",
+    text_en: "Big change and transformation are on the horizon. Stay flexible, release what no longer serves you, and welcome the new opportunities arriving.",
+    label_fr: "555 · Changement & transformation",
+    text_fr: "Un grand changement et une transformation sont à l’horizon. Reste flexible, libère ce qui ne te sert plus et accueille les nouvelles opportunités."
+  },
+  {
+    label_en: "666 · Balance & self-care",
+    text_en: "A call for balance between material and spiritual life. It nudges you toward honest self-reflection, self-care, and healthier priorities.",
+    label_fr: "666 · Rééquilibrage & soin de soi",
+    text_fr: "Un appel à rééquilibrer vie matérielle et vie intérieure. Cela te pousse vers une vraie introspection, plus de soin de toi et des priorités plus saines."
+  },
+  {
+    label_en: "777 · Luck & spiritual awakening",
+    text_en: "Luck, spiritual awakening, and inner wisdom. It is a sign to trust your intuition, let go of fear, and recognise that you are being guided.",
+    label_fr: "777 · Chance & éveil spirituel",
+    text_fr: "Chance, éveil spirituel et sagesse intérieure. C’est un signe que tu peux faire confiance à ton intuition, lâcher la peur et reconnaître que tu es guidé·e."
+  },
+  {
+    label_en: "888 · Abundance & success",
+    text_en: "Abundance, financial success, and infinite potential. Prosperity and recognition are on their way as you align with the flow of energy.",
+    label_fr: "888 · Abondance & succès",
+    text_fr: "Abondance, succès financier et potentiel infini. Prospérité et reconnaissance arrivent à mesure que tu t’alignes avec le flux de l’énergie."
+  },
+  {
+    label_en: "999 · Completion & new cycle",
+    text_en: "Completion and the end of a major cycle. You are encouraged to release the old so that new beginnings and personal evolution can fully enter.",
+    label_fr: "999 · Achèvement & nouveau cycle",
+    text_fr: "Achèvement et fin d’un grand cycle. Tu es encouragé·e à laisser partir l’ancien pour que de nouveaux commencements et une évolution personnelle puissent entrer pleinement."
+  }
+];
+
+// Hwatu 카드 이미지 (앞면)
+const HWATU_CARD_IMAGES = [
+  "images/hwatu/The_Crane.png",
+  "images/hwatu/Plum_Blossom.png",
+  "images/hwatu/Cherry_Blossom.png",
+  "images/hwatu/Wisteria.png",
+  "images/hwatu/Iris.png",
+  "images/hwatu/Peony.png",
+  "images/hwatu/Bush_Clover_and_wild-boar.png",
+  "images/hwatu/The_Moon.png",
+  "images/hwatu/Chrysanthemum_and_glass.png",
+  "images/hwatu/Maple_tree_and_deer.png",
+  "images/hwatu/Paulownia_leaves_and_phoenix.png",
+  "images/hwatu/The_Scholar_and_Turtle.png"
+];
+
+/* ============================
+   STATE
+===============================*/
+let selectedAngelIndex = null;   // 0–9
+let currentHwatuIndices = [];    // 길이 3, 0–11
+let resultShown = false;
+let lastHwatuIndex = null;
+let lastAngelIndex = null;
+
+/* ============================
+   DOM
+===============================*/
+const screenIntro  = document.getElementById("screen-intro");
+const screenPick   = document.getElementById("screen-pick");
+const screenResult = document.getElementById("screen-result");
+
+const introCardSlot  = document.getElementById("intro-card-slot");
+const resultCardSlot = document.getElementById("result-card-slot");
+
+const numberButtons = Array.from(document.querySelectorAll(".num-btn"));
+const cardButtons   = Array.from(document.querySelectorAll(".card-button"));
+const againBtn      = document.getElementById("again-btn");
+
+const backTemplate  = document.getElementById("card-back-template");
+const flipSoundEl   = document.getElementById("flip-sound");
+
+const badgeLabel    = document.getElementById("badge-label");
+const appTitleText  = document.getElementById("app-title-text");
+const appTagline    = document.getElementById("app-tagline");
+const step1TitleEl  = document.getElementById("step1-title");
+const step1TextEl   = document.getElementById("step1-text");
+const helper1El     = document.getElementById("helper1");
+const step2TitleEl  = document.getElementById("step2-title");
+const step2TextEl   = document.getElementById("step2-text");
+const helper2El     = document.getElementById("helper2");
+const step3TitleEl  = document.getElementById("step3-title");
+const langButtons   = Array.from(document.querySelectorAll(".lang-btn"));
+
+/* ============================
+   HELPERS
+===============================*/
+function createBackCard() {
+  return backTemplate.content.firstElementChild.cloneNode(true);
+}
+
+// intro에 뒷면 카드 1장
+introCardSlot.appendChild(createBackCard());
+
+// 선택 화면용 카드 3장
+cardButtons.forEach(btn => {
+  btn.appendChild(createBackCard());
+});
+
+function showScreen(name) {
+  screenIntro.classList.toggle("hidden",  name !== "intro");
+  screenPick.classList.toggle("hidden",   name !== "pick");
+  screenResult.classList.toggle("hidden", name !== "result");
+}
+
+// 12장 중 3장 랜덤 선택
+function dealHwatuCards() {
+  const pool = [...Array(12).keys()];
+  const picked = [];
+  for (let i = 0; i < 3; i++) {
+    const r = Math.floor(Math.random() * pool.length);
+    picked.push(pool.splice(r, 1)[0]);
+  }
+  currentHwatuIndices = picked;
+  resultShown = false;
+  lastHwatuIndex = null;
+  lastAngelIndex = null;
+}
+
+// A + B 조합 리딩 만들기 (언어별)
+function buildReading(angelIndex, hwatuIndex) {
+  const a = HWATU_MEANINGS[hwatuIndex];
+  const b = ANGEL_MEANINGS[angelIndex];
+  const ui = UI_STRINGS[currentLang];
+
+  const aLabel = currentLang === "fr" ? a.label_fr : a.label_en;
+  const aText  = currentLang === "fr" ? a.text_fr  : a.text_en;
+  const bLabel = currentLang === "fr" ? b.label_fr : b.label_en;
+  const bText  = currentLang === "fr" ? b.text_fr  : b.text_en;
+
+  const line1 = `Energy – ${aLabel}:\n${aText}`;
+  const line2 = `\n\nMessage – ${bLabel}:\n${bText}`;
+  const line3 = `\n\n${ui.combinedLine}`;
+
+  return line1 + line2 + line3;
+}
+
+function playFlipSound() {
+  if (!flipSoundEl) return;
+  try {
+    flipSoundEl.currentTime = 0;
+    flipSoundEl.play();
+  } catch (e) {
+    // 모바일 자동재생 제한용, 에러 무시
+  }
+}
+
+/* ============================
+   LANGUAGE APPLY
+===============================*/
+function applyLanguage(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+
+  const ui = UI_STRINGS[lang];
+
+  badgeLabel.textContent   = ui.badge;
+  appTitleText.textContent = ui.title;
+  appTagline.textContent   = ui.tagline;
+  step1TitleEl.textContent = ui.step1Title;
+  step1TextEl.textContent  = ui.step1Text;
+  helper1El.textContent    = ui.helper1;
+  step2TitleEl.textContent = ui.step2Title;
+  step2TextEl.textContent  = ui.step2Text;
+  helper2El.textContent    = ui.helper2;
+  step3TitleEl.textContent = ui.step3Title;
+  againBtn.firstChild.textContent = ui.againBtn + " ";
+
+  langButtons.forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.lang === lang);
+  });
+
+  // 결과가 이미 떠있으면 텍스트만 갱신
+  if (resultShown && lastAngelIndex !== null && lastHwatuIndex !== null) {
+    const bodyEl = document.querySelector("#screen-result .reading-body");
+    const titleEl = document.querySelector("#screen-result .reading-title");
+    if (bodyEl && titleEl) {
+      titleEl.textContent = ui.readingTitle;
+      bodyEl.textContent = buildReading(lastAngelIndex, lastHwatuIndex);
+    }
+  }
+}
+
+/* ============================
+   INTERACTIONS
+===============================*/
+
+// 초기 언어 적용
+applyLanguage("en");
+
+// 언어 버튼
+langButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const lang = btn.dataset.lang;
+    applyLanguage(lang);
+  });
+});
+
+// 숫자 선택
+numberButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const num = Number(btn.dataset.num); // 0~9
+    selectedAngelIndex = num;
+
+    numberButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    setTimeout(() => {
+      dealHwatuCards();
+      showScreen("pick");
+    }, 350);
+  });
+});
+
+// 카드 선택 → 결과 화면 + 앞면 카드 + flip으로 리딩
+cardButtons.forEach((btn, slotIndex) => {
+  btn.addEventListener("click", () => {
+    if (resultShown) return;
+    if (selectedAngelIndex === null) return;
+
+    resultShown = true;
+    const hwatuIndex = currentHwatuIndices[slotIndex];
+    lastHwatuIndex = hwatuIndex;
+    lastAngelIndex = selectedAngelIndex;
+
+    // 다른 버튼 비활성화
+    cardButtons.forEach(b => b.classList.add("disabled"));
+
+    const reading = buildReading(selectedAngelIndex, hwatuIndex);
+
+    // 결과 카드 렌더
+    resultCardSlot.innerHTML = "";
+
+    const card3d = document.createElement("div");
+    card3d.className = "card-3d card-enter";
+
+    const inner3d = document.createElement("div");
+    inner3d.className = "card-3d-inner";
+
+    // 앞면 – 화투 이미지
+    const frontFace = document.createElement("div");
+    frontFace.className = "card-face card-front";
+    frontFace.style.backgroundImage = `url('${HWATU_CARD_IMAGES[hwatuIndex]}')`;
+
+    // 뒷면 – 리딩 텍스트
+    const backFace = document.createElement("div");
+    backFace.className = "card-face card-back";
+    backFace.innerHTML = `
+      <div class="reading-title">${UI_STRINGS[currentLang].readingTitle}</div>
+      <div class="reading-body"></div>
+    `;
+    backFace.querySelector(".reading-body").textContent = reading;
+
+    // Tap to reveal overlay
+    const overlay = document.createElement("div");
+    overlay.className = "tap-overlay";
+    overlay.textContent = UI_STRINGS[currentLang].overlayTap;
+
+    inner3d.appendChild(frontFace);
+    inner3d.appendChild(backFace);
+    card3d.appendChild(inner3d);
+    card3d.appendChild(overlay);
+    resultCardSlot.appendChild(card3d);
+
+    showScreen("result");
+
+    // 카드 등장 + overlay + pulse
+    setTimeout(() => {
+      card3d.classList.remove("card-enter");
+    }, 900);
+
+    setTimeout(() => {
+      overlay.classList.add("show");
+      setTimeout(() => overlay.classList.remove("show"), 1300);
+    }, 900);
+
+    setTimeout(() => {
+      card3d.classList.add("pulse");
+      setTimeout(() => card3d.classList.remove("pulse"), 1400);
+    }, 1200);
+
+    // 첫 클릭 → flip해서 뜻풀이 보여주기
+    let revealed = false;
+    card3d.addEventListener("click", () => {
+      if (!revealed) {
+        playFlipSound();
+        card3d.classList.add("flipped");
+        revealed = true;
+      }
+    });
+  });
+});
+
+// 다시 뽑기
+againBtn.addEventListener("click", () => {
+  selectedAngelIndex = null;
+  resultShown = false;
+  currentHwatuIndices = [];
+  lastAngelIndex = null;
+  lastHwatuIndex = null;
+
+  numberButtons.forEach(b => b.classList.remove("active"));
+  cardButtons.forEach(b => b.classList.remove("disabled"));
+
+  showScreen("intro");
+});
+</script>
+</body>
+</html>

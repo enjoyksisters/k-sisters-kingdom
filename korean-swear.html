@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Korean Swear Level Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Brand fonts : Pretendard + Gmarket Sans Bold -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+
+    @font-face {
+      font-family: 'GmarketSansBold';
+      src: url('https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+  </style>
+
+  <style>
+    :root {
+      /* K-SISTERS base */
+      --primary-navy: #273355;
+      --primary-cream: #FEF9F3;
+
+      /* Swear game theme – black / red / yellow */
+      --swear-bg: #050509;
+      --swear-red: #ff375f;
+      --swear-red-deep: #b3122e;
+      --swear-yellow: #ffd447;
+      --swear-orange: #ff9f1c;
+
+      --text-main: #f9fafb;
+      --text-sub: #d2d6ff;
+
+      --card-bg: #11111a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 14px;
+      font-family: "Pretendard", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,148,148,0.35), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(255,212,87,0.45), transparent 55%),
+        linear-gradient(145deg, #11111a, #1c1220);
+    }
+
+    body::before {
+      /* subtle grain */
+      content: "";
+      position: fixed;
+      inset: -40px;
+      pointer-events: none;
+      opacity: 0.35;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(0,0,0,0.5) 0, transparent 60%),
+        radial-gradient(1px 1px at 80% 30%, rgba(255,255,255,0.1) 0, transparent 60%),
+        radial-gradient(1px 1px at 30% 80%, rgba(255,199,60,0.25) 0, transparent 60%);
+      mix-blend-mode: soft-light;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+    }
+
+    .card {
+      background: radial-gradient(circle at 20% 0%, #1b1226, #050509);
+      border-radius: 26px;
+      padding: 20px 18px 22px;
+      box-shadow:
+        0 20px 40px rgba(0,0,0,0.65),
+        0 0 40px rgba(255,39,82,0.55);
+      border: 1px solid rgba(255,255,255,0.12);
+      position: relative;
+      overflow: hidden;
+      color: var(--text-main);
+      animation: fadeIn 0.35s ease-out;
+    }
+
+    .card::before {
+      content: "🤬";
+      position: absolute;
+      font-size: 80px;
+      right: -8px;
+      top: -18px;
+      opacity: 0.18;
+      transform: rotate(-18deg);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,212,87,0.8);
+      color: #ffeaa7;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .badge span:first-child {
+      font-size: 1rem;
+    }
+
+    .title {
+      font-family: "GmarketSansBold", "Pretendard", system-ui, sans-serif;
+      text-transform: uppercase;
+      font-size: 2rem;
+      line-height: 1.15;
+      margin: 0 0 6px;
+      letter-spacing: 0.08em;
+      color: #ffffff;
+      text-shadow:
+        0 0 10px rgba(255,212,87,0.6),
+        0 0 18px rgba(255,55,95,0.65);
+    }
+
+    .title span {
+      color: var(--swear-red);
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      margin: 0 0 16px;
+    }
+
+    .subtitle strong {
+      color: var(--swear-yellow);
+    }
+
+    /* Level tabs */
+
+    .level-tabs {
+      display: flex;
+      gap: 6px;
+      background: rgba(15,15,25,0.95);
+      border-radius: 999px;
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.55);
+      margin-bottom: 14px;
+    }
+
+    .level-btn {
+      flex: 1 1 auto;
+      border-radius: 999px;
+      border: none;
+      padding: 7px 4px;
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s, transform 0.08s;
+      font-family: "Pretendard", system-ui, sans-serif;
+    }
+
+    .level-btn span.level-label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .level-btn.active.level-1 {
+      background: linear-gradient(135deg, #ffd447, #fffae5);
+      color: #1f1308;
+      box-shadow: 0 3px 0 rgba(138,84,0,0.7);
+      transform: translateY(-1px);
+    }
+
+    .level-btn.active.level-2 {
+      background: linear-gradient(135deg, #ff9f1c, #ffd447);
+      color: #1f0a07;
+      box-shadow: 0 3px 0 rgba(130,47,0,0.7);
+      transform: translateY(-1px);
+    }
+
+    .level-btn.active.level-3 {
+      background: linear-gradient(135deg, #ff375f, #ff9f1c);
+      color: #0b0203;
+      box-shadow: 0 3px 0 rgba(120,0,0,0.9);
+      transform: translateY(-1px);
+    }
+
+    /* Main swear card */
+
+    .swear-card {
+      margin-top: 2px;
+      padding: 16px 14px 16px;
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255,212,87,0.12), transparent 60%),
+        radial-gradient(circle at 80% 100%, rgba(255,55,95,0.16), transparent 60%),
+        #090910;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow:
+        0 14px 26px rgba(0,0,0,0.85),
+        0 0 24px rgba(255,55,95,0.45);
+      text-align: center;
+    }
+
+    .swear-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+      color: var(--text-sub);
+    }
+
+    .pill-level {
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .pill-level.level-1 {
+      background: rgba(255,212,87,0.15);
+      color: #ffeaa7;
+      border-color: rgba(255,212,87,0.7);
+    }
+
+    .pill-level.level-2 {
+      background: rgba(255,159,28,0.18);
+      color: #ffb87a;
+      border-color: rgba(255,159,28,0.7);
+    }
+
+    .pill-level.level-3 {
+      background: rgba(255,55,95,0.2);
+      color: #ff9fb8;
+      border-color: rgba(255,55,95,0.85);
+    }
+
+    .danger-chip {
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(255,55,95,0.12);
+      border: 1px dashed rgba(255,55,95,0.7);
+    }
+
+    .korean-word {
+      font-family: "GmarketSansBold", "Pretendard", system-ui, sans-serif;
+      font-size: 2.4rem;
+      margin: 10px 0 4px;
+      letter-spacing: 0.06em;
+    }
+
+    .romanization {
+      font-size: 0.95rem;
+      color: #e5e7ff;
+      margin-bottom: 4px;
+    }
+
+    .meaning {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .meaning strong {
+      color: var(--swear-yellow);
+    }
+
+    .safety-note {
+      font-size: 0.8rem;
+      color: #fca5a5;
+      margin-bottom: 10px;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ghost-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.32);
+      background: rgba(0,0,0,0.45);
+      color: #f9fafb;
+      font-size: 0.8rem;
+      padding: 7px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: background 0.12s, box-shadow 0.12s, transform 0.08s;
+    }
+
+    .ghost-btn:hover {
+      background: rgba(255,55,95,0.22);
+      box-shadow: 0 0 12px rgba(255,55,95,0.6);
+      transform: translateY(-1px);
+    }
+
+    .main-btn {
+      margin-top: 16px;
+      width: 100%;
+      border-radius: 18px;
+      border: none;
+      padding: 14px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ff375f, #ffd447);
+      color: #0b0203;
+      box-shadow:
+        0 14px 0 rgba(0,0,0,0.8),
+        0 0 24px rgba(255,55,95,0.75);
+      transition: transform 0.08s, box-shadow 0.08s, filter 0.12s;
+      font-family: "Pretendard", system-ui, sans-serif;
+    }
+
+    .main-btn:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .main-btn:active {
+      transform: translateY(2px);
+      box-shadow:
+        0 8px 0 rgba(0,0,0,0.9),
+        0 0 16px rgba(255,55,95,0.7);
+    }
+
+    .tip {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      text-align: center;
+    }
+
+    .blurred {
+      filter: blur(4px);
+      pointer-events: none;
+    }
+
+    @media (max-width: 420px) {
+      .title { font-size: 1.8rem; }
+      .korean-word { font-size: 2.1rem; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="badge">
+        <span>😡</span>
+        <span>K-SISTERS · K-SWEAR LAB</span>
+      </div>
+
+      <h1 class="title">
+        <span>Korean Swear</span> Level Game
+      </h1>
+
+      <p class="subtitle">
+        Learn how Koreans express anger in dramas & real life in
+        <strong>3 levels</strong>.  
+        For study & fun only – don’t actually yell these at people 🤚
+      </p>
+
+      <!-- Level selector -->
+      <div class="level-tabs">
+        <button class="level-btn level-1 active" data-level="1">
+          <span>😶</span>
+          <span class="level-label">Lv.1 Soft</span>
+        </button>
+        <button class="level-btn level-2" data-level="2">
+          <span>😠</span>
+          <span class="level-label">Lv.2 Rude</span>
+        </button>
+        <button class="level-btn level-3" data-level="3">
+          <span>🤬</span>
+          <span class="level-label">Lv.3 Hardcore</span>
+        </button>
+      </div>
+
+      <!-- Swear card -->
+      <div class="swear-card" id="swearCard">
+        <div class="swear-meta">
+          <div id="levelPill" class="pill-level level-1">
+            <span>Lv.1 · Soft</span> 😶
+          </div>
+          <div class="danger-chip">
+            <span>🚫 교육용 / for learning only</span>
+          </div>
+        </div>
+
+        <div id="koreanWord" class="korean-word">바보야!</div>
+        <div id="romanization" class="romanization">ba-bo-ya</div>
+        <div id="meaning" class="meaning">
+          <strong>You dummy</strong> / silly / playful light insult.
+        </div>
+
+        <div id="safetyNote" class="safety-note">
+          Lv.1은 친구끼리 장난으로 쓰이는 약한 욕이에요. 그래도 조심! 😅
+        </div>
+
+        <div class="toggle-row">
+          <button id="toggleBlurBtn" class="ghost-btn">
+            🙈 Hide / show meaning
+          </button>
+          <button id="showAltBtn" class="ghost-btn">
+            🙂 Softer alternative
+          </button>
+          <button id="speakBtn" class="ghost-btn">
+            🔊 Hear Korean
+          </button>
+        </div>
+
+        <button id="nextBtn" class="main-btn">
+          Next angry line 😡🔥
+        </button>
+
+        <p class="tip">
+          Tip: Practice it quietly <strong>as if you're acting</strong> 조용히 연습하기.  
+          (Definitely don’t shout these in public!🖕❌)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===================== DATA =====================
+    const SWEARS = [
+      // Lv.1 (soft / everyday complaints)
+      { level: 1, korean: "바보야!", roman: "ba-bo-ya",
+        meaning: "You dummy / you idiot (playful to mildly rude)",
+        alt: "야~ 장난이야 (I’m just kidding~)", emoji: "😅" },
+      { level: 1, korean: "멍청아!", roman: "meong-cheong-a",
+        meaning: "You idiot / you moron",
+        alt: "왜 그랬어~ (Why’d you do that~)", emoji: "😑" },
+      { level: 1, korean: "답답하다!", roman: "dap-da-pa-da",
+        meaning: "This is so frustrating / You’re so frustrating",
+        alt: "조금 답답하네… (I feel a bit stuck…)", emoji: "😤" },
+      { level: 1, korean: "한심하다", roman: "han-sim-ha-da",
+        meaning: "How pathetic / That’s pathetic",
+        alt: "좀 아쉽다… (That’s a bit disappointing…)", emoji: "😮‍💨" },
+      { level: 1, korean: "찌질하다", roman: "jji-jil-ha-da",
+        meaning: "So lame / loser-ish",
+        alt: "별로 멋있진 않다… (Not very cool…)", emoji: "😒" },
+      { level: 1, korean: "실망이다", roman: "sil-mang-i-da",
+        meaning: "I’m disappointed in you / That’s disappointing",
+        alt: "기대했는데… (I expected more…)", emoji: "😔" },
+      { level: 1, korean: "별로다", roman: "byeol-lo-da",
+        meaning: "It’s not good / Not my type",
+        alt: "나랑은 안 맞네. (Not really my style.)", emoji: "😕" },
+      { level: 1, korean: "짜증난다", roman: "jja-jeung-nan-da",
+        meaning: "This is annoying / I’m so annoyed",
+        alt: "조금 스트레스네. (This is a bit stressful.)", emoji: "😵‍💫" },
+      { level: 1, korean: "재수 없다", roman: "jae-su eop-tta",
+        meaning: "You give off bad vibes / I hate your vibe",
+        alt: "느낌이 별로야. (I don’t get a good vibe.)", emoji: "🙃" },
+      { level: 1, korean: "유치하다", roman: "yu-chi-ha-da",
+        meaning: "So childish / immature",
+        alt: "좀 어린 느낌이야. (Feels a bit childish.)", emoji: "😶" },
+      { level: 1, korean: "비호감이다", roman: "bi-ho-gam-i-da",
+        meaning: "Such a turn-off / very unlikeable",
+        alt: "매력은 아니네. (Not very charming.)", emoji: "🙄" },
+      { level: 1, korean: "싫다 진짜", roman: "sil-ta jin-jja",
+        meaning: "I really hate this / I really don’t like you",
+        alt: "진짜 안 좋아. (I really don’t like this.)", emoji: "😤" },
+      { level: 1, korean: "못났다", roman: "mot-nat-ta",
+        meaning: "You’re ugly / terrible (inside or outside)",
+        alt: "그건 좀 심했다… (That was a bit much…)", emoji: "😞" },
+      { level: 1, korean: "어이없다", roman: "eo-i eop-tta",
+        meaning: "I’m speechless / That’s ridiculous",
+        alt: "진짜 웃기네… (That’s ridiculous lol…)", emoji: "😮" },
+      { level: 1, korean: "구질구질하다", roman: "gu-jil-gu-jil-ha-da",
+        meaning: "So shabby / pathetic / messy vibe",
+        alt: "좀 정리가 필요하겠다. (You need to clean this up.)", emoji: "😬" },
+      { level: 1, korean: "쓸데없다", roman: "sseul-tte-eop-tta",
+        meaning: "Useless / pointless",
+        alt: "굳이 안 해도 될 것 같아. (Maybe we don’t need this.)", emoji: "😑" },
+      { level: 1, korean: "답 없다", roman: "dap eop-tta",
+        meaning: "Hopeless / There’s no answer with you",
+        alt: "어렵다 진짜… (This is really hard…)", emoji: "😵" },
+      { level: 1, korean: "뻔뻔하다", roman: "ppeon-ppeon-ha-da",
+        meaning: "So shameless / brazen",
+        alt: "자신감은 인정… (You’re very bold…)", emoji: "😏" },
+      { level: 1, korean: "허세부리지마", roman: "heo-se bu-ri-ji-ma",
+        meaning: "Stop acting tough / Stop flexing",
+        alt: "편하게 있어~ (Just relax, be yourself.)", emoji: "😗" },
+      { level: 1, korean: "깝치지마", roman: "kkap-chi-ji-ma",
+        meaning: "Don’t act up / Don’t be extra (rude slang)",
+        alt: "조금만 차분히~ (Take it down a notch.)", emoji: "😶‍🌫️" },
+      { level: 1, korean: "주접떨지마", roman: "ju-jeop-tteol-ji-ma",
+        meaning: "Don’t be cringe / Stop being ridiculous",
+        alt: "너무 과해~ (That’s a bit extra.)", emoji: "😅" },
+      { level: 1, korean: "설치지마", roman: "seol-chi-ji-ma",
+        meaning: "Stop making a fuss / don’t run around",
+        alt: "조용히 좀 하자~ (Let’s calm down a bit.)", emoji: "😌" },
+      { level: 1, korean: "민폐다 진짜", roman: "min-pye-da jin-jja",
+        meaning: "You’re really bothering everyone / such a nuisance",
+        alt: "조금 배려해줘. (Please be a bit considerate.)", emoji: "😓" },
+      { level: 1, korean: "엉망이다", roman: "eong-mang-i-da",
+        meaning: "It’s a mess / You’re a mess",
+        alt: "처음부터 다시 해보자. (Let’s try again from the start.)", emoji: "😵‍💫" },
+      { level: 1, korean: "헛소리 하지마", roman: "heot-so-ri ha-ji-ma",
+        meaning: "Stop talking nonsense / bullshit",
+        alt: "장난이지? (You’re joking, right?)", emoji: "🤨" },
+      { level: 1, korean: "나대지마", roman: "na-dae-ji-ma",
+        meaning: "Don’t show off / don’t act like you’re all that",
+        alt: "적당히만 해~ (Take it easy~)", emoji: "😏" },
+      { level: 1, korean: "오글거린다", roman: "o-geul-geo-rin-da",
+        meaning: "That’s so cringe / cheesy",
+        alt: "너무 로맨틱한데? (That’s… very romantic lol)", emoji: "🫣" },
+
+      // Lv.2 (medium / clearly rude)
+      { level: 2, korean: "또라이네", roman: "tto-ra-i-ne",
+        meaning: "You’re crazy / You’re a weirdo (insult)",
+        alt: "이해가 잘 안 된다… (I really don’t get you…)", emoji: "😠" },
+      { level: 2, korean: "정신병자네", roman: "jeong-sin-byeong-ja-ne",
+        meaning: "You’re a psycho / mentally sick (very offensive)",
+        alt: "너무 극단적인데. (That’s way too extreme.)", emoji: "😡" },
+      { level: 2, korean: "미친년", roman: "mi-chin-nyeon",
+        meaning: "Crazy bitch (very rude, for a woman)",
+        alt: "진짜 많이 화난 상태… (I’m seriously mad…)", emoji: "🤯" },
+      { level: 2, korean: "미친놈", roman: "mi-chin-nom",
+        meaning: "Crazy bastard (very rude, for a man)",
+        alt: "제정신이 아니네. (You’re not thinking straight.)", emoji: "😤" },
+      { level: 2, korean: "개소리하지마", roman: "gae-so-ri ha-ji-ma",
+        meaning: "Don’t talk bullshit",
+        alt: "말이 너무 심하다. (That makes no sense.)", emoji: "😡" },
+      { level: 2, korean: "지랄하지마", roman: "ji-ral ha-ji-ma",
+        meaning: "Stop freaking out / cut the crap",
+        alt: "진정해. (Calm down.)", emoji: "😠" },
+      { level: 2, korean: "돌았니?", roman: "do-rat-ni?",
+        meaning: "Are you crazy?",
+        alt: "왜 그러는 거야? (What are you doing?)", emoji: "🤨" },
+      { level: 2, korean: "뇌가 없니?", roman: "noe-ga eop-ni?",
+        meaning: "Are you brainless?",
+        alt: "생각 좀 하고 말해. (Please think before you speak.)", emoji: "😤" },
+      { level: 2, korean: "꺼져", roman: "kkeo-jyeo",
+        meaning: "Get lost / F*** off",
+        alt: "이제 그만하자. (Let’s stop here.)", emoji: "😾" },
+      { level: 2, korean: "인간말종이네", roman: "in-gan mal-jong-i-ne",
+        meaning: "You’re human trash / lowest of the low",
+        alt: "사람답게 좀 해. (Act like a decent person.)", emoji: "😡" },
+      { level: 2, korean: "찐따 새끼", roman: "jjin-tta sae-kki",
+        meaning: "You pathetic loser",
+        alt: "자신감 좀 가져. (Have some confidence.)", emoji: "😒" },
+      { level: 2, korean: "쓰레기네", roman: "sseu-re-gi-ne",
+        meaning: "You’re trash",
+        alt: "정말 실망이다. (I’m really disappointed.)", emoji: "😞" },
+      { level: 2, korean: "인성 쓰레기네", roman: "in-seong sseu-re-gi-ne",
+        meaning: "Your personality is trash",
+        alt: "인성이 좀 아쉽다. (Your personality is… not great.)", emoji: "😤" },
+      { level: 2, korean: "개념 없다", roman: "gae-nyeom eop-tta",
+        meaning: "You have no common sense / no manners",
+        alt: "상식적으로 생각해 봐. (Think logically.)", emoji: "😑" },
+      { level: 2, korean: "한심하다 진짜", roman: "han-sim-ha-da jin-jja",
+        meaning: "You’re really pathetic, seriously",
+        alt: "정말 그러지 마. (Please don’t be like that.)", emoji: "😮‍💨" },
+      { level: 2, korean: "꼴통 새끼야", roman: "kkol-tong sae-kki-ya",
+        meaning: "You thick-headed idiot",
+        alt: "고집이 진짜 세네. (You’re so stubborn.)", emoji: "😤" },
+      { level: 2, korean: "개노답이네", roman: "gae-no-dap-i-ne",
+        meaning: "You’re totally hopeless",
+        alt: "방법을 다시 찾아보자. (Let’s find another way.)", emoji: "🤦‍♀️" },
+      { level: 2, korean: "니가 인간이냐", roman: "ni-ga in-ga-ni-nya",
+        meaning: "Are you even human?",
+        alt: "사람이면 그러면 안 되지. (You shouldn’t do that as a person.)", emoji: "😡" },
+      { level: 2, korean: "사람 새끼 아니네", roman: "sa-ram sae-kki a-ni-ne",
+        meaning: "You’re not even a human being",
+        alt: "양심이 없네. (You’ve got no conscience.)", emoji: "😠" },
+      { level: 2, korean: "쳐웃지 마", roman: "cheo-ut-ji ma",
+        meaning: "Don’t f***ing laugh",
+        alt: "지금 웃을 때 아니야. (This isn’t the time to laugh.)", emoji: "😑" },
+
+      // Lv.3 (hardcore)
+      { level: 3, korean: "씨발", roman: "ssi-bal",
+        meaning: "F*** / F***ing hell (strong general curse)",
+        alt: "아… 큰일 났다. (Ah… this is bad.)", emoji: "🤬" },
+      { level: 3, korean: "개새끼야", roman: "gae-sae-kki-ya",
+        meaning: "You son of a bitch",
+        alt: "진짜 너무했다. (That was really too much.)", emoji: "😡" },
+      { level: 3, korean: "좆같네", roman: "jot-gat-ne",
+        meaning: "This f***ing sucks",
+        alt: "진짜 엉망이네. (This is a mess.)", emoji: "🤯" },
+      { level: 3, korean: "지랄마", roman: "ji-ral-ma",
+        meaning: "Stop your f***ing bullshit",
+        alt: "그만해. (Stop it.)", emoji: "😠" },
+      { level: 3, korean: "엿 먹어라", roman: "yeot meo-geo-ra",
+        meaning: "Go to hell / shove it",
+        alt: "상종 안 할래. (I don’t want to deal with you.)", emoji: "😤" },
+      { level: 3, korean: "닥쳐라", roman: "dak-chyeo-ra",
+        meaning: "Shut the f*** up",
+        alt: "조용히 해줘. (Please be quiet.)", emoji: "😠" },
+      { level: 3, korean: "꺼져라", roman: "kkeo-jyeo-ra",
+        meaning: "F*** off / get the hell out",
+        alt: "먼저 가 줄래? (Can you just go?)", emoji: "😾" },
+      { level: 3, korean: "좆됐다", roman: "jot-doet-tta",
+        meaning: "I’m f***ed / We’re screwed",
+        alt: "큰일 났다… (We’re in trouble…)", emoji: "😱" },
+      { level: 3, korean: "좆밥 새끼야", roman: "jot-bap sae-kki-ya",
+        meaning: "You f***ing loser (small-time)",
+        alt: "너무 하찮게 본다… (You’re underestimating me.)", emoji: "😡" },
+    ];
+
+    // ===================== ELEMENTS =====================
+    const levelButtons = document.querySelectorAll(".level-btn");
+    const levelPill = document.getElementById("levelPill");
+    const swearCard = document.getElementById("swearCard");
+    const koreanWordEl = document.getElementById("koreanWord");
+    const romanizationEl = document.getElementById("romanization");
+    const meaningEl = document.getElementById("meaning");
+    const safetyNoteEl = document.getElementById("safetyNote");
+    const nextBtn = document.getElementById("nextBtn");
+    const toggleBlurBtn = document.getElementById("toggleBlurBtn");
+    const showAltBtn = document.getElementById("showAltBtn");
+    const speakBtn = document.getElementById("speakBtn");
+
+    let currentLevel = 1;
+    let currentEntry = null;
+    let blurred = false;
+
+    function pickRandomByLevel(level) {
+      const pool = SWEARS.filter(item => item.level === level);
+      if (!pool.length) return null;
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    function updateLevelPill(level, emoji) {
+      levelPill.className = "pill-level level-" + level;
+      if (level === 1) {
+        levelPill.innerHTML = `<span>Lv.1 · Soft</span> ${emoji || "😶"}`;
+      } else if (level === 2) {
+        levelPill.innerHTML = `<span>Lv.2 · Rude</span> ${emoji || "😠"}`;
+      } else {
+        levelPill.innerHTML = `<span>Lv.3 · Hardcore</span> ${emoji || "🤬"}`;
+      }
+    }
+
+    function updateSafetyNote(level) {
+      if (level === 1) {
+        safetyNoteEl.textContent =
+          "Level 1 is just mild, playful teasing between friends. Still, make sure the situation is right before using them!😅";
+      } else if (level === 2) {
+        safetyNoteEl.textContent =
+          "Starting from Level 2, the phrases get intense enough to cause a real fight if you actually use them. Enjoy them ONLY as K-drama lines!😠";
+      } else {
+        safetyNoteEl.textContent =
+          "Lv.3contains the strongest expressions—things people only say in serious fights or breakups. Do NOT use these in real life!🤬🚫";
+      }
+    }
+
+    function renderEntry(entry) {
+      if (!entry) return;
+
+      // 새 표현이 뜰 때마다 이전 음성 중단
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      currentEntry = entry;
+      koreanWordEl.textContent = entry.korean;
+      romanizationEl.textContent = entry.roman;
+
+      const parts = entry.meaning.split("/");
+      const first = parts[0].trim();
+      const rest = parts.slice(1).join("/").trim();
+      meaningEl.innerHTML = rest
+        ? `<strong>${first}</strong> / ${rest}`
+        : `<strong>${first}</strong>`;
+
+      updateLevelPill(entry.level, entry.emoji);
+      updateSafetyNote(entry.level);
+
+      if (blurred) {
+        koreanWordEl.classList.add("blurred");
+        meaningEl.classList.add("blurred");
+      } else {
+        koreanWordEl.classList.remove("blurred");
+        meaningEl.classList.remove("blurred");
+      }
+    }
+
+    // 음성 재생
+    function speakKorean() {
+      if (!currentEntry) return;
+      if (!("speechSynthesis" in window)) return;
+
+      const text = currentEntry.korean;
+      if (!text) return;
+
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "ko-KR";
+      utter.rate = 0.95;
+      utter.pitch = 1.05;
+      window.speechSynthesis.speak(utter);
+    }
+
+    // Initial render
+    renderEntry(pickRandomByLevel(currentLevel));
+
+    // Level tab click
+    levelButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const level = parseInt(btn.dataset.level, 10);
+        if (currentLevel === level) return;
+        currentLevel = level;
+
+        levelButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        renderEntry(pickRandomByLevel(currentLevel));
+      });
+    });
+
+    // Next button
+    nextBtn.addEventListener("click", () => {
+      renderEntry(pickRandomByLevel(currentLevel));
+    });
+
+    // Blur / unblur
+    toggleBlurBtn.addEventListener("click", () => {
+      blurred = !blurred;
+      if (blurred) {
+        koreanWordEl.classList.add("blurred");
+        meaningEl.classList.add("blurred");
+        toggleBlurBtn.innerHTML = "🙈 Show meaning";
+      } else {
+        koreanWordEl.classList.remove("blurred");
+        meaningEl.classList.remove("blurred");
+        toggleBlurBtn.innerHTML = "😈 Hide / show meaning";
+      }
+    });
+
+    // Softer alternative alert
+    showAltBtn.addEventListener("click", () => {
+      if (!currentEntry) return;
+      alert(
+        `Softer / safer version:\n\n` +
+        `${currentEntry.alt}\n\n` +
+        `(Use this instead of the swear when you’re actually speaking 😇)`
+      );
+    });
+
+    // Speak Korean button
+    if ("speechSynthesis" in window) {
+      speakBtn.addEventListener("click", speakKorean);
+    } else {
+      speakBtn.disabled = true;
+      speakBtn.textContent = "🔇 Voice not supported";
+      speakBtn.style.opacity = "0.5";
+      speakBtn.style.cursor = "not-allowed";
+    }
+  </script>
+</body>
+</html>

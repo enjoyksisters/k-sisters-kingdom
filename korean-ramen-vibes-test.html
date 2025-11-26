@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Korean Ramen Vibes Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Cute, bold fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Patrick+Hand&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      /* 메인 팔레트: 노랑, 주황, 파랑, 빨강, 검정, 흰색, 초록 */
+      --bg1: #ffea3a;      /* bold yellow */
+      --bg2: #ffd18a;      /* soft orange */
+      --line: #111111;     /* black */
+      --accent: #ff6b35;   /* orange */
+      --accent3: #2563eb;  /* blue */
+      --text-main: #111111;/* black */
+      --text-sub: #374151; /* dark gray-ish (검정보다 연한 글자색) */
+      --card: #ffffff;     /* white */
+      --green-accent: #22c55e; /* green */
+      --red-accent: #ef4444;   /* red */
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px;
+      font-family: "Fredoka", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, var(--bg1), var(--bg2));
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      border-radius: 26px;
+      background: var(--card);
+      border: 3px solid var(--line);
+      box-shadow: 0 10px 0 rgba(0,0,0,0.2);
+      padding: 20px 18px 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app::before {
+      content: "🍜";
+      position: absolute;
+      font-size: 82px;
+      right: -8px;
+      top: -18px;
+      opacity: 0.18;
+      transform: rotate(10deg);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #fffbe6; /* 연한 노랑 */
+      margin-bottom: 6px;
+    }
+
+    .badge span:first-child { font-size: 1rem; }
+
+    .logo-title {
+      text-align: left;
+      font-size: 1.85rem;
+      margin: 0 0 4px;
+      letter-spacing: 0.02em;
+    }
+
+    .logo-title span {
+      color: var(--accent); /* 주황 */
+      font-weight: 800;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      margin: 0 0 16px;
+    }
+
+    .subtitle strong { color: var(--text-main); }
+
+    section { display: none; }
+    section.active { display: block; }
+
+    /* 🍜 RAMEN FACE CHARACTER */
+
+    .ramen-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 6px 0 4px;
+    }
+
+    .ramen-face {
+      position: relative;
+      width: 250px;
+      height: 250px;
+      border-radius: 28px;
+      border: none;
+      box-shadow: 0 8px 0 #fbbf24; /* 진한 노랑 그림자 */
+      overflow: hidden;
+    }
+
+    .ramen-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .ramen-svg .outer {
+      fill: #fde047;          /* 노란 라면 블록 */
+      stroke: #f59e0b;        /* 주황 라인 */
+      stroke-width: 3;
+      stroke-linejoin: round;
+    }
+
+    .ramen-svg .noodle {
+      fill: none;
+      stroke: #facc15;        /* 노랑 면결 */
+      stroke-width: 3;
+      stroke-linecap: round;
+    }
+
+    /* Eyes */
+    .eye {
+      position: absolute;
+      top: 72px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid var(--line);
+      z-index: 2;
+    }
+
+    .eye.left { left: 65px; }
+    .eye.right { right: 65px; }
+
+    .eye::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -45%);
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #000000;
+    }
+
+    /* Nose */
+    .nose {
+      position: absolute;
+      top: 128px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 20px solid var(--accent); /* 주황 코 */
+      z-index: 2;
+    }
+
+    /* Lips slot */
+    .photo-slot {
+      position: absolute;
+      left: 50%;
+      top: 150px;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 90px;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #fefce8; /* 밝은 노랑 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 10px;
+      text-align: center;
+      z-index: 3;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    }
+
+    .photo-slot:hover {
+      transform: translateX(-50%) translateY(1px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.14);
+      background: #fef9c3;
+    }
+
+    .photo-slot.has-photo {
+      padding: 4px;
+      background: #fee2e2; /* 연한 빨강/핑크 */
+      box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+    }
+
+    .photo-slot img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 999px;
+      object-fit: cover;
+      display: none;
+      border: 2px solid var(--line);
+    }
+
+    .photo-slot.has-photo img {
+      display: block;
+    }
+
+    .upload-cta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.78rem;
+      color: var(--text-sub);
+    }
+
+    .upload-icon {
+      font-size: 1.4rem;
+    }
+
+    .photo-slot.has-photo .upload-cta {
+      display: none;
+    }
+
+    /* Result ramen slot (not clickable) */
+    .ramen-result .photo-slot {
+      cursor: default;
+      box-shadow: none;
+    }
+    .ramen-result .photo-slot:hover {
+      transform: translateX(-50%);
+      box-shadow: none;
+      background: #fee2e2;
+    }
+
+    .helper-text {
+      text-align: center;
+      font-size: 0.9rem;
+      margin: 16px 0 10px;
+      color: var(--text-sub);
+    }
+
+    .helper-text span {
+      color: var(--green-accent); /* 초록 포인트 */
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 999px;
+      border: 3px solid var(--line);
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 4px 0 #c2410c;
+    }
+
+    .primary-btn:hover {
+      filter: brightness(0.96);
+      transform: translateY(1px);
+      box-shadow: 0 3px 0 #c2410c;
+    }
+
+    .secondary-btn {
+      background: #eff6ff;        /* 연한 파랑 */
+      color: var(--text-main);
+      box-shadow: 0 4px 0 #93c5fd;
+      border-color: var(--accent3); /* 파랑 테두리 */
+      margin-top: 12px;
+    }
+
+    .secondary-btn:hover {
+      background: #dbeafe;
+      transform: translateY(1px);
+      box-shadow: 0 3px 0 #93c5fd;
+    }
+
+    .hidden { display: none !important; }
+
+    /* RESULT block */
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      font-family: "Patrick Hand", system-ui, sans-serif;
+    }
+
+    .result-title { font-size: 1.4rem; }
+
+    .spicy-box {
+      text-align: right;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    .spicy-label { margin-bottom: 2px; }
+
+    .spicy-bar {
+      position: relative;
+      width: 96px;
+      height: 12px;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .spicy-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 50%;
+      background: linear-gradient(90deg, #f97316, #ef4444); /* 오렌지 → 빨강 */
+    }
+
+    .spicy-chilis {
+      margin-top: 2px;
+      font-size: 0.9rem;
+      color: var(--red-accent);
+    }
+
+    .you-are {
+      text-align: center;
+      margin: 12px 0 4px;
+      font-size: 1rem;
+      font-family: "Patrick Hand", system-ui, sans-serif;
+    }
+
+    .ramen-name-box {
+      text-align: center;
+      border: 3px solid var(--line);
+      border-radius: 16px;
+      padding: 7px 10px 9px;
+      display: inline-block;
+      margin: 0 auto 10px;
+      background: #fef9c3; /* 연노랑 */
+      box-shadow: 0 4px 0 #facc15;
+      display: block;
+    }
+
+    .ramen-name-ko {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .ramen-name-en {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-top: 1px;
+    }
+
+    .sticker-caption {
+      text-align:center;
+      font-size:0.9rem;
+      color:var(--text-sub);
+      margin-bottom:6px;
+    }
+    .sticker-caption span{
+      font-weight:600;
+      color:var(--green-accent); /* 초록 포인트 */
+    }
+
+    .result-body {
+      margin-top: 8px;
+      padding: 10px 10px 4px;
+      border-radius: 16px;
+      background: #eff6ff;       /* 연파랑 박스 */
+      border: 2px dashed var(--accent3); /* 파랑 점선 */
+    }
+
+    .field {
+      font-size: 0.92rem;
+      line-height: 1.45;
+      margin: 4px 0 8px;
+    }
+
+    .field strong {
+      font-weight: 700;
+      color: var(--accent3); /* 파랑 텍스트 */
+    }
+
+    @media (max-width: 420px) {
+      .app { padding: 18px 14px 20px; }
+      .ramen-face { width: 230px; height: 230px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="badge">
+      <span>💋</span>
+      <span>K-Sisters mini game</span>
+    </div>
+    <h1 class="logo-title">
+      Korean <span>Ramen Vibes Test</span>
+    </h1>
+    <p class="subtitle">
+      Upload your lips photo & find out which trendy <strong>ramen vibes</strong> you give off 🍜
+    </p>
+
+    <!-- Upload Screen -->
+    <section id="screen-upload" class="active">
+      <div class="ramen-wrap">
+        <div class="ramen-face ramen-upload">
+          <svg class="ramen-svg" viewBox="0 0 260 260" aria-hidden="true">
+            <path class="outer"
+              d="M35 50
+                Q50 40 65 50
+                T95 50 T125 50 T155 50 T185 50 T215 50
+                Q225 60 220 75
+                T220 105 T220 135 T220 165 T220 195
+                Q210 210 195 205
+                T165 205 T135 205 T105 205 T75 205 T45 205
+                Q35 195 38 180
+                T38 150 T38 120 T38 90 T38 60
+                Q35 55 35 50"
+            />
+            <path class="noodle"
+              d="M50 80 Q75 60 100 80 T150 80 T210 78" />
+            <path class="noodle"
+              d="M42 105 Q70 90 100 105 T160 108 T218 110" />
+            <path class="noodle"
+              d="M45 130 Q75 115 110 132 T170 138 T215 140" />
+            <path class="noodle"
+              d="M40 155 Q70 140 105 158 T165 166 T215 170" />
+            <path class="noodle"
+              d="M45 180 Q75 165 115 182 T175 190 T210 195" />
+          </svg>
+
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+          <div class="nose"></div>
+
+          <div class="photo-slot" id="photoSlot">
+            <img id="previewImage" alt="Preview" />
+            <div id="uploadCTA" class="upload-cta">
+              <div class="upload-icon">👄</div>
+              <div class="upload-text">Upload lips photo</div>
+            </div>
+            <input type="file" id="fileInput" accept="image/*" hidden />
+          </div>
+        </div>
+      </div>
+
+      <p class="helper-text">
+        Your photo never leaves this page. Just for fun, not saved anywhere <span>✨</span>
+      </p>
+
+      <button id="resultBtn" class="primary-btn">
+        GET MY RAMEN VIBES RESULT 🍥
+      </button>
+    </section>
+
+    <!-- Result Screen -->
+    <section id="screen-result">
+      <div class="result-header">
+        <div class="result-title">Result…</div>
+        <div class="spicy-box">
+          <div class="spicy-label">🌶 Spicy level</div>
+          <div class="spicy-bar">
+            <div id="spicyFill" class="spicy-fill"></div>
+          </div>
+          <div id="spicyChilis" class="spicy-chilis">🌶🌶🌶</div>
+        </div>
+      </div>
+
+      <div class="ramen-wrap">
+        <div class="ramen-face ramen-result">
+          <svg class="ramen-svg" viewBox="0 0 260 260" aria-hidden="true">
+            <path class="outer"
+              d="M35 50
+                Q50 40 65 50
+                T95 50 T125 50 T155 50 T185 50 T215 50
+                Q225 60 220 75
+                T220 105 T220 135 T220 165 T220 195
+                Q210 210 195 205
+                T165 205 T135 205 T105 205 T75 205 T45 205
+                Q35 195 38 180
+                T38 150 T38 120 T38 90 T38 60
+                Q35 55 35 50"
+            />
+            <path class="noodle"
+              d="M50 80 Q75 60 100 80 T150 80 T210 78" />
+            <path class="noodle"
+              d="M42 105 Q70 90 100 105 T160 108 T218 110" />
+            <path class="noodle"
+              d="M45 130 Q75 115 110 132 T170 138 T215 140" />
+            <path class="noodle"
+              d="M40 155 Q70 140 105 158 T165 166 T215 170" />
+            <path class="noodle"
+              d="M45 180 Q75 165 115 182 T175 190 T210 195" />
+          </svg>
+
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+          <div class="nose"></div>
+
+          <div class="photo-slot" id="resultSlot">
+            <img id="resultImage" alt="Ramen lips" />
+          </div>
+        </div>
+      </div>
+
+      <p class="you-are">You are…</p>
+
+      <div class="ramen-name-box">
+        <div id="ramenNameKo" class="ramen-name-ko">신라면</div>
+        <div id="ramenNameEn" class="ramen-name-en">(Shin Ramyun) baby</div>
+      </div>
+
+      <p class="sticker-caption">
+        Your <span>Ramen Vibes</span> have been cooked 🔥
+      </p>
+
+      <div class="result-body">
+        <p class="field">
+          <strong>Ramen vibe:</strong>
+          <span id="ramenVibe">Korea’s most iconic spicy classic.</span>
+        </p>
+        <p class="field">
+          <strong>Personality:</strong>
+          <span id="ramenPersonality">
+            You’re the life of the party — bold, fiery, and instantly unforgettable.
+          </span>
+        </p>
+      </div>
+
+      <button id="againBtn" class="secondary-btn">
+        TRY ANOTHER RAMEN VIBE 🔁
+      </button>
+    </section>
+  </div>
+
+  <script>
+    const RAMEN_DATA = [
+      { nameEn: "Shin Ramyun", nameKo: "신라면",
+        vibe: "Korea’s most iconic spicy classic.",
+        personality: "You’re the life of the party — bold, fiery, and instantly unforgettable.",
+        spicy: 4 },
+      { nameEn: "Shin Ramyun Black", nameKo: "신라면 블랙",
+        vibe: "Premium, rich, and deeper flavor.",
+        personality: "Classy with depth. You do everything well—then add a little luxury on top.",
+        spicy: 4 },
+      { nameEn: "Jin Ramen Mild", nameKo: "진라면 순한맛",
+        vibe: "Soft, gentle, comforting flavor.",
+        personality: "The human version of a warm hug — calm, sweet, and comforting to everyone.",
+        spicy: 1 },
+      { nameEn: "Jin Ramen Spicy", nameKo: "진라면 매운맛",
+        vibe: "Mild but with a spicy kick.",
+        personality: "Soft on the outside, spicy on the inside — a subtle-but-addictive type.",
+        spicy: 3 },
+      { nameEn: "Neoguri", nameKo: "너구리 라면",
+        vibe: "Thick noodles with a cozy, homey broth.",
+        personality: "Cute, warm, and surprisingly deep — you bring healing energy wherever you go.",
+        spicy: 2 },
+      { nameEn: "Jjapagetti", nameKo: "짜파게티",
+        vibe: "Sweet, savory, nostalgic black-bean noodles.",
+        personality: "Comforting, sweet, and secretly irresistible — people crave your vibe.",
+        spicy: 1 },
+      { nameEn: "Yukgaejang", nameKo: "육개장",
+        vibe: "Spicy, hearty, and dependable.",
+        personality: "Strong, loyal, and reliable — you shine the most when things get tough.",
+        spicy: 3 },
+      { nameEn: "Kimchi Bowl Noodles", nameKo: "김치 사발면",
+        vibe: "Tangy, refreshing, and lively.",
+        personality: "Bright, playful, and full of energy — you’re everyone’s mood booster.",
+        spicy: 2 },
+      { nameEn: "Bibimmyeon", nameKo: "비빔면",
+        vibe: "Sweet, spicy, and refreshing cold noodles.",
+        personality: "Fun, vibrant, and refreshing — being around you feels like a mood reset.",
+        spicy: 2 },
+      { nameEn: "Buldak Hot Chicken", nameKo: "불닭볶음면",
+        vibe: "Extremely spicy and intense.",
+        personality: "A walking flame — bold, fearless, and impossible to ignore.",
+        spicy: 5 },
+      { nameEn: "Carbo Buldak", nameKo: "까르보불닭볶음면",
+        vibe: "Creamy + spicy combo.",
+        personality: "Cute but deadly — soft looks, powerful impact.",
+        spicy: 4 },
+      { nameEn: "Nuclear Buldak 2X Spicy", nameKo: "핵불닭볶음면",
+        vibe: "The spiciest version of Buldak.",
+        personality: "Pure intensity — nobody survives your level of energy, and nobody forgets you either.",
+        spicy: 5 },
+      { nameEn: "Cheese Buldak", nameKo: "치즈불닭볶음면",
+        vibe: "Cheesy, cozy, and spicy.",
+        personality: "Warm, cozy, and addictively charming — people get hooked on your duality.",
+        spicy: 4 },
+      { nameEn: "Saewootang", nameKo: "새우탕",
+        vibe: "Clean, ocean-like, and light.",
+        personality: "Soft-spoken but deep — gentle, sensitive, and thoughtful.",
+        spicy: 2 },
+      { nameEn: "Tempura Udon", nameKo: "튀김우동",
+        vibe: "Warm, comforting, and classic.",
+        personality: "Calm, steady, and deeply comforting — people feel safe and warm around you.",
+        spicy: 1 },
+      { nameEn: "Yeol Ramen", nameKo: "열라면",
+        vibe: "Fiery, bold, and strong.",
+        personality: "All passion, all fire — when you commit, you go all in.",
+        spicy: 4 },
+      { nameEn: "Ansungtangmyun", nameKo: "안성탕면",
+        vibe: "Homey, warm, nostalgic Korean flavor.",
+        personality: "Low-key charming and steady — not flashy, but unforgettable over time.",
+        spicy: 2 },
+      { nameEn: "Chamkae Ramen", nameKo: "참깨라면",
+        vibe: "Nutty, smooth, and soothing.",
+        personality: "Soft, cozy, and full of sweet details — you make people feel cared for.",
+        spicy: 1 },
+      { nameEn: "Cup Noodles (Light)", nameKo: "컵누들",
+        vibe: "Light, simple, and effortless.",
+        personality: "Minimal, bright, and easy to be around — people enjoy your clean, refreshing vibe.",
+        spicy: 1 },
+      { nameEn: "Wangttukkeong", nameKo: "왕뚜껑",
+        vibe: "Big, bold, king-size cup noodles.",
+        personality: "Big energy, big heart — you naturally become the leader of any group.",
+        spicy: 3 },
+      { nameEn: "Samyang Ramen Classic", nameKo: "삼양라면",
+        vibe: "Old-school, authentic, and timeless.",
+        personality: "Reliable, honest, and classic — people trust you because you’re consistently real.",
+        spicy: 2 },
+      { nameEn: "Sari Gomtang", nameKo: "사리곰탕",
+        vibe: "Gentle, milky, and soothing broth.",
+        personality: "Soft, warm, and deeply comforting — you’re the calm presence everyone needs.",
+        spicy: 1 }
+    ];
+
+    const screenUpload = document.getElementById("screen-upload");
+    const screenResult = document.getElementById("screen-result");
+    const fileInput = document.getElementById("fileInput");
+    const previewImage = document.getElementById("previewImage");
+    const photoSlot = document.getElementById("photoSlot");
+    const resultSlot = document.getElementById("resultSlot");
+    const resultImage = document.getElementById("resultImage");
+    const resultBtn = document.getElementById("resultBtn");
+    const againBtn = document.getElementById("againBtn");
+    const ramenNameKo = document.getElementById("ramenNameKo");
+    const ramenNameEn = document.getElementById("ramenNameEn");
+    const ramenVibe = document.getElementById("ramenVibe");
+    const ramenPersonality = document.getElementById("ramenPersonality");
+    const spicyFill = document.getElementById("spicyFill");
+    const spicyChilis = document.getElementById("spicyChilis");
+
+    let uploadedImageDataUrl = null;
+
+    // 업로드 슬롯 클릭 → 파일 선택
+    photoSlot.addEventListener("click", () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        uploadedImageDataUrl = event.target.result;
+        previewImage.src = uploadedImageDataUrl;
+        photoSlot.classList.add("has-photo");
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function pickRandomRamen() {
+      const index = Math.floor(Math.random() * RAMEN_DATA.length);
+      return RAMEN_DATA[index];
+    }
+
+    function showResult() {
+      const ramen = pickRandomRamen();
+
+      ramenNameKo.textContent = ramen.nameKo;
+      ramenNameEn.textContent = `(${ramen.nameEn}) baby`;
+      ramenVibe.textContent = ramen.vibe;
+      ramenPersonality.textContent = ramen.personality;
+
+      const level = Math.min(Math.max(ramen.spicy, 1), 5);
+      const percent = (level / 5) * 100;
+      spicyFill.style.width = percent + "%";
+      spicyChilis.textContent = "🌶".repeat(level);
+
+      if (uploadedImageDataUrl) {
+        resultImage.src = uploadedImageDataUrl;
+        resultSlot.classList.add("has-photo");
+      } else {
+        resultImage.src =
+          "data:image/svg+xml;utf8," +
+          encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="40">👄</text></svg>'
+          );
+        resultSlot.classList.add("has-photo");
+      }
+
+      screenUpload.classList.remove("active");
+      screenResult.classList.add("active");
+    }
+
+    resultBtn.addEventListener("click", showResult);
+
+    againBtn.addEventListener("click", () => {
+      screenResult.classList.remove("active");
+      screenUpload.classList.add("active");
+    });
+  </script>
+</body>
+</html>

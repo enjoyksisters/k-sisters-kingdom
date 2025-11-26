@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Korean Name Generator</title>
+
+  <!-- Cute font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Fredoka", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ff6b4a;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 14px;
+      color: #fff;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 430px;
+      text-align: center;
+    }
+
+    .card {
+      background: transparent;
+    }
+
+    /* 타이틀 */
+    .title {
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 2.1rem;
+      line-height: 1.1;
+      letter-spacing: 0.08em;
+      margin: 0 0 12px;
+      text-shadow: 0 3px 0 rgba(0,0,0,0.15);
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      max-width: 320px;
+      margin: 0 auto 22px;
+      color: #ffece2;
+    }
+
+    /* 사진 동그라미 */
+    .photo-circle {
+      width: 190px;
+      height: 190px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      background: #ffc55c;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 10px 0 rgba(0,0,0,0.12);
+    }
+
+    .photo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .photo-placeholder {
+      font-size: 0.95rem;
+      color: #b76a1e;
+      pointer-events: none;
+    }
+
+    /* 파일 선택 영역 : 중앙 + 커스텀 버튼 */
+    .file-input-wrapper {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* 진짜 input 숨기기 */
+    #photoInput {
+      display: none;
+    }
+
+    .custom-file-btn {
+      background: #ffd9a0;
+      padding: 8px 18px;
+      font-size: 0.9rem;
+      border-radius: 14px;
+      cursor: pointer;
+      color: #783b04;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.14);
+      transition: transform 0.08s;
+      line-height: 1;
+    }
+
+    .custom-file-btn:active {
+      transform: translateY(2px);
+    }
+
+    /* vibe 라벨 */
+    .section-label {
+      margin: 22px 0 10px;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    /* vibe 선택 그룹 */
+    .vibe-group {
+      display: flex;
+      gap: 4px;
+      background: #ffe1cf;
+      border-radius: 20px;
+      padding: 4px;
+      justify-content: center;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+    }
+
+    .vibe-option {
+      position: relative;
+      flex: 1 1 auto;
+    }
+
+    .vibe-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .vibe-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 0.82rem;
+      padding: 7px 4px;
+      border-radius: 16px;
+      cursor: pointer;
+      color: #c04a3c;
+      user-select: none;
+      line-height: 1;
+    }
+
+    .vibe-option input:checked + .vibe-label {
+      background: #ff9ed9;
+      color: #5a174f;
+      box-shadow: 0 2px 0 rgba(0,0,0,0.12);
+    }
+
+    /* 메인 버튼 */
+    .main-btn {
+      margin: 22px auto 10px;
+      width: 100%;
+      max-width: 360px;
+      border: none;
+      border-radius: 999px;
+      padding: 13px 16px;
+      background: #f3b0ff;
+      color: #3c1146;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 0 rgba(0,0,0,0.18);
+      transition: transform 0.08s;
+      line-height: 1;
+    }
+
+    .main-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 5px 0 rgba(0,0,0,0.18);
+    }
+
+    /* 결과 카드 */
+    .result-card {
+      margin-top: 18px;
+      padding: 16px 14px 16px;
+      border-radius: 18px;
+      background: #fff1e7;
+      color: #4c1c18;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.12);
+    }
+
+    .result-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 8px;
+      object-fit: cover;
+      display: none;
+      border: 4px solid #ffc55c;
+    }
+
+    .result-name-kor {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: 4px 0 2px;
+      line-height: 1.1;
+    }
+
+    .result-name-roman {
+      font-size: 0.98rem;
+      margin: 0 0 2px;
+      line-height: 1.2;
+    }
+
+    .result-meaning {
+      font-size: 0.86rem;
+      color: #7a4034;
+      margin: 2px 0 2px;
+      line-height: 1.4;
+    }
+
+    .result-tag {
+      margin-top: 4px;
+      font-size: 0.8rem;
+      color: #b0583b;
+    }
+
+    /* 결과 카드 안의 작은 버튼들 */
+    .bottom-actions {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .small-btn {
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.78rem;
+      padding: 7px 10px;
+      background: #ffe9f3;
+      color: #5a1746;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.14);
+      line-height: 1.1;
+    }
+
+    .small-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.14);
+    }
+
+    /* 결과 카드 바깥쪽 인스타 / 틱톡 버튼 */
+    .social-actions {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .social-btn {
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.78rem;
+      padding: 7px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      line-height: 1.1;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.14);
+    }
+
+    .social-btn.instagram {
+      background: #ff99c8;
+      color: #fff;
+    }
+
+    .social-btn.tiktok {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .social-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.14);
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 400px) {
+      .title { font-size: 1.9rem; }
+      .photo-circle { width: 170px; height: 170px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="card">
+
+      <h1 class="title">KOREAN NAME<br>GENERATOR</h1>
+
+      <p class="subtitle">
+        Upload your photo, choose your vibe,<br>
+        and get a K-drama ready Korean name.
+      </p>
+
+      <!-- 사진 동그라미 -->
+      <div class="photo-circle">
+        <img id="photoPreview" alt="preview">
+        <div class="photo-placeholder" id="photoPlaceholder">photo here</div>
+      </div>
+
+      <!-- 커스텀 파일 버튼 (중앙, 영어) -->
+      <div class="file-input-wrapper">
+        <label class="custom-file-btn" for="photoInput">Choose file</label>
+        <input type="file" id="photoInput" accept="image/*">
+      </div>
+
+      <!-- vibe 선택 -->
+      <div class="section-label">Choose your vibe:</div>
+
+      <div class="vibe-group">
+        <label class="vibe-option">
+          <input type="radio" name="vibe" value="female" checked>
+          <div class="vibe-label">♀️ Female</div>
+        </label>
+        <label class="vibe-option">
+          <input type="radio" name="vibe" value="male">
+          <div class="vibe-label">🔥 Male</div>
+        </label>
+        <label class="vibe-option">
+          <input type="radio" name="vibe" value="neutral">
+          <div class="vibe-label">🌈 Neutral</div>
+        </label>
+        <label class="vibe-option">
+          <input type="radio" name="vibe" value="any">
+          <div class="vibe-label">🎲 Any</div>
+        </label>
+      </div>
+
+      <!-- 메인 버튼 -->
+      <button class="main-btn" id="generateBtn">
+        Get my Korean name
+      </button>
+
+      <!-- 결과 카드 -->
+      <div class="result-card hidden" id="resultCard">
+        <img id="resultPhoto" class="result-photo" alt="your photo result">
+        <div class="result-name-kor" id="resultNameKor">---</div>
+        <div class="result-name-roman" id="resultNameRoman">---</div>
+        <div class="result-meaning" id="resultMeaning">---</div>
+        <div class="result-tag" id="resultTag"></div>
+
+        <div class="bottom-actions">
+          <button class="small-btn" id="copyBtn">📋 Copy result text</button>
+          <button class="small-btn" id="storyBtn">📲 Story text helper</button>
+        </div>
+      </div>
+
+      <!-- 결과 카드 바깥, 맨 아래 인스타/틱톡 버튼 -->
+      <div id="socialActions" class="social-actions hidden">
+        <button class="social-btn instagram" id="igBtn">📷 Share to Instagram</button>
+        <button class="social-btn tiktok" id="ttBtn">🎵 Share to TikTok</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ===== 100개 이름 데이터 =====
+    const nameData = [
+      {
+        "koreanName": "김서연",
+        "romanized": "Seoyeon Kim",
+        "gender": "female",
+        "type": "normal",
+        "description": "Soft and elegant, like a calm breeze."
+      },
+      {
+        "koreanName": "이준호",
+        "romanized": "Junho Lee",
+        "gender": "male",
+        "type": "normal",
+        "description": "Bright and friendly, 'Jun' often feels like 'talented'."
+      },
+      {
+        "koreanName": "김방구",
+        "romanized": "Bangu Kim",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Bang-gu' means 'fart' in Korean. A legendary name for someone with powerful air energy."
+      },
+      {
+        "koreanName": "박민지",
+        "romanized": "Minji Park",
+        "gender": "female",
+        "type": "normal",
+        "description": "Cute and smart, a very classic Korean name vibe."
+      },
+      {
+        "koreanName": "최도윤",
+        "romanized": "Doyoon Choi",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Trendy and cool, works as a modern unisex name."
+      },
+      {
+        "koreanName": "정하늘",
+        "romanized": "Haneul Jung",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "'Haneul' means 'sky' — soft, dreamy energy."
+      },
+      {
+        "koreanName": "이감자",
+        "romanized": "Gamja Lee",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Gamja' means 'potato'. Cute, round, and very snackable energy."
+      },
+      {
+        "koreanName": "유지민",
+        "romanized": "Jimin Yoo",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Gentle and artistic; very K-pop idol feeling."
+      },
+      {
+        "koreanName": "한서우",
+        "romanized": "Seou Han",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Soft, neutral vibe; works for any gender."
+      },
+      {
+        "koreanName": "박고구마",
+        "romanized": "Goguma Park",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Goguma' means 'sweet potato'. Sweet but a little shy and roasted inside."
+      },
+      {
+        "koreanName": "오지후",
+        "romanized": "Jihu Oh",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Trendy and cool, kind of K-drama second-lead vibe."
+      },
+      {
+        "koreanName": "서예린",
+        "romanized": "Yerin Seo",
+        "gender": "female",
+        "type": "normal",
+        "description": "Pretty and bright, feels like art and melody together."
+      },
+      {
+        "koreanName": "최똥별",
+        "romanized": "Ddongbyeol Choi",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Ddong' = poop, 'byeol' = star → 'poop star'. A truly unforgettable cosmic disaster energy."
+      },
+      {
+        "koreanName": "조하린",
+        "romanized": "Harin Cho",
+        "gender": "female",
+        "type": "normal",
+        "description": "Warm and fresh, like sunshine in spring."
+      },
+      {
+        "koreanName": "강도현",
+        "romanized": "Dohyun Kang",
+        "gender": "male",
+        "type": "normal",
+        "description": "Dependable and calm, good for a main-character lawyer or doctor."
+      },
+      {
+        "koreanName": "윤아라",
+        "romanized": "Ara Yoon",
+        "gender": "female",
+        "type": "normal",
+        "description": "'Ara' can feel like 'beautiful, elegant'. Very classy."
+      },
+      {
+        "koreanName": "문코딱지",
+        "romanized": "Koddakji Moon",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Ko-ttak-ji' means 'booger'. Tiny, sticky, and always there when you don't want it."
+      },
+      {
+        "koreanName": "임태규",
+        "romanized": "Taegyu Lim",
+        "gender": "male",
+        "type": "normal",
+        "description": "Smart, slightly nerdy, but charming."
+      },
+      {
+        "koreanName": "신라온",
+        "romanized": "Laon Shin",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "'Laon' can feel like 'joyful, happy'. Bright vibe."
+      },
+      {
+        "koreanName": "표꾸러기",
+        "romanized": "Kkureogi Pyo",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Kkureogi' means 'mischievous kid / little rascal'. Perfect for chaos energy."
+      },
+      {
+        "koreanName": "배수진",
+        "romanized": "Sujin Bae",
+        "gender": "female",
+        "type": "normal",
+        "description": "Soft and mature, feels reliable and kind."
+      },
+      {
+        "koreanName": "하유진",
+        "romanized": "Yujin Ha",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Very neutral; could be any K-drama main character."
+      },
+      {
+        "koreanName": "노준서",
+        "romanized": "Junseo Noh",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Youthful, smart, almost 'golden boy/girl' vibes."
+      },
+      {
+        "koreanName": "유수다",
+        "romanized": "Sooda Yoo",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Sooda' means 'to talk a lot / chit-chat'. Great for the friend who never stops talking."
+      },
+      {
+        "koreanName": "손채영",
+        "romanized": "Chaeyoung Son",
+        "gender": "female",
+        "type": "normal",
+        "description": "Trendy and artistic, very idol-like."
+      },
+      {
+        "koreanName": "류지안",
+        "romanized": "Jian Ryu",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Calm and minimal, with a modern vibe."
+      },
+      {
+        "koreanName": "강두더지",
+        "romanized": "Dudeoji Kang",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Dudeoji' means 'mole'. Cute, squishy, underground introvert energy."
+      },
+      {
+        "koreanName": "장하율",
+        "romanized": "Hayul Jang",
+        "gender": "female",
+        "type": "normal",
+        "description": "Warm and bright, like sunshine and harmony."
+      },
+      {
+        "koreanName": "안시온",
+        "romanized": "Sion Ahn",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Cool, neutral, and slightly mysterious."
+      },
+      {
+        "koreanName": "고번개",
+        "romanized": "Beongae Go",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Beongae' means 'lightning'. For someone fast, dramatic, and a little shocking."
+      },
+      {
+        "koreanName": "김여울",
+        "romanized": "Yeoul Kim",
+        "gender": "female",
+        "type": "normal",
+        "description": "Soft, poetic name; feels like a Korean indie song."
+      },
+      {
+        "koreanName": "이현우",
+        "romanized": "Hyunwoo Lee",
+        "gender": "male",
+        "type": "normal",
+        "description": "Classic handsome boy name. Very K-drama male lead."
+      },
+      {
+        "koreanName": "박코끼리",
+        "romanized": "Kokkiri Park",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Kokkiri' means 'elephant'. Big heart, big ears, big cuteness."
+      },
+      {
+        "koreanName": "최소연",
+        "romanized": "Soyeon Choi",
+        "gender": "female",
+        "type": "normal",
+        "description": "Calm and clever, with a slightly mature vibe."
+      },
+      {
+        "koreanName": "정민재",
+        "romanized": "Minjae Jung",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Very neutral; feels dependable and friendly."
+      },
+      {
+        "koreanName": "조잠만보",
+        "romanized": "Jammanbo Cho",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "From 'Jammanbo', the Korean name for Snorlax. For the person who only wants to sleep and eat."
+      },
+      {
+        "koreanName": "한라진",
+        "romanized": "Lajin Han",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Unique and stylish; sounds like a fashion designer."
+      },
+      {
+        "koreanName": "유다온",
+        "romanized": "Daon Yoo",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "'Daon' feels like 'good things have come'. Very positive vibe."
+      },
+      {
+        "koreanName": "서허당",
+        "romanized": "Heodang Seo",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Heodang' means someone clumsy and a bit spacey but lovable."
+      },
+      {
+        "koreanName": "문지후",
+        "romanized": "Jihu Moon",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Modern and cool, fits any gender."
+      },
+      {
+        "koreanName": "배세린",
+        "romanized": "Serin Bae",
+        "gender": "female",
+        "type": "normal",
+        "description": "Fresh, slightly elegant, like a perfume name."
+      },
+      {
+        "koreanName": "오왕자님",
+        "romanized": "Wangjanim Oh",
+        "gender": "male",
+        "type": "funny",
+        "description": "'Wangja-nim' means 'prince'. Drama-king level main-character energy."
+      },
+      {
+        "koreanName": "하채윤",
+        "romanized": "Chaeyoon Ha",
+        "gender": "female",
+        "type": "normal",
+        "description": "Pretty and musical, like a character who plays piano."
+      },
+      {
+        "koreanName": "임도겸",
+        "romanized": "Dogyeom Lim",
+        "gender": "male",
+        "type": "normal",
+        "description": "Soft but dependable; good second-lead name."
+      },
+      {
+        "koreanName": "윤공주님",
+        "romanized": "Gongjunim Yoon",
+        "gender": "female",
+        "type": "funny",
+        "description": "'Gongju-nim' means 'princess'. Cute, dramatic, and a little spoiled (in a good way)."
+      },
+      {
+        "koreanName": "강서리",
+        "romanized": "Seori Kang",
+        "gender": "female",
+        "type": "normal",
+        "description": "Gentle and cool, like a quiet snowy day."
+      },
+      {
+        "koreanName": "장우빈",
+        "romanized": "Woobin Jang",
+        "gender": "male",
+        "type": "normal",
+        "description": "Strong and charismatic, CEO or actor vibe."
+      },
+      {
+        "koreanName": "노고구마칩",
+        "romanized": "Gogumachip Noh",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Goguma chip' means sweet potato chips. For the crunchy snack friend everyone secretly loves."
+      },
+      {
+        "koreanName": "손하린",
+        "romanized": "Harin Son",
+        "gender": "female",
+        "type": "normal",
+        "description": "Warm, bright, spring-flower feeling."
+      },
+      {
+        "koreanName": "류시온",
+        "romanized": "Sion Ryu",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Simple, modern, and slightly mysterious."
+      },
+      {
+        "koreanName": "표핫도그",
+        "romanized": "Hotdog Pyo",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Hotdog' is exactly what it sounds like. Street-food energy and main-character hunger."
+      },
+      {
+        "koreanName": "신라라",
+        "romanized": "Lala Shin",
+        "gender": "female",
+        "type": "normal",
+        "description": "Playful and musical, like a character in a webtoon."
+      },
+      {
+        "koreanName": "장민호",
+        "romanized": "Minho Jang",
+        "gender": "male",
+        "type": "normal",
+        "description": "Classic, masculine, very familiar Korean name."
+      },
+      {
+        "koreanName": "고감기",
+        "romanized": "Gamgi Go",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Gamgi' means 'cold' (the sickness). For someone always sniffling but still cute."
+      },
+      {
+        "koreanName": "안지유",
+        "romanized": "Jiyu Ahn",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Soft and flexible, neutral and modern."
+      },
+      {
+        "koreanName": "김하린",
+        "romanized": "Harin Kim",
+        "gender": "female",
+        "type": "normal",
+        "description": "Bright, warm, feels like spring sunlight."
+      },
+      {
+        "koreanName": "이꿀벌",
+        "romanized": "Kkulbeol Lee",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Kkulbeol' means 'honey bee'. Busy, hardworking, and always buzzing around."
+      },
+      {
+        "koreanName": "박도윤",
+        "romanized": "Doyoon Park",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Trendy, calm, and reliable main-character energy."
+      },
+      {
+        "koreanName": "최유진",
+        "romanized": "Yujin Choi",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Very neutral and popular; works for any gender."
+      },
+      {
+        "koreanName": "정멍멍",
+        "romanized": "Meongmeong Jung",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Meong-meong' is the Korean sound for 'woof'. Puppy-like, loyal, and easily distracted by snacks."
+      },
+      {
+        "koreanName": "조서윤",
+        "romanized": "Seoyoon Cho",
+        "gender": "female",
+        "type": "normal",
+        "description": "Elegant and gentle, like a drama female lead."
+      },
+      {
+        "koreanName": "한지후",
+        "romanized": "Jihu Han",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Modern all-rounder: could be gamer, artist, or CEO."
+      },
+      {
+        "koreanName": "유곰돌이",
+        "romanized": "Gomdori Yoo",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Gomdori' means 'little bear'. Soft, sleepy, hug-magnet energy."
+      },
+      {
+        "koreanName": "하도연",
+        "romanized": "Doyeon Ha",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Chic, model-like, with a strong presence."
+      },
+      {
+        "koreanName": "배채민",
+        "romanized": "Chaemin Bae",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Cool and friendly, kind of K-pop trainee vibe."
+      },
+      {
+        "koreanName": "문꿀떡",
+        "romanized": "Kkulddeok Moon",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Kkul-ddeok' means 'honey rice cake'. Super chewy, super sweet, impossible to forget."
+      },
+      {
+        "koreanName": "손라온",
+        "romanized": "Laon Son",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Joyful, bright, and positive aura."
+      },
+      {
+        "koreanName": "노지아",
+        "romanized": "Jia Noh",
+        "gender": "female",
+        "type": "normal",
+        "description": "Short, chic, fashion-influencer feel."
+      },
+      {
+        "koreanName": "강몽몽",
+        "romanized": "Mongmong Kang",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Mong-mong' means spaced-out and dreamy. Soft, sleepy cloud energy."
+      },
+      {
+        "koreanName": "윤태린",
+        "romanized": "Taerin Yoon",
+        "gender": "female",
+        "type": "normal",
+        "description": "Delicate but strong; sounds like a violinist."
+      },
+      {
+        "koreanName": "오현성",
+        "romanized": "Hyunseong Oh",
+        "gender": "male",
+        "type": "normal",
+        "description": "Serious, smart, maybe a future professor."
+      },
+      {
+        "koreanName": "표라떼",
+        "romanized": "Latte Pyo",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Latte' is for the person who basically lives at cafés."
+      },
+      {
+        "koreanName": "류시안",
+        "romanized": "Sian Ryu",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Short, modern, gender-neutral vibe."
+      },
+      {
+        "koreanName": "신여진",
+        "romanized": "Yeo-jin Shin",
+        "gender": "female",
+        "type": "normal",
+        "description": "Pretty and gentle, a classic girl-name."
+      },
+      {
+        "koreanName": "정뿌까",
+        "romanized": "Ppukka Jung",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "Feels like a tiny bun-haired troublemaker from a cartoon."
+      },
+      {
+        "koreanName": "장도아",
+        "romanized": "Doa Jang",
+        "gender": "female",
+        "type": "normal",
+        "description": "Soft and slightly mystical, like a webtoon heroine."
+      },
+      {
+        "koreanName": "표준우",
+        "romanized": "Junwoo Pyo",
+        "gender": "male",
+        "type": "normal",
+        "description": "Friendly and playful, good unisex feeling."
+      },
+      {
+        "koreanName": "한치킨",
+        "romanized": "Chicken Han",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Chicken' is Korea's true soulmate food. Perfect for a fried-chicken lover."
+      },
+      {
+        "koreanName": "유하늘",
+        "romanized": "Haneul Yoo",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "'Haneul' again means 'sky'; dreamy and poetic."
+      },
+      {
+        "koreanName": "이라온",
+        "romanized": "Raon Lee",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "'Raon' often feels like 'joyful, happy'. Positive vibe."
+      },
+      {
+        "koreanName": "고탕수육",
+        "romanized": "Tangsooyuk Go",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Tangsooyuk' is sweet and sour pork. Crispy, saucy, and everyone's favorite at the table."
+      },
+      {
+        "koreanName": "김채운",
+        "romanized": "Chaeun Kim",
+        "gender": "female",
+        "type": "normal",
+        "description": "Light and bright, like a breeze in spring."
+      },
+      {
+        "koreanName": "박지온",
+        "romanized": "Jion Park",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Soft, modern, and gender-neutral."
+      },
+      {
+        "koreanName": "노꽈배기",
+        "romanized": "Kkwabaegi Noh",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Kkwabaegi' is a twisted Korean donut. Sweet, fluffy, and a little twisted in a good way."
+      },
+      {
+        "koreanName": "최다해",
+        "romanized": "Dahae Choi",
+        "gender": "female",
+        "type": "normal",
+        "description": "Feels like 'many blessings' or 'much love'. Warm vibe."
+      },
+      {
+        "koreanName": "조윤재",
+        "romanized": "Yoonjae Cho",
+        "gender": "male",
+        "type": "normal",
+        "description": "Smart, dependable, great for a lead character."
+      },
+      {
+        "koreanName": "배호빵",
+        "romanized": "Hoppang Bae",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Hoppang' is a warm steamed bun. Soft outside, lava inside."
+      },
+      {
+        "koreanName": "임세하",
+        "romanized": "Seha Lim",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Chic and simple, model-type name."
+      },
+      {
+        "koreanName": "안도윤",
+        "romanized": "Doyoon Ahn",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Trendy and calm, everyday main-character energy."
+      },
+      {
+        "koreanName": "손심쿵",
+        "romanized": "Simkoong Son",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Simkoong' means 'heart-thump'. A heart-attack-level crush name."
+      },
+      {
+        "koreanName": "강유림",
+        "romanized": "Yurim Kang",
+        "gender": "female",
+        "type": "normal",
+        "description": "Gentle and pretty, like a forest in spring."
+      },
+      {
+        "koreanName": "윤하진",
+        "romanized": "Hajin Yoon",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Modern, energetic, and slightly sporty."
+      },
+      {
+        "koreanName": "김꿀잠",
+        "romanized": "Kkuljam Kim",
+        "gender": "neutral",
+        "type": "funny",
+        "description": "'Kkuljam' means sweet, perfect sleep. For the nap king or queen."
+      },
+      {
+        "koreanName": "문서준",
+        "romanized": "Seojun Moon",
+        "gender": "male",
+        "type": "normal",
+        "description": "Very K-drama male-lead name."
+      },
+      {
+        "koreanName": "오다인",
+        "romanized": "Dain Oh",
+        "gender": "female",
+        "type": "normal",
+        "description": "Soft and classy, short and memorable."
+      },
+      {
+        "koreanName": "류소이",
+        "romanized": "Soi Ryu",
+        "gender": "female",
+        "type": "normal",
+        "description": "Cute, modern, and stylish; webtoon-heroine vibes."
+      },
+      {
+        "koreanName": "하지안",
+        "romanized": "Jian Ha",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Minimal, cool, unisex, and sleek."
+      },
+      {
+        "koreanName": "배루아",
+        "romanized": "Rua Bae",
+        "gender": "female",
+        "type": "normal",
+        "description": "Unique, feels soft and dreamy."
+      },
+      {
+        "koreanName": "신은채",
+        "romanized": "Eunchae Shin",
+        "gender": "female",
+        "type": "normal",
+        "description": "Pretty, gentle, very K-idol-like."
+      },
+      {
+        "koreanName": "조태윤",
+        "romanized": "Taeyoon Cho",
+        "gender": "neutral",
+        "type": "normal",
+        "description": "Warm and bright; friendly sun-energy."
+      }
+    ];
+
+    const photoInput       = document.getElementById("photoInput");
+    const photoPreview     = document.getElementById("photoPreview");
+    const photoPlaceholder = document.getElementById("photoPlaceholder");
+    const generateBtn      = document.getElementById("generateBtn");
+
+    const resultCard       = document.getElementById("resultCard");
+    const resultPhoto      = document.getElementById("resultPhoto");
+    const resultNameKor    = document.getElementById("resultNameKor");
+    const resultNameRoman  = document.getElementById("resultNameRoman");
+    const resultMeaning    = document.getElementById("resultMeaning");
+    const resultTag        = document.getElementById("resultTag");
+
+    const copyBtn          = document.getElementById("copyBtn");
+    const storyBtn         = document.getElementById("storyBtn");
+
+    const socialActions    = document.getElementById("socialActions");
+    const igBtn            = document.getElementById("igBtn");
+    const ttBtn            = document.getElementById("ttBtn");
+
+    let lastResultText = "";
+
+    function pickRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function getSelectedVibe() {
+      const checked = document.querySelector('input[name="vibe"]:checked');
+      return checked ? checked.value : "any";
+    }
+
+    function getPoolByVibe(vibe) {
+      if (vibe === "any") return nameData;
+      return nameData.filter(n => n.gender === vibe);
+    }
+
+    // 사진 미리보기
+    photoInput.addEventListener("change", () => {
+      const file = photoInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        photoPreview.src = e.target.result;
+        photoPreview.style.display = "block";
+        photoPlaceholder.style.display = "none";
+        resultPhoto.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // 이름 생성
+    generateBtn.addEventListener("click", () => {
+      const vibe = getSelectedVibe();
+      const pool = getPoolByVibe(vibe);
+
+      if (!pool.length) {
+        alert("No names found for this vibe. Try another one! 😅");
+        return;
+      }
+
+      const picked = pickRandom(pool);
+
+      resultNameKor.textContent   = picked.koreanName;
+      resultNameRoman.textContent = picked.romanized;
+      resultMeaning.textContent   = picked.description;
+      resultTag.textContent       =
+        `Gender: ${picked.gender} · Type: ${picked.type}`;
+
+      if (photoPreview.src) {
+        resultPhoto.style.display = "block";
+      } else {
+        resultPhoto.style.display = "none";
+      }
+
+      resultCard.classList.remove("hidden");
+      socialActions.classList.remove("hidden");
+
+      lastResultText =
+        `My Korean name: ${picked.romanized} (${picked.koreanName}) — ${picked.description}`;
+    });
+
+    // 결과 텍스트 복사
+    copyBtn.addEventListener("click", () => {
+      if (!lastResultText) {
+        alert("Generate your Korean name first! 💖");
+        return;
+      }
+      navigator.clipboard.writeText(lastResultText)
+        .then(() => alert("Copied! Paste it anywhere you like ✨"))
+        .catch(() => alert(lastResultText));
+    });
+
+    // 스토리 텍스트 헬퍼
+    storyBtn.addEventListener("click", () => {
+      if (!lastResultText) {
+        alert("Make your Korean name first, then open this helper! ✨");
+        return;
+      }
+      alert(
+        "Story caption idea:\n\n" +
+        lastResultText +
+        "\n\nMade with my Korean Name Generator 💖"
+      );
+    });
+
+    // 인스타 / 틱톡 버튼 (실제 업로드는 직접 해야 함)
+    igBtn.addEventListener("click", () => {
+      if (!lastResultText) {
+        alert("Generate your name first, then take a screenshot and upload 💕");
+        return;
+      }
+      alert("1) Take a screenshot of this page\n2) Open Instagram and upload it to Story or Reel 📷");
+      window.open("https://www.instagram.com", "_blank");
+    });
+
+    ttBtn.addEventListener("click", () => {
+      if (!lastResultText) {
+        alert("Generate your name first, then take a screenshot and upload 🎵");
+        return;
+      }
+      alert("1) Take a screenshot of this page\n2) Open TikTok and upload it as a new post 🎵");
+      window.open("https://www.tiktok.com", "_blank");
+    });
+  </script>
+</body>
+</html>
