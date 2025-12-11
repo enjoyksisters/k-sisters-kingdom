@@ -32,7 +32,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 12px;         /* 화면 가장자리 기본 여백 */
+  padding: 20px 12px 40px;   /* ⬅️ 아래 여백 조금 넉넉하게 */
   background:
     radial-gradient(circle at 10% 0%, #5846ff 0, transparent 55%),
     radial-gradient(circle at 80% 100%, #f74f7a33 0, transparent 60%),
@@ -216,6 +216,7 @@ body::before {
   justify-content: center;
   gap: 8px;
   margin-top: 4px;
+  margin-bottom: 6px;        /* ⬅️ 숫자줄 아래 살짝 여백 */
   overflow-x: auto;
   padding-bottom: 4px;
 }
@@ -270,7 +271,7 @@ body::before {
   padding: 3px;
   cursor: pointer;
   border-radius: 26px;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s.ease;
 }
 .card-button:hover:not(.disabled) {
   transform: translateY(-2px) scale(1.03);
@@ -403,7 +404,7 @@ body::before {
   }
 }
 .card-3d.card-enter {
-  animation: card-rise-glow 0.8s.ease-out forwards;
+  animation: card-rise-glow 0.8s ease-out forwards;   /* ⬅️ 오타 수정 */
 }
 
 /* subtle pulse */
@@ -457,9 +458,9 @@ body::before {
     0 0 18px rgba(129,116,255,0.9),
     0 0 40px rgba(255,138,230,0.65);
   text-shadow: 0 0 6px rgba(0,0,0,0.9);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s.ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;  /* ⬅️ 오타 수정 */
 }
-.secondary-btn span { transition: transform 0.25s ease; }
+.secondary-btn span { transition: transform 0.25s.ease; }
 .secondary-btn:hover {
   transform: translateY(-1px);
   box-shadow:
@@ -475,21 +476,28 @@ body::before {
 /* 🔍 모바일에서 여백 좀 더 주고 카드 폭 줄이기 */
 @media (max-width: 480px) {
   body {
-    padding: 16px 10px;             /* 화면 가장자리 여백 */
+    padding: 16px 12px 90px;      /* ⬅️ 아래 90px 여백 + 모바일은 위에서부터 시작 */
+    align-items: flex-start;
+    justify-content: flex-start;
   }
+
   .app-shell {
     max-width: 420px;
-    padding: 26px 14px 18px;        /* 카드랑 테두리 사이 여백 */
+    padding: 26px 14px 18px;
+    margin-top: 16px;
+    margin-bottom: 24px;
   }
+
   .card,
   .card-3d {
-    width: min(220px, 72vw);        /* 카드가 화면에 꽉 차지 않게 */
+    width: min(220px, 72vw);
   }
   .card-slot.small .card {
     width: min(120px, 26vw);
   }
 }
 </style>
+
 </head>
 
 <body>
