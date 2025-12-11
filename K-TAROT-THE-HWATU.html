@@ -23,18 +23,24 @@
   --deep-violet: #2a0b4e;
 }
 
-/* =====================
-      GLOBAL
-===================== */
-* { box-sizing: border-box; }
+/* ============= GLOBAL ============= */
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
 
 body {
   margin: 0;
   min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 20px 16px 40px;
+  /* 👇 노치/하단바 포함 안전 여백 */
+  padding-top: 16px;
+  padding-right: calc(16px + env(safe-area-inset-right, 0px));
+  padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+  padding-left: calc(16px + env(safe-area-inset-left, 0px));
+
+  display: block;
   background:
     radial-gradient(circle at 10% 0%, #5846ff 0, transparent 55%),
     radial-gradient(circle at 80% 100%, #f74f7a33 0, transparent 60%),
@@ -42,148 +48,251 @@ body {
     #050014;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--text-main);
+  overflow-y: auto;
+  overflow-x: hidden;  /* 👉 옆으로 잘리는 느낌 방지 */
 }
 
-/* APP WRAPPER */
+/* ============= BADGE & APP WRAP ============= */
 .app {
   width: 100%;
   max-width: 480px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
 }
 
-/* APP SHELL (화면 컨테이너) */
-.app-shell {
-  width: 100%;
-  max-width: 430px;
-  border-radius: 26px;
-  padding: 28px 16px 28px;
-  background: linear-gradient(145deg, #1a0f3b 0%, #070315 50%, #240628 100%);
-  border: 1px solid rgba(255,255,255,0.12);
-  overflow: hidden;
-  box-shadow: 0 18px 80px rgba(0,0,0,0.8);
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 224, 170, 0.95);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.2), transparent 55%),
+    linear-gradient(135deg, rgba(60,34,8,0.95), rgba(120,76,20,0.95));
+  color: var(--gold-soft);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 12px rgba(255, 215, 160, 0.7),
+    0 0 26px rgba(255, 174, 200, 0.5);
+  text-shadow:
+    0 0 4px rgba(0,0,0,0.9),
+    0 0 10px rgba(255,215,160,0.8);
+  backdrop-filter: blur(4px);
 }
 
-/* HEADER */
+/* ============= LANG TOGGLE ============= */
+.lang-toggle {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  display: flex;
+  gap: 4px;
+  z-index: 3;
+}
+.lang-btn {
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(6,3,20,0.6);
+  color: #f8ecff;
+  font-size: 0.65rem;
+  padding: 2px 7px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.lang-btn.active {
+  background: linear-gradient(135deg, #ffc658, #ff8ae6);
+  color: #1b0d1f;
+  border-color: rgba(255,248,210,0.95);
+}
+
+/* ============= APP SHELL ============= */
+.app-shell {
+  position: relative;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  margin-top: 4px;
+
+  border-radius: 26px;
+  padding: 22px 16px 24px;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.09), transparent 60%),
+    radial-gradient(circle at bottom, rgba(0,0,0,0.95), transparent 70%),
+    linear-gradient(145deg, #1a0f3b 0%, #070315 50%, #240628 100%);
+  box-shadow: 0 18px 80px rgba(0,0,0,0.85);
+  border: 1px solid rgba(255,255,255,0.12);
+  overflow: hidden;
+}
+
+/* ============= HEADER ============= */
 .app-header {
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .app-title {
-  font-family: "Cinzel", serif;
-  font-size: 1.35rem;
-  letter-spacing: 0.14em;
+  font-family: "Cinzel", "Times New Roman", serif;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  font-size: 1.35rem;
   color: var(--gold-soft);
 }
 .app-title::after {
   content: "✶";
   display: block;
-  margin-top: 6px;
   font-size: 1.8rem;
+  margin-top: 4px;
   color: var(--glow-cyan);
 }
 .app-tagline {
-  font-size: 0.9rem;
   margin-top: 6px;
+  font-size: 0.9rem;
   color: #9fd6ff;
   text-shadow: 0 0 4px rgba(29,117,189,0.7);
 }
 
-/* =====================
-      SCREEN COMMON
-===================== */
+/* ============= SCREEN COMMON ============= */
 .screen {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 .hidden { display: none !important; }
 
 .step-title {
-  font-size: 1.1rem;
-  color: #ffe8b6;
+  font-weight: 600;
+  font-size: 1rem;
   text-align: center;
+  color: #ffe8b6;
 }
 .step-text,
 .helper-text {
-  font-size: 0.95rem;
-  text-align: center;
+  font-size: 0.9rem;
   color: var(--text-soft);
-  line-height: 1.45;
+  line-height: 1.4;
+  text-align: center;
+  padding: 0 4px;
 }
 
-/* =====================
-      NUMBER BUTTONS
-===================== */
+/* ============= NUMBER ROW ============= */
 .btn-row {
   width: 100%;
   display: flex;
   flex-wrap: nowrap;
+  justify-content: center;
   gap: 6px;
+  margin-top: 4px;
+  margin-bottom: 4px;
   overflow-x: auto;
-  padding-bottom: 6px;
+  padding: 0 4px 6px;
+}
+.btn-row::-webkit-scrollbar { height: 4px; }
+.btn-row::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 999px;
 }
 .num-btn {
   flex: 0 0 auto;
   min-width: 40px;
   height: 40px;
-  font-size: 1.1rem;
-  border-radius: 50%;
+  border-radius: 999px;
   border: 1px solid rgba(255,214,140,0.8);
-  background: linear-gradient(140deg, #2d214d, #15152f);
+  background:
+    radial-gradient(circle at 30% 0%, rgba(255,255,255,0.2), transparent 60%),
+    linear-gradient(140deg, #2d214d, #15152f);
   color: var(--gold-soft);
+  font-weight: 600;
+  font-size: 1rem;
 }
 .num-btn.active {
-  background: linear-gradient(150deg, #ffc958, #ff7f55);
+  background:
+    radial-gradient(circle at 10% 0%, #fff9d4 0, transparent 60%),
+    linear-gradient(150deg, #ffc958, #ff7f55);
   color: #2b1200;
-  border-color: rgba(255,248,210,1);
+  border-color: rgba(255,248,210,0.95);
 }
 
-/* =====================
-          CARDS
-===================== */
+/* ============= CARDS ============= */
 .card-slot { display: flex; justify-content: center; }
+.card-slot.large { margin-top: 4px; }
+
+.card-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.card-button {
+  background: none;
+  border: none;
+  padding: 3px;
+  cursor: pointer;
+  border-radius: 22px;
+}
+.card-button.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
 
 .card {
-  width: 78%;
+  width: 80%;
   max-width: 260px;
-  aspect-ratio: 3/5;
-  border-radius: 20px;
+  aspect-ratio: 3 / 5;
+  border-radius: 22px;
   overflow: hidden;
-  box-shadow: 0 18px 60px rgba(0,0,0,0.8);
+  box-shadow: 0 18px 70px rgba(0,0,0,0.9);
 }
 .card-slot.small .card {
-  width: 28vw;
+  width: 26vw;
   max-width: 120px;
 }
 
-/* 3D RESULT CARD */
+.card-back-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============= RESULT CARD (3D) ============= */
+.result-card-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
 .card-3d {
-  width: 78%;
+  width: 80%;
   max-width: 260px;
   aspect-ratio: 3/5;
   perspective: 1200px;
-  position: relative;
   cursor: pointer;
+  position: relative;
 }
 .card-3d-inner {
   width: 100%;
   height: 100%;
+  position: relative;
   transform-style: preserve-3d;
   transition: transform 0.7s ease;
 }
 .card-3d.flipped .card-3d-inner {
   transform: rotateY(180deg);
 }
+
 .card-face {
   position: absolute;
   inset: 0;
-  backface-visibility: hidden;
   border-radius: 20px;
+  backface-visibility: hidden;
+  overflow: hidden;
 }
 .card-front {
   background-size: cover;
@@ -191,64 +300,81 @@ body {
 }
 .card-back {
   transform: rotateY(180deg);
-  padding: 12px;
-  background: linear-gradient(180deg, rgba(6,3,20,0.96), rgba(3,1,10,0.99));
+  padding: 10px 10px 12px;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.12) 0, transparent 60%),
+    radial-gradient(circle at 0% 100%, rgba(101,248,255,0.15) 0, transparent 55%),
+    linear-gradient(180deg, rgba(6,3,20,0.96), rgba(3,1,10,0.99));
   border: 1px solid rgba(249,226,176,0.65);
 }
-.reading-body {
-  overflow-y: auto;
-  font-size: 0.95rem;
-  line-height: 1.45;
-  white-space: pre-wrap;
-}
+
 .reading-title {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   letter-spacing: 0.4em;
-  text-align: center;
-  margin-bottom: 6px;
+  text-transform: uppercase;
   color: var(--gold-soft);
+  text-align: center;
+  margin-bottom: 4px;
 }
 
-/* TAP overlay */
+.reading-body {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  line-height: 1.45;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+/* overlay */
 .tap-overlay {
   position: absolute;
   inset: 0;
   border-radius: 20px;
-  background: rgba(0,0,0,0.45);
-  backdrop-filter: blur(3px);
+  background: rgba(0,0,0,0.42);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   color: var(--gold-soft);
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
   opacity: 0;
-  transition: opacity 0.3s;
+  pointer-events: none;
+  text-shadow: 0 0 12px rgba(255,220,160,0.8);
+  transition: opacity 0.3s ease;
 }
 .tap-overlay.show { opacity: 1; }
 
 /* AGAIN BUTTON */
 .secondary-btn {
+  margin-top: 12px;
   padding: 8px 16px;
-  font-size: 1.3rem;
   border-radius: 999px;
   border: 1px solid rgba(151,132,255,0.9);
-  background: linear-gradient(140deg, rgba(50,32,120,0.95), rgba(18,11,60,0.98));
-  color: white;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.16), transparent 65%),
+    linear-gradient(140deg, rgba(50,32,120,0.95), rgba(18,11,60,0.98));
+  color: #e2ddff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-/* =====================
-    MOBILE FIXES
-===================== */
+/* ============= SMALL HEIGHT ============= */
+@media (max-height: 700px) {
+  .reading-body { font-size: 0.85rem; }
+}
+
+/* ============= SMALL WIDTH (모바일 공통) ============= */
 @media (max-width: 480px) {
-  body {
-    padding: 14px 12px 40px;
+  .app-shell {
+    max-width: 420px;
+    padding: 20px 14px 22px;
   }
   .step-text,
   .helper-text {
-    font-size: 0.9rem;
-  }
-  .reading-body {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
   }
 }
 </style>
