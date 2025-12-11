@@ -30,7 +30,6 @@ html, body {
 }
 
 body {
-  /* 안전 여백 (노치/홈바) */
   padding-top: 16px;
   padding-right: calc(12px + env(safe-area-inset-right, 0px));
   padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
@@ -63,7 +62,7 @@ body {
 .outer-card {
   position: relative;
   width: 100%;
-  max-width: 380px;               /* ✅ 폰보다 항상 작게 */
+  max-width: 360px;              /* ✅ 카드 자체를 더 줄임 */
   margin: 0 auto;
 
   border-radius: 26px;
@@ -140,19 +139,19 @@ body {
   font-family: "Cinzel", "Times New Roman", serif;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   color: var(--gold-soft);
 }
 .app-title::after {
   content: "✶";
   display: block;
-  font-size: 1.7rem;
+  font-size: 1.6rem;
   margin-top: 4px;
   color: var(--glow-cyan);
 }
 .app-tagline {
   margin-top: 6px;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: #9fd6ff;
   text-shadow: 0 0 4px rgba(29,117,189,0.7);
   padding: 0 4px;
@@ -169,13 +168,13 @@ body {
 
 .step-title {
   font-weight: 600;
-  font-size: 0.98rem;
+  font-size: 0.96rem;
   text-align: center;
   color: #ffe8b6;
 }
 .step-text,
 .helper-text {
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   color: var(--text-soft);
   line-height: 1.4;
   text-align: center;
@@ -186,17 +185,19 @@ body {
 .btn-row {
   width: 100%;
   display: flex;
-  flex-wrap: wrap;           /* ✅ 두 줄로 자동 줄바꿈 */
+  flex-wrap: wrap;           /* 필요하면 줄바꿈 */
   justify-content: center;
-  gap: 6px;
+  gap: 4px;                  /* ✅ 간격 줄임 */
   margin-top: 4px;
   margin-bottom: 4px;
   padding: 0 6px;
 }
+
+/* 버튼 폭을 확 줄여서 10개가 한줄에 들어가도 360px 안에 끝남 */
 .num-btn {
   flex: 0 0 auto;
-  width: 34px;
-  height: 34px;
+  width: 30px;              /* ✅ 30px 로 축소 */
+  height: 30px;
   border-radius: 999px;
   border: 1px solid rgba(255,214,140,0.8);
   background:
@@ -204,7 +205,7 @@ body {
     linear-gradient(140deg, #2d214d, #15152f);
   color: var(--gold-soft);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 .num-btn.active {
   background:
@@ -237,16 +238,16 @@ body {
 }
 
 .card {
-  width: 78%;
-  max-width: 260px;
+  width: 76%;
+  max-width: 240px;
   aspect-ratio: 3 / 5;
   border-radius: 22px;
   overflow: hidden;
   box-shadow: 0 18px 70px rgba(0,0,0,0.9);
 }
 .card-slot.small .card {
-  width: 26vw;
-  max-width: 120px;
+  width: 25vw;
+  max-width: 110px;
 }
 
 .card-back-img {
@@ -264,8 +265,8 @@ body {
 }
 
 .card-3d {
-  width: 78%;
-  max-width: 260px;
+  width: 76%;
+  max-width: 240px;
   aspect-ratio: 3/5;
   perspective: 1200px;
   cursor: pointer;
@@ -304,8 +305,8 @@ body {
 }
 
 .reading-title {
-  font-size: 0.9rem;
-  letter-spacing: 0.4em;
+  font-size: 0.88rem;
+  letter-spacing: 0.36em;
   text-transform: uppercase;
   color: var(--gold-soft);
   text-align: center;
@@ -313,7 +314,7 @@ body {
 }
 
 .reading-body {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text-main);
   line-height: 1.45;
   overflow-y: auto;
@@ -330,7 +331,7 @@ body {
   align-items: center;
   justify-content: center;
   color: var(--gold-soft);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   opacity: 0;
   pointer-events: none;
@@ -349,7 +350,7 @@ body {
     radial-gradient(circle at top, rgba(255,255,255,0.16), transparent 65%),
     linear-gradient(140deg, rgba(50,32,120,0.95), rgba(18,11,60,0.98));
   color: #e2ddff;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -358,16 +359,15 @@ body {
 
 /* 작은 화면에서 텍스트 살짝 줄이기 */
 @media (max-width: 380px) {
-  .app-title { font-size: 1.25rem; }
+  .app-title { font-size: 1.2rem; }
   .app-tagline,
   .step-text,
-  .helper-text { font-size: 0.84rem; }
+  .helper-text { font-size: 0.82rem; }
 }
 </style>
 </head>
 
 <body>
-  <!-- flip sound -->
   <audio id="flip-sound" src="sounds/card-flip-sound.mp3" preload="auto"></audio>
 
   <div class="page-root">
@@ -377,7 +377,6 @@ body {
         <span id="badge-label">K-SISTERS · K-Tarot Reading</span>
       </div>
 
-      <!-- Lang toggle -->
       <div class="lang-toggle">
         <button class="lang-btn active" data-lang="en">EN</button>
         <button class="lang-btn" data-lang="fr">FR</button>
@@ -455,7 +454,6 @@ body {
     </div>
   </div>
 
-  <!-- 공통 뒷면 카드 템플릿 -->
   <template id="card-back-template">
     <div class="card">
       <img src="images/hwatu/hwatu_card_back.png" alt="Hwatu card back" class="card-back-img" />
@@ -463,7 +461,6 @@ body {
   </template>
 
 <script>
-/* ============================ UI STRINGS ============================ */
 const UI_STRINGS = {
   en: {
     badge: "K-SISTERS · K-Tarot Reading",
@@ -501,149 +498,34 @@ const UI_STRINGS = {
 
 let currentLang = "en";
 
-/* ============================ DATA ============================ */
-
-// Hwatu 카드 의미
 const HWATU_MEANINGS = [
-  {
-    label_en: "The Crane · New message & baby energy",
-    text_en: "New announcements and the energy of fresh beginnings, including the possibility of something like a baby or a new project being born in your life.",
-    label_fr: "La Grue · Nouveau message & énergie de bébé",
-    text_fr: "Nouveaux messages et énergie de commencement, y compris la possibilité qu’un « bébé » apparaisse dans ta vie – un enfant, un projet ou une idée toute neuve."
-  },
-  {
-    label_en: "The Plum Blossom · Lover & new romance",
-    text_en: "The energy of lovers and attraction, suggesting that a new romantic connection or crush may begin or feel warmer.",
-    label_fr: "La Fleur de prunier · Amour & nouvelle romance",
-    text_fr: "L’énergie des amoureux et de l’attirance, qui suggère qu’une nouvelle connexion romantique ou un crush peut commencer ou devenir plus chaleureux."
-  },
-  {
-    label_en: "The Cherry Blossom · Meetings & dates",
-    text_en: "The energy of meetings, dates, and spending time together in ways that deepen connection step by step.",
-    label_fr: "La Fleur de cerisier · Rencontres & rendez-vous",
-    text_fr: "L’énergie des rencontres, des rendez-vous et des moments passés ensemble, qui approfondissent peu à peu la connexion."
-  },
-  {
-    label_en: "The Bush Clover · Gossip & drama",
-    text_en: "The energy of gossip and rumors, hinting that you could be pulled into misunderstandings or drama if you don’t protect your boundaries.",
-    label_fr: "Le Trèfle des buissons · Potins & drama",
-    text_fr: "L’énergie des potins et des rumeurs, qui montre que tu peux être entraîné·e dans des malentendus ou du drama si tu ne protèges pas tes limites."
-  },
-  {
-    label_en: "The Iris · Food, marriage & celebration",
-    text_en: "Shared meals, weddings, and celebrations, showing chances to be invited to happy events or gatherings.",
-    label_fr: "L’Iris · Repas, mariage & célébration",
-    text_fr: "Repas partagés, mariages et célébrations, qui indiquent des invitations à des événements heureux ou des réunions chaleureuses."
-  },
-  {
-    label_en: "The Peony · Good omen & happy surprise",
-    text_en: "A bright, lucky omen that suggests unexpected good news or a pleasant surprise arriving into your day.",
-    label_fr: "La Pivoine · Bon présage & heureuse surprise",
-    text_fr: "Un heureux présage lumineux qui annonce une bonne nouvelle inattendue ou une surprise agréable qui entre dans ta journée."
-  },
-  {
-    label_en: "The Wild Boar · Good fortune & money flow",
-    text_en: "Good luck and increased resources, pointing to situations where money or practical support may come in more easily.",
-    label_fr: "Le Sanglier · Chance & flux d’argent",
-    text_fr: "Bonne chance et ressources qui augmentent, indiquant des situations où l’argent ou le soutien matériel peuvent arriver plus facilement."
-  },
-  {
-    label_en: "The Moon · Late night, worries & pleasure",
-    text_en: "Late-night energy that blends worries with nightlife and fun, hinting at both emotional heaviness and release through play or entertainment.",
-    label_fr: "La Lune · Nuit tardive, soucis & plaisir",
-    text_fr: "Énergie de nuit tardive mêlée de soucis, de sorties et de plaisir, qui montre à la fois un poids émotionnel et un besoin de se libérer par le jeu ou la fête."
-  },
-  {
-    label_en: "The Chrysanthemum · Drinks & socializing",
-    text_en: "The energy of drinking and social gatherings, bringing moments to relax, open up, and share deeper thoughts with others.",
-    label_fr: "Le Chrysanthème · Verres & sociabilité",
-    text_fr: "L’énergie des verres partagés et des rencontres sociales, avec des moments pour se détendre, s’ouvrir et partager des pensées plus profondes."
-  },
-  {
-    label_en: "The Deer · Concern & overthinking",
-    text_en: "The energy of concern and mental load, pointing to worries or burdens that may feel heavier than usual if you carry them alone.",
-    label_fr: "Le Daim · Soucis & trop réfléchir",
-    text_fr: "L’énergie des préoccupations et de la charge mentale, qui signale des soucis ou des poids plus lourds si tu les portes seul·e."
-  },
-  {
-    label_en: "The Kappa · Money luck & resources",
-    text_en: "Strong money luck and material support, suggesting that income, savings, or financial help may increase or stabilise.",
-    label_fr: "Le Kappa · Chance financière & ressources",
-    text_fr: "Une forte chance financière et un soutien matériel, qui suggèrent que tes revenus, économies ou aides financières peuvent augmenter ou se stabiliser."
-  },
-  {
-    label_en: "The Rain · Unexpected visitor",
-    text_en: "The energy of unexpected guests—people, messages, or chances that suddenly appear and gently shift your plans or direction.",
-    label_fr: "La Pluie · Visiteur inattendu",
-    text_fr: "L’énergie des visites inattendues – personnes, messages ou opportunités qui apparaissent soudainement et changent doucement tes plans ou ta direction."
-  }
+  {label_en:"The Crane · New message & baby energy",text_en:"New announcements and the energy of fresh beginnings, including the possibility of something like a baby or a new project being born in your life.",label_fr:"La Grue · Nouveau message & énergie de bébé",text_fr:"Nouveaux messages et énergie de commencement, y compris la possibilité qu’un « bébé » apparaisse dans ta vie – un enfant, un projet ou une idée toute neuve."},
+  {label_en:"The Plum Blossom · Lover & new romance",text_en:"The energy of lovers and attraction, suggesting that a new romantic connection or crush may begin or feel warmer.",label_fr:"La Fleur de prunier · Amour & nouvelle romance",text_fr:"L’énergie des amoureux et de l’attirance, qui suggère qu’une nouvelle connexion romantique ou un crush peut commencer ou devenir plus chaleureux."},
+  {label_en:"The Cherry Blossom · Meetings & dates",text_en:"The energy of meetings, dates, and spending time together in ways that deepen connection step by step.",label_fr:"La Fleur de cerisier · Rencontres & rendez-vous",text_fr:"L’énergie des rencontres, des rendez-vous et des moments passés ensemble, qui approfondissent peu à peu la connexion."},
+  {label_en:"The Bush Clover · Gossip & drama",text_en:"The energy of gossip and rumors, hinting that you could be pulled into misunderstandings or drama if you don’t protect your boundaries.",label_fr:"Le Trèfle des buissons · Potins & drama",text_fr:"L’énergie des potins et des rumeurs, qui montre que tu peux être entraîné·e dans des malentendus ou du drama si tu ne protèges pas tes limites."},
+  {label_en:"The Iris · Food, marriage & celebration",text_en:"Shared meals, weddings, and celebrations, showing chances to be invited to happy events or gatherings.",label_fr:"L’Iris · Repas, mariage & célébration",text_fr:"Repas partagés, mariages et célébrations, qui indiquent des invitations à des événements heureux ou des réunions chaleureuses."},
+  {label_en:"The Peony · Good omen & happy surprise",text_en:"A bright, lucky omen that suggests unexpected good news or a pleasant surprise arriving into your day.",label_fr:"La Pivoine · Bon présage & heureuse surprise",text_fr:"Un heureux présage lumineux qui annonce une bonne nouvelle inattendue ou une surprise agréable qui entre dans ta journée."},
+  {label_en:"The Wild Boar · Good fortune & money flow",text_en:"Good luck and increased resources, pointing to situations where money or practical support may come in more easily.",label_fr:"Le Sanglier · Chance & flux d’argent",text_fr:"Bonne chance et ressources qui augmentent, indiquant des situations où l’argent ou le soutien matériel peuvent arriver plus facilement."},
+  {label_en:"The Moon · Late night, worries & pleasure",text_en:"Late-night energy that blends worries with nightlife and fun, hinting at both emotional heaviness and release through play or entertainment.",label_fr:"La Lune · Nuit tardive, soucis & plaisir",text_fr:"Énergie de nuit tardive mêlée de soucis, de sorties et de plaisir, qui montre à la fois un poids émotionnel et un besoin de se libérer par le jeu ou la fête."},
+  {label_en:"The Chrysanthemum · Drinks & socializing",text_en:"The energy of drinking and social gatherings, bringing moments to relax, open up, and share deeper thoughts with others.",label_fr:"Le Chrysanthème · Verres & sociabilité",text_fr:"L’énergie des verres partagés et des rencontres sociales, avec des moments pour se détendre, s’ouvrir et partager des pensées plus profondes."},
+  {label_en:"The Deer · Concern & overthinking",text_en:"The energy of concern and mental load, pointing to worries or burdens that may feel heavier than usual if you carry them alone.",label_fr:"Le Daim · Soucis & trop réfléchir",text_fr:"L’énergie des préoccupations et de la charge mentale, qui signale des soucis ou des poids plus lourds si tu les portes seul·e."},
+  {label_en:"The Kappa · Money luck & resources",text_en:"Strong money luck and material support, suggesting that income, savings, or financial help may increase or stabilise.",label_fr:"Le Kappa · Chance financière & ressources",text_fr:"Une forte chance financière et un soutien matériel, qui suggèrent que tes revenus, économies ou aides financières peuvent augmenter ou se stabiliser."},
+  {label_en:"The Rain · Unexpected visitor",text_en:"The energy of unexpected guests—people, messages, or chances that suddenly appear and gently shift your plans or direction.",label_fr:"La Pluie · Visiteur inattendu",text_fr:"L’énergie des visites inattendues – personnes, messages ou opportunités qui apparaissent soudainement et changent doucement tes plans ou ta direction."}
 ];
 
-// Angel numbers
 const ANGEL_MEANINGS = [
-  {
-    label_en: "000 · Infinite potential",
-    text_en: "Infinite potential and a fresh start. You are deeply connected to the universe, with endless possibilities available to you right now.",
-    label_fr: "000 · Potentiel infini",
-    text_fr: "Potentiel infini et nouveau départ. Tu es profondément connecté·e à l’univers, avec d’innombrables possibilités disponibles pour toi maintenant."
-  },
-  {
-    label_en: "111 · New beginnings & manifestation",
-    text_en: "A powerful sign of new beginnings and manifestation. Your thoughts are turning into reality quickly, so keep your mindset clear and positive.",
-    label_fr: "111 · Nouveau départ & manifestation",
-    text_fr: "Signe puissant de nouveau départ et de manifestation. Tes pensées deviennent réalité très vite, alors garde un esprit clair et positif."
-  },
-  {
-    label_en: "222 · Balance & harmony",
-    text_en: "Balance, harmony, and trust in divine timing. You are in the right place at the right time, especially in relationships and partnerships.",
-    label_fr: "222 · Équilibre & harmonie",
-    text_fr: "Équilibre, harmonie et confiance dans le timing divin. Tu es au bon endroit au bon moment, surtout dans tes relations et partenariats."
-  },
-  {
-    label_en: "333 · Guidance & creativity",
-    text_en: "Your spiritual guides are close, offering support and encouragement. You are invited to express your creativity and unique talents more boldly.",
-    label_fr: "333 · Guidance & créativité",
-    text_fr: "Tes guides spirituels sont proches, t’offrant soutien et encouragement. Tu es invité·e à exprimer ta créativité et tes talents uniques plus ouvertement."
-  },
-  {
-    label_en: "444 · Protection & stability",
-    text_en: "Protection, grounding, and stability. Your efforts to build a strong foundation are supported, and you are allowed to worry less and trust more.",
-    label_fr: "444 · Protection & stabilité",
-    text_fr: "Protection, ancrage et stabilité. Tes efforts pour construire une base solide sont soutenus : tu peux t’inquiéter moins et faire davantage confiance."
-  },
-  {
-    label_en: "555 · Change & transformation",
-    text_en: "Big change and transformation are on the horizon. Stay flexible, release what no longer serves you, and welcome the new opportunities arriving.",
-    label_fr: "555 · Changement & transformation",
-    text_fr: "Un grand changement et une transformation sont à l’horizon. Reste flexible, libère ce qui ne te sert plus et accueille les nouvelles opportunités."
-  },
-  {
-    label_en: "666 · Balance & self-care",
-    text_en: "A call for balance between material and spiritual life. It nudges you toward honest self-reflection, self-care, and healthier priorities.",
-    label_fr: "666 · Rééquilibrage & soin de soi",
-    text_fr: "Un appel à rééquilibrer vie matérielle et vie intérieure. Cela te pousse vers une vraie introspection, plus de soin de toi et des priorités plus saines."
-  },
-  {
-    label_en: "777 · Luck & spiritual awakening",
-    text_en: "Luck, spiritual awakening, and inner wisdom. It is a sign to trust your intuition, let go of fear, and recognise that you are being guided.",
-    label_fr: "777 · Chance & éveil spirituel",
-    text_fr: "Chance, éveil spirituel et sagesse intérieure. C’est un signe que tu peux faire confiance à ton intuition, lâcher la peur et reconnaître que tu es guidé·e."
-  },
-  {
-    label_en: "888 · Abundance & success",
-    text_en: "Abundance, financial success, and infinite potential. Prosperity and recognition are on their way as you align with the flow of energy.",
-    label_fr: "888 · Abondance & succès",
-    text_fr: "Abondance, succès financier et potentiel infini. Prospérité et reconnaissance arrivent à mesure que tu t’alignes avec le flux de l’énergie."
-  },
-  {
-    label_en: "999 · Completion & new cycle",
-    text_en: "Completion and the end of a major cycle. You are encouraged to release the old so that new beginnings and personal evolution can fully enter.",
-    label_fr: "999 · Achèvement & nouveau cycle",
-    text_fr: "Achèvement et fin d’un grand cycle. Tu es encouragé·e à laisser partir l’ancien pour que de nouveaux commencements et une évolution personnelle puissent entrer pleinement."
-  }
+  {label_en:"000 · Infinite potential",text_en:"Infinite potential and a fresh start. You are deeply connected to the universe, with endless possibilities available to you right now.",label_fr:"000 · Potentiel infini",text_fr:"Potentiel infini et nouveau départ. Tu es profondément connecté·e à l’univers, avec d’innombrables possibilités disponibles pour toi maintenant."},
+  {label_en:"111 · New beginnings & manifestation",text_en:"A powerful sign of new beginnings and manifestation. Your thoughts are turning into reality quickly, so keep your mindset clear and positive.",label_fr:"111 · Nouveau départ & manifestation",text_fr:"Signe puissant de nouveau départ et de manifestation. Tes pensées deviennent réalité très vite, alors garde un esprit clair et positif."},
+  {label_en:"222 · Balance & harmony",text_en:"Balance, harmony, and trust in divine timing. You are in the right place at the right time, especially in relationships and partnerships.",label_fr:"222 · Équilibre & harmonie",text_fr:"Équilibre, harmonie et confiance dans le timing divin. Tu es au bon endroit au bon moment, surtout dans tes relations et partenariats."},
+  {label_en:"333 · Guidance & creativity",text_en:"Your spiritual guides are close, offering support and encouragement. You are invited to express your creativity and unique talents more boldly.",label_fr:"333 · Guidance & créativité",text_fr:"Tes guides spirituels sont proches, t’offrant soutien et encouragement. Tu es invité·e à exprimer ta créativité et tes talents uniques plus ouvertement."},
+  {label_en:"444 · Protection & stability",text_en:"Protection, grounding, and stability. Your efforts to build a strong foundation are supported, and you are allowed to worry less and trust more.",label_fr:"444 · Protection & stabilité",text_fr:"Protection, ancrage et stabilité. Tes efforts pour construire une base solide sont soutenus : tu peux t’inquiéter moins et faire davantage confiance."},
+  {label_en:"555 · Change & transformation",text_en:"Big change and transformation are on the horizon. Stay flexible, release what no longer serves you, and welcome the new opportunities arriving.",label_fr:"555 · Changement & transformation",text_fr:"Un grand changement et une transformation sont à l’horizon. Reste flexible, libère ce qui ne te sert plus et accueille les nouvelles opportunités."},
+  {label_en:"666 · Balance & self-care",text_en:"A call for balance between material and spiritual life. It nudges you toward honest self-reflection, self-care, and healthier priorities.",label_fr:"666 · Rééquilibrage & soin de soi",text_fr:"Un appel à rééquilibrer vie matérielle et vie intérieure. Cela te pousse vers une vraie introspection, plus de soin de toi et des priorités plus saines."},
+  {label_en:"777 · Luck & spiritual awakening",text_en:"Luck, spiritual awakening, and inner wisdom. It is a sign to trust your intuition, let go of fear, and recognise that you are being guided.",label_fr:"777 · Chance & éveil spirituel",text_fr:"Chance, éveil spirituel et sagesse intérieure. C’est un signe que tu peux faire confiance à ton intuition, lâcher la peur et reconnaître que tu es guidé·e."},
+  {label_en:"888 · Abundance & success",text_en:"Abundance, financial success, and infinite potential. Prosperity and recognition are on their way as you align with the flow of energy.",label_fr:"888 · Abondance & succès",text_fr:"Abondance, succès financier et potentiel infini. Prospérité et reconnaissance arrivent à mesure que tu t’alignes avec le flux de l’énergie."},
+  {label_en:"999 · Completion & new cycle",text_en:"Completion and the end of a major cycle. You are encouraged to release the old so that new beginnings and personal evolution can fully enter.",label_fr:"999 · Achèvement & nouveau cycle",text_fr:"Achèvement et fin d’un grand cycle. Tu es encouragé·e à laisser partir l’ancien pour que de nouveaux commencements et une évolution personnelle puissent entrer pleinement."}
 ];
 
-// 카드 이미지
 const HWATU_CARD_IMAGES = [
   "images/hwatu/The_Crane.png",
   "images/hwatu/Plum_Blossom.png",
@@ -659,14 +541,12 @@ const HWATU_CARD_IMAGES = [
   "images/hwatu/The_Scholar_and_Turtle.png"
 ];
 
-/* ============================ STATE ============================ */
 let selectedAngelIndex = null;
 let currentHwatuIndices = [];
 let resultShown = false;
 let lastHwatuIndex = null;
 let lastAngelIndex = null;
 
-/* ============================ DOM ============================ */
 const screenIntro  = document.getElementById("screen-intro");
 const screenPick   = document.getElementById("screen-pick");
 const screenResult = document.getElementById("screen-result");
@@ -693,14 +573,11 @@ const helper2El     = document.getElementById("helper2");
 const step3TitleEl  = document.getElementById("step3-title");
 const langButtons   = Array.from(document.querySelectorAll(".lang-btn"));
 
-/* ============================ HELPERS ============================ */
 function createBackCard() {
   return backTemplate.content.firstElementChild.cloneNode(true);
 }
 
-// intro용 뒷면
 introCardSlot.appendChild(createBackCard());
-// 선택 화면용 3장
 cardButtons.forEach(btn => btn.appendChild(createBackCard()));
 
 function showScreen(name) {
@@ -732,11 +609,7 @@ function buildReading(angelIndex, hwatuIndex) {
   const bLabel = currentLang === "fr" ? b.label_fr : b.label_en;
   const bText  = currentLang === "fr" ? b.text_fr  : b.text_en;
 
-  const line1 = `Energy – ${aLabel}:\n${aText}`;
-  const line2 = `\n\nMessage – ${bLabel}:\n${bText}`;
-  const line3 = `\n\n${ui.combinedLine}`;
-
-  return line1 + line2 + line3;
+  return `Energy – ${aLabel}:\n${aText}\n\nMessage – ${bLabel}:\n${bText}\n\n${ui.combinedLine}`;
 }
 
 function playFlipSound() {
@@ -744,12 +617,9 @@ function playFlipSound() {
   try {
     flipSoundEl.currentTime = 0;
     flipSoundEl.play();
-  } catch (e) {
-    /* 모바일 자동재생 제한 시 무시 */
-  }
+  } catch (e) {}
 }
 
-/* ============================ LANGUAGE ============================ */
 function applyLanguage(lang) {
   currentLang = lang;
   document.documentElement.lang = lang;
@@ -782,13 +652,10 @@ function applyLanguage(lang) {
   }
 }
 
-/* ============================ INTERACTIONS ============================ */
 applyLanguage("en");
 
 langButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    applyLanguage(btn.dataset.lang);
-  });
+  btn.addEventListener("click", () => applyLanguage(btn.dataset.lang));
 });
 
 numberButtons.forEach(btn => {
