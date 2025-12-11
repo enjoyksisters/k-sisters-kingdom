@@ -8,6 +8,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&display=swap" rel="stylesheet">
 
 <style>
+/* 전체 컨텐츠 92% 스케일 */
+.app-scale-wrapper {
+  transform: scale(0.92);
+  transform-origin: top center;
+  width: 100%;
+}
+
 :root {
   --bg-dark: #050014;
   --gold-soft: #fde3a9;
@@ -34,7 +41,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  /* 👇 노치/하단바 포함 안전 여백 */
+  /* 노치/하단바 포함 안전 여백 */
   padding-top: 16px;
   padding-right: calc(16px + env(safe-area-inset-right, 0px));
   padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
@@ -49,7 +56,7 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--text-main);
   overflow-y: auto;
-  overflow-x: hidden;  /* 👉 옆으로 잘리는 느낌 방지 */
+  overflow-x: hidden;  /* 옆으로 잘리는 느낌 방지 */
 }
 
 /* ============= BADGE & APP WRAP ============= */
@@ -382,94 +389,96 @@ body {
 </head>
 
 <body>
-  <!-- 🔊 카드 flip 사운드 -->
+  <!-- 카드 flip 사운드 -->
   <audio id="flip-sound" src="sounds/card-flip-sound.mp3" preload="auto"></audio>
 
-  <div class="app">
-    <div class="badge">
-      <span>🔮</span>
-      <span id="badge-label">K-SISTERS · K-Tarot Reading</span>
-    </div>
-
-    <div class="app-shell">
-      <!-- Lang toggle -->
-      <div class="lang-toggle">
-        <button class="lang-btn active" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="fr">FR</button>
+  <div class="app-scale-wrapper">
+    <div class="app">
+      <div class="badge">
+        <span>🔮</span>
+        <span id="badge-label">K-SISTERS · K-Tarot Reading</span>
       </div>
 
-      <div class="app-header">
-        <div class="app-title" id="app-title-text">K-TAROT: THE HWATU</div>
-        <div class="app-tagline" id="app-tagline">
-          Focus on a question, choose a number, 
-          then let one Hwatu card find you. ✦
+      <div class="app-shell">
+        <!-- Lang toggle -->
+        <div class="lang-toggle">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="fr">FR</button>
         </div>
-      </div>
 
-      <!-- SCREEN 1 -->
-      <section id="screen-intro" class="screen">
-        <div class="card-slot large" id="intro-card-slot"></div>
-        <div class="step-title" id="step1-title">
-          1. Choose how many times you want to “shuffle”.
-        </div>
-        <div class="step-text" id="step1-text">
-          Pick a number from 0–9. That number quietly becomes the energetic tone behind your reading.
-        </div>
-        <div class="btn-row" id="number-buttons">
-          <button class="num-btn" data-num="0">0</button>
-          <button class="num-btn" data-num="1">1</button>
-          <button class="num-btn" data-num="2">2</button>
-          <button class="num-btn" data-num="3">3</button>
-          <button class="num-btn" data-num="4">4</button>
-          <button class="num-btn" data-num="5">5</button>
-          <button class="num-btn" data-num="6">6</button>
-          <button class="num-btn" data-num="7">7</button>
-          <button class="num-btn" data-num="8">8</button>
-          <button class="num-btn" data-num="9">9</button>
-        </div>
-        <div class="helper-text" id="helper1">
-          Take a breath, think of your question, then tap the number that feels right.
-        </div>
-      </section>
-
-      <!-- SCREEN 2 -->
-      <section id="screen-pick" class="screen hidden">
-        <div class="step-title" id="step2-title">
-          2. Let one Hwatu card find you.
-        </div>
-        <div class="step-text" id="step2-text">
-          Three cards are waiting. When you’re ready, choose the one that pulls your eye first.
-        </div>
-        <div class="card-row">
-          <div class="card-slot small">
-            <button class="card-button" data-slot="0"></button>
-          </div>
-          <div class="card-slot small">
-            <button class="card-button" data-slot="1"></button>
-          </div>
-          <div class="card-slot small">
-            <button class="card-button" data-slot="2"></button>
+        <div class="app-header">
+          <div class="app-title" id="app-title-text">K-TAROT: THE HWATU</div>
+          <div class="app-tagline" id="app-tagline">
+            Focus on a question, choose a number, 
+            then let one Hwatu card find you. ✦
           </div>
         </div>
-        <div class="helper-text" id="helper2">
-          Only the first card you pick will speak for this reading.
-        </div>
-      </section>
 
-      <!-- SCREEN 3 -->
-      <section id="screen-result" class="screen hidden">
-        <div class="step-title" id="step3-title">
-          3. Your reading for this moment
-        </div>
-        <div class="result-card-wrapper">
-          <div id="result-card-slot"></div>
-        </div>
-        <button class="secondary-btn" id="again-btn">
-          Draw again <span>↻</span>
-        </button>
-      </section>
-    </div>
-  </div>
+        <!-- SCREEN 1 -->
+        <section id="screen-intro" class="screen">
+          <div class="card-slot large" id="intro-card-slot"></div>
+          <div class="step-title" id="step1-title">
+            1. Choose how many times you want to “shuffle”.
+          </div>
+          <div class="step-text" id="step1-text">
+            Pick a number from 0–9. That number quietly becomes the energetic tone behind your reading.
+          </div>
+          <div class="btn-row" id="number-buttons">
+            <button class="num-btn" data-num="0">0</button>
+            <button class="num-btn" data-num="1">1</button>
+            <button class="num-btn" data-num="2">2</button>
+            <button class="num-btn" data-num="3">3</button>
+            <button class="num-btn" data-num="4">4</button>
+            <button class="num-btn" data-num="5">5</button>
+            <button class="num-btn" data-num="6">6</button>
+            <button class="num-btn" data-num="7">7</button>
+            <button class="num-btn" data-num="8">8</button>
+            <button class="num-btn" data-num="9">9</button>
+          </div>
+          <div class="helper-text" id="helper1">
+            Take a breath, think of your question, then tap the number that feels right.
+          </div>
+        </section>
+
+        <!-- SCREEN 2 -->
+        <section id="screen-pick" class="screen hidden">
+          <div class="step-title" id="step2-title">
+            2. Let one Hwatu card find you.
+          </div>
+          <div class="step-text" id="step2-text">
+            Three cards are waiting. When you’re ready, choose the one that pulls your eye first.
+          </div>
+          <div class="card-row">
+            <div class="card-slot small">
+              <button class="card-button" data-slot="0"></button>
+            </div>
+            <div class="card-slot small">
+              <button class="card-button" data-slot="1"></button>
+            </div>
+            <div class="card-slot small">
+              <button class="card-button" data-slot="2"></button>
+            </div>
+          </div>
+          <div class="helper-text" id="helper2">
+            Only the first card you pick will speak for this reading.
+          </div>
+        </section>
+
+        <!-- SCREEN 3 -->
+        <section id="screen-result" class="screen hidden">
+          <div class="step-title" id="step3-title">
+            3. Your reading for this moment
+          </div>
+          <div class="result-card-wrapper">
+            <div id="result-card-slot"></div>
+          </div>
+          <button class="secondary-btn" id="again-btn">
+            Draw again <span>↻</span>
+          </button>
+        </section>
+      </div><!-- /.app-shell -->
+    </div><!-- /.app -->
+  </div><!-- /.app-scale-wrapper -->
 
   <!-- 공통 뒷면 카드 템플릿 -->
   <template id="card-back-template">
@@ -867,7 +876,7 @@ cardButtons.forEach((btn, slotIndex) => {
     resultCardSlot.innerHTML = "";
 
     const card3d = document.createElement("div");
-    card3d.className = "card-3d card-enter";
+    card3d.className = "card-3d";
 
     const inner3d = document.createElement("div");
     inner3d.className = "card-3d-inner";
@@ -898,21 +907,6 @@ cardButtons.forEach((btn, slotIndex) => {
     resultCardSlot.appendChild(card3d);
 
     showScreen("result");
-
-    // 카드 등장 + overlay + pulse
-    setTimeout(() => {
-      card3d.classList.remove("card-enter");
-    }, 900);
-
-    setTimeout(() => {
-      overlay.classList.add("show");
-      setTimeout(() => overlay.classList.remove("show"), 1300);
-    }, 900);
-
-    setTimeout(() => {
-      card3d.classList.add("pulse");
-      setTimeout(() => card3d.classList.remove("pulse"), 1400);
-    }, 1200);
 
     // 첫 클릭 → flip해서 뜻풀이 보여주기
     let revealed = false;
