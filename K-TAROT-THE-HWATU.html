@@ -8,54 +8,80 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&display=swap" rel="stylesheet">
 
 <style>
-/* ===============================
-   전체 페이지를 하나의 큰 카드로 감싼다
-================================*/
-body {
+:root {
+  --bg-dark: #050014;
+  --gold-soft: #fde3a9;
+  --gold-strong: #ffc658;
+  --line-gold: #f5c97b;
+  --accent-red: #ff6b6b;
+  --accent-teal: #39d1bf;
+  --text-main: #fdf7ff;
+  --text-soft: #c8c0f0;
+
+  --glow-pink: #ff8ae6;
+  --glow-cyan: #65f8ff;
+}
+
+/* ============= GLOBAL ============= */
+html, body {
   margin: 0;
-  min-height: 100vh;
   padding: 0;
-  display: flex;
-  justify-content: center;
+  height: 100%;
+}
+
+body {
+  /* 안전 여백 (노치/홈바) */
+  padding-top: 16px;
+  padding-right: calc(12px + env(safe-area-inset-right, 0px));
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  padding-left: calc(12px + env(safe-area-inset-left, 0px));
+
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text-main);
+
   background:
     radial-gradient(circle at 10% 0%, #5846ff 0, transparent 55%),
     radial-gradient(circle at 80% 100%, #f74f7a33 0, transparent 60%),
     radial-gradient(circle at 0% 100%, #16d9ff33 0, transparent 60%),
     #050014;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-/* 🔥 큰 카드 — 전체 앱을 이 박스 안에 넣음 */
-.page-card {
-  width: min(430px, 94vw);
-  margin: 20px auto;
-  padding: 20px 14px 26px;
-  border-radius: 26px;
-
-  background: rgba(0, 0, 0, 0.42);
-  box-shadow:
-    0 18px 40px rgba(0,0,0,0.9),
-    0 0 70px rgba(150,120,255,0.55);
-
-  box-sizing: border-box;
-  overflow: hidden; /* 절대 넘치지 않도록 */
-}
-
-/* ===============================
-   내부 앱 구조 그대로 유지
-================================*/
-.app {
+/* ============= PAGE & OUTER CARD ============= */
+.page-root {
   width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  justify-content: center;
 }
 
+.outer-card {
+  position: relative;
+  width: 100%;
+  max-width: 380px;               /* ✅ 폰보다 항상 작게 */
+  margin: 0 auto;
+
+  border-radius: 26px;
+  padding: 18px 16px 20px;
+
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.09), transparent 60%),
+    radial-gradient(circle at bottom, rgba(0,0,0,0.95), transparent 70%),
+    linear-gradient(145deg, #1a0f3b 0%, #070315 50%, #240628 100%);
+
+  box-shadow:
+    0 18px 70px rgba(0,0,0,0.9),
+    0 0 120px rgba(217,98,255,0.7);
+
+  border: 1px solid rgba(255,255,255,0.13);
+}
+
+/* ============= BADGE ============= */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -66,35 +92,28 @@ body {
   background:
     radial-gradient(circle at 0% 0%, rgba(255,255,255,0.2), transparent 55%),
     linear-gradient(135deg, rgba(60,34,8,0.95), rgba(120,76,20,0.95));
-  color: #fde3a9;
-  font-size: 0.95rem;
+  color: var(--gold-soft);
+  font-size: 0.9rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  box-shadow:
+    0 0 12px rgba(255, 215, 160, 0.7),
+    0 0 26px rgba(255, 174, 200, 0.5);
+  text-shadow:
+    0 0 4px rgba(0,0,0,0.9),
+    0 0 10px rgba(255,215,160,0.8);
+  backdrop-filter: blur(4px);
 }
 
-/* App Shell (컨텐츠 카드) */
-.app-shell {
-  width: 100%;
-  border-radius: 26px;
-  padding: 22px 16px 24px;
-  background:
-    radial-gradient(circle at top, rgba(255,255,255,0.09), transparent 60%),
-    radial-gradient(circle at bottom, rgba(0,0,0,0.95), transparent 70%),
-    linear-gradient(145deg, #1a0f3b 0%, #070315 50%, #240628 100%);
-  box-shadow: 0 18px 80px rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.12);
-  overflow: hidden;
-  box-sizing: border-box;
-}
-
+/* ============= LANGUAGE TOGGLE ============= */
 .lang-toggle {
   position: absolute;
-  top: 8px;
-  right: 10px;
+  top: 10px;
+  right: 12px;
   display: flex;
   gap: 4px;
+  z-index: 3;
 }
-
 .lang-btn {
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.35);
@@ -103,145 +122,267 @@ body {
   font-size: 0.65rem;
   padding: 2px 7px;
   cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 .lang-btn.active {
   background: linear-gradient(135deg, #ffc658, #ff8ae6);
   color: #1b0d1f;
+  border-color: rgba(255,248,210,0.95);
 }
 
-/* HEADER */
+/* ============= HEADER ============= */
 .app-header {
   text-align: center;
-  margin-bottom: 10px;
+  margin: 12px 0 10px;
 }
 .app-title {
-  font-family: "Cinzel", serif;
-  font-size: 1.35rem;
+  font-family: "Cinzel", "Times New Roman", serif;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #fde3a9;
+  font-size: 1.35rem;
+  color: var(--gold-soft);
 }
 .app-title::after {
   content: "✶";
   display: block;
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   margin-top: 4px;
-  color: #65f8ff;
+  color: var(--glow-cyan);
 }
 .app-tagline {
   margin-top: 6px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: #9fd6ff;
+  text-shadow: 0 0 4px rgba(29,117,189,0.7);
+  padding: 0 4px;
 }
 
-/* Screens */
-.screen { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+/* ============= SCREEN COMMON ============= */
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
 .hidden { display: none !important; }
 
 .step-title {
-  font-size: 1rem;
   font-weight: 600;
+  font-size: 0.98rem;
+  text-align: center;
   color: #ffe8b6;
-  text-align: center;
 }
-.step-text, .helper-text {
-  font-size: 0.9rem;
-  color: #c8c0f0;
-  text-align: center;
+.step-text,
+.helper-text {
+  font-size: 0.86rem;
+  color: var(--text-soft);
   line-height: 1.4;
+  text-align: center;
+  padding: 0 4px;
 }
 
-/* 숫자 버튼 */
+/* ============= NUMBER ROW ============= */
 .btn-row {
   width: 100%;
   display: flex;
+  flex-wrap: wrap;           /* ✅ 두 줄로 자동 줄바꿈 */
+  justify-content: center;
   gap: 6px;
-  overflow-x: auto;
-  padding-bottom: 6px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 0 6px;
 }
 .num-btn {
-  min-width: 40px;
-  height: 40px;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
   border-radius: 999px;
   border: 1px solid rgba(255,214,140,0.8);
   background:
     radial-gradient(circle at 30% 0%, rgba(255,255,255,0.2), transparent 60%),
     linear-gradient(140deg, #2d214d, #15152f);
-  color: #fde3a9;
-  font-size: 1rem;
+  color: var(--gold-soft);
   font-weight: 600;
+  font-size: 0.9rem;
 }
 .num-btn.active {
-  background: linear-gradient(150deg, #ffc958, #ff7f55);
+  background:
+    radial-gradient(circle at 10% 0%, #fff9d4 0, transparent 60%),
+    linear-gradient(150deg, #ffc958, #ff7f55);
   color: #2b1200;
+  border-color: rgba(255,248,210,0.95);
 }
 
-/* 카드 */
-.card { width: 80%; max-width: 260px; aspect-ratio: 3/5; border-radius: 22px; overflow: hidden; }
-.card-slot.small .card { width: 26vw; max-width: 120px; }
+/* ============= CARDS ============= */
+.card-slot { display: flex; justify-content: center; }
+.card-slot.large { margin-top: 4px; }
 
-.card-back-img { width: 100%; height: 100%; object-fit: cover; }
+.card-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
 
-/* Result Card 3D */
-.card-3d { width: 80%; max-width: 260px; aspect-ratio: 3/5; position: relative; perspective: 1000px; cursor: pointer; }
-.card-3d-inner { width: 100%; height: 100%; transition: transform .7s; transform-style: preserve-3d; }
-.card-3d.flipped .card-3d-inner { transform: rotateY(180deg); }
+.card-button {
+  background: none;
+  border: none;
+  padding: 3px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+.card-button.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
 
-.card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px; overflow: hidden; }
-.card-front { background-size: cover; background-position: center; }
+.card {
+  width: 78%;
+  max-width: 260px;
+  aspect-ratio: 3 / 5;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 18px 70px rgba(0,0,0,0.9);
+}
+.card-slot.small .card {
+  width: 26vw;
+  max-width: 120px;
+}
+
+.card-back-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============= RESULT CARD (3D) ============= */
+.result-card-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.card-3d {
+  width: 78%;
+  max-width: 260px;
+  aspect-ratio: 3/5;
+  perspective: 1200px;
+  cursor: pointer;
+  position: relative;
+}
+.card-3d-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s ease;
+}
+.card-3d.flipped .card-3d-inner {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+.card-front {
+  background-size: cover;
+  background-position: center;
+}
 .card-back {
   transform: rotateY(180deg);
-  padding: 10px;
-  background: linear-gradient(180deg, #0f0a22, #02010a);
+  padding: 10px 10px 12px;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.12) 0, transparent 60%),
+    radial-gradient(circle at 0% 100%, rgba(101,248,255,0.15) 0, transparent 55%),
+    linear-gradient(180deg, rgba(6,3,20,0.96), rgba(3,1,10,0.99));
   border: 1px solid rgba(249,226,176,0.65);
 }
-.reading-title { text-align: center; color: #fde3a9; letter-spacing: 0.4em; font-size: 0.9rem; margin-bottom: 4px; }
-.reading-body { font-size: 0.9rem; color: white; line-height: 1.45; white-space: pre-wrap; }
 
-/* Again Button */
+.reading-title {
+  font-size: 0.9rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.reading-body {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  line-height: 1.45;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+/* overlay */
+.tap-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.42);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-soft);
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 0 12px rgba(255,220,160,0.8);
+  transition: opacity 0.3s ease;
+}
+.tap-overlay.show { opacity: 1; }
+
+/* AGAIN BUTTON */
 .secondary-btn {
   margin-top: 12px;
   padding: 8px 16px;
   border-radius: 999px;
-  font-size: 1.2rem;
   border: 1px solid rgba(151,132,255,0.9);
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.16), transparent 65%),
+    linear-gradient(140deg, rgba(50,32,120,0.95), rgba(18,11,60,0.98));
   color: #e2ddff;
+  font-size: 1.1rem;
   cursor: pointer;
-  background: linear-gradient(140deg,rgba(50,32,120,0.95),rgba(18,11,60,0.98));
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .page-card { width: 94vw; }
-  .app-shell { padding: 18px 12px; }
-  .reading-body { font-size: 0.85rem; }
+/* 작은 화면에서 텍스트 살짝 줄이기 */
+@media (max-width: 380px) {
+  .app-title { font-size: 1.25rem; }
+  .app-tagline,
+  .step-text,
+  .helper-text { font-size: 0.84rem; }
 }
 </style>
 </head>
 
 <body>
-
-<!-- 전체 앱을 감싸는 대형 카드 -->
-<div class="page-card">
-
+  <!-- flip sound -->
   <audio id="flip-sound" src="sounds/card-flip-sound.mp3" preload="auto"></audio>
 
-  <div class="app">
+  <div class="page-root">
+    <div class="outer-card">
+      <div class="badge">
+        <span>🔮</span>
+        <span id="badge-label">K-SISTERS · K-Tarot Reading</span>
+      </div>
 
-    <div class="badge">
-      <span>🔮</span>
-      <span id="badge-label">K-SISTERS · K-Tarot Reading</span>
-    </div>
-
-    <div class="app-shell">
-
-      <!-- 언어 선택 -->
+      <!-- Lang toggle -->
       <div class="lang-toggle">
         <button class="lang-btn active" data-lang="en">EN</button>
         <button class="lang-btn" data-lang="fr">FR</button>
       </div>
 
-      <!-- HEADER -->
       <div class="app-header">
         <div class="app-title" id="app-title-text">K-TAROT: THE HWATU</div>
         <div class="app-tagline" id="app-tagline">
@@ -252,11 +393,12 @@ body {
       <!-- SCREEN 1 -->
       <section id="screen-intro" class="screen">
         <div class="card-slot large" id="intro-card-slot"></div>
-        <div class="step-title" id="step1-title">1. Choose how many times you want to “shuffle”.</div>
+        <div class="step-title" id="step1-title">
+          1. Choose how many times you want to “shuffle”.
+        </div>
         <div class="step-text" id="step1-text">
           Pick a number from 0–9. That number quietly becomes the energetic tone behind your reading.
         </div>
-
         <div class="btn-row" id="number-buttons">
           <button class="num-btn" data-num="0">0</button>
           <button class="num-btn" data-num="1">1</button>
@@ -269,7 +411,6 @@ body {
           <button class="num-btn" data-num="8">8</button>
           <button class="num-btn" data-num="9">9</button>
         </div>
-
         <div class="helper-text" id="helper1">
           Take a breath, think of your question, then tap the number that feels right.
         </div>
@@ -277,17 +418,23 @@ body {
 
       <!-- SCREEN 2 -->
       <section id="screen-pick" class="screen hidden">
-        <div class="step-title" id="step2-title">2. Let one Hwatu card find you.</div>
+        <div class="step-title" id="step2-title">
+          2. Let one Hwatu card find you.
+        </div>
         <div class="step-text" id="step2-text">
-          Three cards are waiting. Choose the one that pulls your eye first.
+          Three cards are waiting. When you’re ready, choose the one that pulls your eye first.
         </div>
-
         <div class="card-row">
-          <div class="card-slot small"><button class="card-button" data-slot="0"></button></div>
-          <div class="card-slot small"><button class="card-button" data-slot="1"></button></div>
-          <div class="card-slot small"><button class="card-button" data-slot="2"></button></div>
+          <div class="card-slot small">
+            <button class="card-button" data-slot="0"></button>
+          </div>
+          <div class="card-slot small">
+            <button class="card-button" data-slot="1"></button>
+          </div>
+          <div class="card-slot small">
+            <button class="card-button" data-slot="2"></button>
+          </div>
         </div>
-
         <div class="helper-text" id="helper2">
           Only the first card you pick will speak for this reading.
         </div>
@@ -295,32 +442,28 @@ body {
 
       <!-- SCREEN 3 -->
       <section id="screen-result" class="screen hidden">
-        <div class="step-title" id="step3-title">3. Your reading for this moment</div>
-
+        <div class="step-title" id="step3-title">
+          3. Your reading for this moment
+        </div>
         <div class="result-card-wrapper">
           <div id="result-card-slot"></div>
         </div>
-
         <button class="secondary-btn" id="again-btn">
           Draw again <span>↻</span>
         </button>
       </section>
-
     </div>
   </div>
-</div>
 
-<!-- 카드 뒷면 -->
-<template id="card-back-template">
-  <div class="card">
-    <img src="images/hwatu/hwatu_card_back.png" class="card-back-img" />
-  </div>
-</template>
+  <!-- 공통 뒷면 카드 템플릿 -->
+  <template id="card-back-template">
+    <div class="card">
+      <img src="images/hwatu/hwatu_card_back.png" alt="Hwatu card back" class="card-back-img" />
+    </div>
+  </template>
 
 <script>
-/* ============================
-   UI STRINGS (EN / FR)
-===============================*/
+/* ============================ UI STRINGS ============================ */
 const UI_STRINGS = {
   en: {
     badge: "K-SISTERS · K-Tarot Reading",
@@ -342,7 +485,7 @@ const UI_STRINGS = {
     badge: "K-SISTERS · Lecture K-Tarot",
     title: "K-TAROT : LE HWATU",
     tagline: "Concentre-toi sur une question, choisis un nombre, puis laisse une carte de Hwatu venir à toi. ✦",
-    step1Title: "1. Choisis combien de fois tu veux « mélanger ».",
+    step1Title: "1. Choisis combien de fois tu veux « mélanger ». ",
     step1Text: "Choisis un nombre de 0 à 9. Ce nombre devient tranquillement le ton énergétique de ta lecture.",
     helper1: "Inspire doucement, pense à ta question, puis touche le chiffre qui te semble juste.",
     step2Title: "2. Laisse une carte de Hwatu te choisir.",
@@ -358,11 +501,9 @@ const UI_STRINGS = {
 
 let currentLang = "en";
 
-/* ============================
-   DATA – Hwatu + Angel Meanings
-===============================*/
+/* ============================ DATA ============================ */
 
-// Hwatu A1~A12 (index 0~11)
+// Hwatu 카드 의미
 const HWATU_MEANINGS = [
   {
     label_en: "The Crane · New message & baby energy",
@@ -438,7 +579,7 @@ const HWATU_MEANINGS = [
   }
 ];
 
-// Angel B1~B10 (index 0~9)
+// Angel numbers
 const ANGEL_MEANINGS = [
   {
     label_en: "000 · Infinite potential",
@@ -502,7 +643,7 @@ const ANGEL_MEANINGS = [
   }
 ];
 
-// Hwatu 카드 이미지 (앞면)
+// 카드 이미지
 const HWATU_CARD_IMAGES = [
   "images/hwatu/The_Crane.png",
   "images/hwatu/Plum_Blossom.png",
@@ -518,18 +659,14 @@ const HWATU_CARD_IMAGES = [
   "images/hwatu/The_Scholar_and_Turtle.png"
 ];
 
-/* ============================
-   STATE
-===============================*/
-let selectedAngelIndex = null;   // 0–9
-let currentHwatuIndices = [];    // 길이 3, 0–11
+/* ============================ STATE ============================ */
+let selectedAngelIndex = null;
+let currentHwatuIndices = [];
 let resultShown = false;
 let lastHwatuIndex = null;
 let lastAngelIndex = null;
 
-/* ============================
-   DOM
-===============================*/
+/* ============================ DOM ============================ */
 const screenIntro  = document.getElementById("screen-intro");
 const screenPick   = document.getElementById("screen-pick");
 const screenResult = document.getElementById("screen-result");
@@ -556,20 +693,15 @@ const helper2El     = document.getElementById("helper2");
 const step3TitleEl  = document.getElementById("step3-title");
 const langButtons   = Array.from(document.querySelectorAll(".lang-btn"));
 
-/* ============================
-   HELPERS
-===============================*/
+/* ============================ HELPERS ============================ */
 function createBackCard() {
   return backTemplate.content.firstElementChild.cloneNode(true);
 }
 
-// intro에 뒷면 카드 1장
+// intro용 뒷면
 introCardSlot.appendChild(createBackCard());
-
-// 선택 화면용 카드 3장
-cardButtons.forEach(btn => {
-  btn.appendChild(createBackCard());
-});
+// 선택 화면용 3장
+cardButtons.forEach(btn => btn.appendChild(createBackCard()));
 
 function showScreen(name) {
   screenIntro.classList.toggle("hidden",  name !== "intro");
@@ -577,7 +709,6 @@ function showScreen(name) {
   screenResult.classList.toggle("hidden", name !== "result");
 }
 
-// 12장 중 3장 랜덤 선택
 function dealHwatuCards() {
   const pool = [...Array(12).keys()];
   const picked = [];
@@ -591,7 +722,6 @@ function dealHwatuCards() {
   lastAngelIndex = null;
 }
 
-// A + B 조합 리딩 만들기 (언어별)
 function buildReading(angelIndex, hwatuIndex) {
   const a = HWATU_MEANINGS[hwatuIndex];
   const b = ANGEL_MEANINGS[angelIndex];
@@ -615,13 +745,11 @@ function playFlipSound() {
     flipSoundEl.currentTime = 0;
     flipSoundEl.play();
   } catch (e) {
-    // 모바일 자동재생 제한용, 에러 무시
+    /* 모바일 자동재생 제한 시 무시 */
   }
 }
 
-/* ============================
-   LANGUAGE APPLY
-===============================*/
+/* ============================ LANGUAGE ============================ */
 function applyLanguage(lang) {
   currentLang = lang;
   document.documentElement.lang = lang;
@@ -644,7 +772,6 @@ function applyLanguage(lang) {
     btn.classList.toggle("active", btn.dataset.lang === lang);
   });
 
-  // 결과가 이미 떠있으면 텍스트만 갱신
   if (resultShown && lastAngelIndex !== null && lastHwatuIndex !== null) {
     const bodyEl = document.querySelector("#screen-result .reading-body");
     const titleEl = document.querySelector("#screen-result .reading-title");
@@ -655,25 +782,18 @@ function applyLanguage(lang) {
   }
 }
 
-/* ============================
-   INTERACTIONS
-===============================*/
-
-// 초기 언어 적용
+/* ============================ INTERACTIONS ============================ */
 applyLanguage("en");
 
-// 언어 버튼
 langButtons.forEach(btn => {
   btn.addEventListener("click", () => {
-    const lang = btn.dataset.lang;
-    applyLanguage(lang);
+    applyLanguage(btn.dataset.lang);
   });
 });
 
-// 숫자 선택
 numberButtons.forEach(btn => {
   btn.addEventListener("click", () => {
-    const num = Number(btn.dataset.num); // 0~9
+    const num = Number(btn.dataset.num);
     selectedAngelIndex = num;
 
     numberButtons.forEach(b => b.classList.remove("active"));
@@ -682,27 +802,22 @@ numberButtons.forEach(btn => {
     setTimeout(() => {
       dealHwatuCards();
       showScreen("pick");
-    }, 350);
+    }, 300);
   });
 });
 
-// 카드 선택 → 결과 화면 + 앞면 카드 + flip으로 리딩
 cardButtons.forEach((btn, slotIndex) => {
   btn.addEventListener("click", () => {
-    if (resultShown) return;
-    if (selectedAngelIndex === null) return;
+    if (resultShown || selectedAngelIndex === null) return;
 
     resultShown = true;
     const hwatuIndex = currentHwatuIndices[slotIndex];
     lastHwatuIndex = hwatuIndex;
     lastAngelIndex = selectedAngelIndex;
 
-    // 다른 버튼 비활성화
     cardButtons.forEach(b => b.classList.add("disabled"));
 
     const reading = buildReading(selectedAngelIndex, hwatuIndex);
-
-    // 결과 카드 렌더
     resultCardSlot.innerHTML = "";
 
     const card3d = document.createElement("div");
@@ -711,12 +826,10 @@ cardButtons.forEach((btn, slotIndex) => {
     const inner3d = document.createElement("div");
     inner3d.className = "card-3d-inner";
 
-    // 앞면 – 화투 이미지
     const frontFace = document.createElement("div");
     frontFace.className = "card-face card-front";
     frontFace.style.backgroundImage = `url('${HWATU_CARD_IMAGES[hwatuIndex]}')`;
 
-    // 뒷면 – 리딩 텍스트
     const backFace = document.createElement("div");
     backFace.className = "card-face card-back";
     backFace.innerHTML = `
@@ -725,7 +838,6 @@ cardButtons.forEach((btn, slotIndex) => {
     `;
     backFace.querySelector(".reading-body").textContent = reading;
 
-    // Tap to reveal overlay
     const overlay = document.createElement("div");
     overlay.className = "tap-overlay";
     overlay.textContent = UI_STRINGS[currentLang].overlayTap;
@@ -738,7 +850,11 @@ cardButtons.forEach((btn, slotIndex) => {
 
     showScreen("result");
 
-    // 첫 클릭 → flip해서 뜻풀이 보여주기
+    setTimeout(() => {
+      overlay.classList.add("show");
+      setTimeout(() => overlay.classList.remove("show"), 1100);
+    }, 600);
+
     let revealed = false;
     card3d.addEventListener("click", () => {
       if (!revealed) {
@@ -750,7 +866,6 @@ cardButtons.forEach((btn, slotIndex) => {
   });
 });
 
-// 다시 뽑기
 againBtn.addEventListener("click", () => {
   selectedAngelIndex = null;
   resultShown = false;
