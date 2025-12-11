@@ -8,66 +8,52 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&display=swap" rel="stylesheet">
 
 <style>
-/* 전체 컨텐츠 70% 스케일 */
-.app-scale-wrapper {
-  transform: scale(0.7);
-  transform-origin: top center;
-  width: 80%;
-}
-
-:root {
-  --bg-dark: #050014;
-  --gold-soft: #fde3a9;
-  --gold-strong: #ffc658;
-  --line-gold: #f5c97b;
-  --accent-red: #ff6b6b;
-  --accent-teal: #39d1bf;
-  --text-main: #fdf7ff;
-  --text-soft: #c8c0f0;
-
-  --glow-pink: #ff8ae6;
-  --glow-cyan: #65f8ff;
-  --deep-violet: #2a0b4e;
-}
-
-/* ============= GLOBAL ============= */
-html {
-  box-sizing: border-box;
-}
-*, *::before, *::after {
-  box-sizing: inherit;
-}
-
+/* ===============================
+   전체 페이지를 하나의 큰 카드로 감싼다
+================================*/
 body {
   margin: 0;
   min-height: 100vh;
-  /* 노치/하단바 포함 안전 여백 */
-  padding-top: 16px;
-  padding-right: calc(16px + env(safe-area-inset-right, 0px));
-  padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
-  padding-left: calc(16px + env(safe-area-inset-left, 0px));
-
-  display: block;
+  padding: 0;
+  display: flex;
+  justify-content: center;
   background:
     radial-gradient(circle at 10% 0%, #5846ff 0, transparent 55%),
     radial-gradient(circle at 80% 100%, #f74f7a33 0, transparent 60%),
     radial-gradient(circle at 0% 100%, #16d9ff33 0, transparent 60%),
     #050014;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: var(--text-main);
   overflow-y: auto;
-  overflow-x: hidden;  /* 옆으로 잘리는 느낌 방지 */
+  overflow-x: hidden;
 }
 
-/* ============= BADGE & APP WRAP ============= */
+/* 🔥 큰 카드 — 전체 앱을 이 박스 안에 넣음 */
+.page-card {
+  width: min(430px, 94vw);
+  margin: 20px auto;
+  padding: 20px 14px 26px;
+  border-radius: 26px;
+
+  background: rgba(0, 0, 0, 0.42);
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.9),
+    0 0 70px rgba(150,120,255,0.55);
+
+  box-sizing: border-box;
+  overflow: hidden; /* 절대 넘치지 않도록 */
+}
+
+/* ===============================
+   내부 앱 구조 그대로 유지
+================================*/
 .app {
-  width: 90%;
-  max-width: 360px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .badge {
@@ -80,28 +66,35 @@ body {
   background:
     radial-gradient(circle at 0% 0%, rgba(255,255,255,0.2), transparent 55%),
     linear-gradient(135deg, rgba(60,34,8,0.95), rgba(120,76,20,0.95));
-  color: var(--gold-soft);
+  color: #fde3a9;
   font-size: 0.95rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow:
-    0 0 12px rgba(255, 215, 160, 0.7),
-    0 0 26px rgba(255, 174, 200, 0.5);
-  text-shadow:
-    0 0 4px rgba(0,0,0,0.9),
-    0 0 10px rgba(255,215,160,0.8);
-  backdrop-filter: blur(4px);
 }
 
-/* ============= LANG TOGGLE ============= */
+/* App Shell (컨텐츠 카드) */
+.app-shell {
+  width: 100%;
+  border-radius: 26px;
+  padding: 22px 16px 24px;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.09), transparent 60%),
+    radial-gradient(circle at bottom, rgba(0,0,0,0.95), transparent 70%),
+    linear-gradient(145deg, #1a0f3b 0%, #070315 50%, #240628 100%);
+  box-shadow: 0 18px 80px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.12);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
 .lang-toggle {
   position: absolute;
   top: 8px;
   right: 10px;
   display: flex;
   gap: 4px;
-  z-index: 3;
 }
+
 .lang-btn {
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.35);
@@ -110,103 +103,63 @@ body {
   font-size: 0.65rem;
   padding: 2px 7px;
   cursor: pointer;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 .lang-btn.active {
   background: linear-gradient(135deg, #ffc658, #ff8ae6);
   color: #1b0d1f;
-  border-color: rgba(255,248,210,0.95);
 }
 
-/* ============= APP SHELL ============= */
-.app-shell {
-  position: relative;
-  width: 100%;
-  max-width: 430px;
-  margin: 0 auto;
-  margin-top: 4px;
-
-  border-radius: 26px;
-  padding: 22px 16px 24px;
-  background:
-    radial-gradient(circle at top, rgba(255,255,255,0.09), transparent 60%),
-    radial-gradient(circle at bottom, rgba(0,0,0,0.95), transparent 70%),
-    linear-gradient(145deg, #1a0f3b 0%, #070315 50%, #240628 100%);
-  box-shadow: 0 18px 80px rgba(0,0,0,0.85);
-  border: 1px solid rgba(255,255,255,0.12);
-  overflow: hidden;
-}
-
-/* ============= HEADER ============= */
+/* HEADER */
 .app-header {
   text-align: center;
   margin-bottom: 10px;
 }
 .app-title {
-  font-family: "Cinzel", "Times New Roman", serif;
+  font-family: "Cinzel", serif;
+  font-size: 1.35rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  font-size: 1.35rem;
-  color: var(--gold-soft);
+  color: #fde3a9;
 }
 .app-title::after {
   content: "✶";
   display: block;
   font-size: 1.8rem;
   margin-top: 4px;
-  color: var(--glow-cyan);
+  color: #65f8ff;
 }
 .app-tagline {
   margin-top: 6px;
   font-size: 0.9rem;
   color: #9fd6ff;
-  text-shadow: 0 0 4px rgba(29,117,189,0.7);
 }
 
-/* ============= SCREEN COMMON ============= */
-.screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
+/* Screens */
+.screen { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .hidden { display: none !important; }
 
 .step-title {
-  font-weight: 600;
   font-size: 1rem;
-  text-align: center;
+  font-weight: 600;
   color: #ffe8b6;
-}
-.step-text,
-.helper-text {
-  font-size: 0.9rem;
-  color: var(--text-soft);
-  line-height: 1.4;
   text-align: center;
-  padding: 0 4px;
+}
+.step-text, .helper-text {
+  font-size: 0.9rem;
+  color: #c8c0f0;
+  text-align: center;
+  line-height: 1.4;
 }
 
-/* ============= NUMBER ROW ============= */
+/* 숫자 버튼 */
 .btn-row {
   width: 100%;
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
   gap: 6px;
-  margin-top: 4px;
-  margin-bottom: 4px;
   overflow-x: auto;
-  padding: 0 4px 6px;
-}
-.btn-row::-webkit-scrollbar { height: 4px; }
-.btn-row::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
-  border-radius: 999px;
+  padding-bottom: 6px;
 }
 .num-btn {
-  flex: 0 0 auto;
   min-width: 40px;
   height: 40px;
   border-radius: 999px;
@@ -214,278 +167,155 @@ body {
   background:
     radial-gradient(circle at 30% 0%, rgba(255,255,255,0.2), transparent 60%),
     linear-gradient(140deg, #2d214d, #15152f);
-  color: var(--gold-soft);
-  font-weight: 600;
+  color: #fde3a9;
   font-size: 1rem;
+  font-weight: 600;
 }
 .num-btn.active {
-  background:
-    radial-gradient(circle at 10% 0%, #fff9d4 0, transparent 60%),
-    linear-gradient(150deg, #ffc958, #ff7f55);
+  background: linear-gradient(150deg, #ffc958, #ff7f55);
   color: #2b1200;
-  border-color: rgba(255,248,210,0.95);
 }
 
-/* ============= CARDS ============= */
-.card-slot { display: flex; justify-content: center; }
-.card-slot.large { margin-top: 4px; }
+/* 카드 */
+.card { width: 80%; max-width: 260px; aspect-ratio: 3/5; border-radius: 22px; overflow: hidden; }
+.card-slot.small .card { width: 26vw; max-width: 120px; }
 
-.card-row {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
+.card-back-img { width: 100%; height: 100%; object-fit: cover; }
 
-.card-button {
-  background: none;
-  border: none;
-  padding: 3px;
-  cursor: pointer;
-  border-radius: 22px;
-}
-.card-button.disabled {
-  pointer-events: none;
-  opacity: 0.7;
-}
+/* Result Card 3D */
+.card-3d { width: 80%; max-width: 260px; aspect-ratio: 3/5; position: relative; perspective: 1000px; cursor: pointer; }
+.card-3d-inner { width: 100%; height: 100%; transition: transform .7s; transform-style: preserve-3d; }
+.card-3d.flipped .card-3d-inner { transform: rotateY(180deg); }
 
-.card {
-  width: 80%;
-  max-width: 260px;
-  aspect-ratio: 3 / 5;
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: 0 18px 70px rgba(0,0,0,0.9);
-}
-.card-slot.small .card {
-  width: 26vw;
-  max-width: 120px;
-}
-
-.card-back-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* ============= RESULT CARD (3D) ============= */
-.result-card-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 6px;
-}
-
-.card-3d {
-  width: 80%;
-  max-width: 260px;
-  aspect-ratio: 3/5;
-  perspective: 1200px;
-  cursor: pointer;
-  position: relative;
-}
-.card-3d-inner {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.7s ease;
-}
-.card-3d.flipped .card-3d-inner {
-  transform: rotateY(180deg);
-}
-
-.card-face {
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  backface-visibility: hidden;
-  overflow: hidden;
-}
-.card-front {
-  background-size: cover;
-  background-position: center;
-}
+.card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px; overflow: hidden; }
+.card-front { background-size: cover; background-position: center; }
 .card-back {
   transform: rotateY(180deg);
-  padding: 10px 10px 12px;
-  background:
-    radial-gradient(circle at top, rgba(255,255,255,0.12) 0, transparent 60%),
-    radial-gradient(circle at 0% 100%, rgba(101,248,255,0.15) 0, transparent 55%),
-    linear-gradient(180deg, rgba(6,3,20,0.96), rgba(3,1,10,0.99));
+  padding: 10px;
+  background: linear-gradient(180deg, #0f0a22, #02010a);
   border: 1px solid rgba(249,226,176,0.65);
 }
+.reading-title { text-align: center; color: #fde3a9; letter-spacing: 0.4em; font-size: 0.9rem; margin-bottom: 4px; }
+.reading-body { font-size: 0.9rem; color: white; line-height: 1.45; white-space: pre-wrap; }
 
-.reading-title {
-  font-size: 0.9rem;
-  letter-spacing: 0.4em;
-  text-transform: uppercase;
-  color: var(--gold-soft);
-  text-align: center;
-  margin-bottom: 4px;
-}
-
-.reading-body {
-  font-size: 0.9rem;
-  color: var(--text-main);
-  line-height: 1.45;
-  overflow-y: auto;
-  white-space: pre-wrap;
-}
-
-/* overlay */
-.tap-overlay {
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background: rgba(0,0,0,0.42);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--gold-soft);
-  font-size: 0.95rem;
-  font-weight: 600;
-  opacity: 0;
-  pointer-events: none;
-  text-shadow: 0 0 12px rgba(255,220,160,0.8);
-  transition: opacity 0.3s ease;
-}
-.tap-overlay.show { opacity: 1; }
-
-/* AGAIN BUTTON */
+/* Again Button */
 .secondary-btn {
   margin-top: 12px;
   padding: 8px 16px;
   border-radius: 999px;
-  border: 1px solid rgba(151,132,255,0.9);
-  background:
-    radial-gradient(circle at top, rgba(255,255,255,0.16), transparent 65%),
-    linear-gradient(140deg, rgba(50,32,120,0.95), rgba(18,11,60,0.98));
-  color: #e2ddff;
   font-size: 1.2rem;
+  border: 1px solid rgba(151,132,255,0.9);
+  color: #e2ddff;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  background: linear-gradient(140deg,rgba(50,32,120,0.95),rgba(18,11,60,0.98));
 }
 
-/* ============= SMALL HEIGHT ============= */
-@media (max-height: 700px) {
+/* Responsive */
+@media (max-width: 480px) {
+  .page-card { width: 94vw; }
+  .app-shell { padding: 18px 12px; }
   .reading-body { font-size: 0.85rem; }
 }
-
-/* ============= SMALL WIDTH (모바일 공통) ============= */
-@media (max-width: 480px) {
-  .app-shell {
-    max-width: 420px;
-    padding: 20px 14px 22px;
-  }
-  .step-text,
-  .helper-text {
-    font-size: 0.88rem;
-  }
-}
 </style>
-
 </head>
 
 <body>
-  <!-- 카드 flip 사운드 -->
+
+<!-- 전체 앱을 감싸는 대형 카드 -->
+<div class="page-card">
+
   <audio id="flip-sound" src="sounds/card-flip-sound.mp3" preload="auto"></audio>
 
-  <div class="app-scale-wrapper">
-    <div class="app">
-      <div class="badge">
-        <span>🔮</span>
-        <span id="badge-label">K-SISTERS · K-Tarot Reading</span>
+  <div class="app">
+
+    <div class="badge">
+      <span>🔮</span>
+      <span id="badge-label">K-SISTERS · K-Tarot Reading</span>
+    </div>
+
+    <div class="app-shell">
+
+      <!-- 언어 선택 -->
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
       </div>
 
-      <div class="app-shell">
-        <!-- Lang toggle -->
-        <div class="lang-toggle">
-          <button class="lang-btn active" data-lang="en">EN</button>
-          <button class="lang-btn" data-lang="fr">FR</button>
+      <!-- HEADER -->
+      <div class="app-header">
+        <div class="app-title" id="app-title-text">K-TAROT: THE HWATU</div>
+        <div class="app-tagline" id="app-tagline">
+          Focus on a question, choose a number, then let one Hwatu card find you. ✦
+        </div>
+      </div>
+
+      <!-- SCREEN 1 -->
+      <section id="screen-intro" class="screen">
+        <div class="card-slot large" id="intro-card-slot"></div>
+        <div class="step-title" id="step1-title">1. Choose how many times you want to “shuffle”.</div>
+        <div class="step-text" id="step1-text">
+          Pick a number from 0–9. That number quietly becomes the energetic tone behind your reading.
         </div>
 
-        <div class="app-header">
-          <div class="app-title" id="app-title-text">K-TAROT: THE HWATU</div>
-          <div class="app-tagline" id="app-tagline">
-            Focus on a question, choose a number, 
-            then let one Hwatu card find you. ✦
-          </div>
+        <div class="btn-row" id="number-buttons">
+          <button class="num-btn" data-num="0">0</button>
+          <button class="num-btn" data-num="1">1</button>
+          <button class="num-btn" data-num="2">2</button>
+          <button class="num-btn" data-num="3">3</button>
+          <button class="num-btn" data-num="4">4</button>
+          <button class="num-btn" data-num="5">5</button>
+          <button class="num-btn" data-num="6">6</button>
+          <button class="num-btn" data-num="7">7</button>
+          <button class="num-btn" data-num="8">8</button>
+          <button class="num-btn" data-num="9">9</button>
         </div>
 
-        <!-- SCREEN 1 -->
-        <section id="screen-intro" class="screen">
-          <div class="card-slot large" id="intro-card-slot"></div>
-          <div class="step-title" id="step1-title">
-            1. Choose how many times you want to “shuffle”.
-          </div>
-          <div class="step-text" id="step1-text">
-            Pick a number from 0–9. That number quietly becomes the energetic tone behind your reading.
-          </div>
-          <div class="btn-row" id="number-buttons">
-            <button class="num-btn" data-num="0">0</button>
-            <button class="num-btn" data-num="1">1</button>
-            <button class="num-btn" data-num="2">2</button>
-            <button class="num-btn" data-num="3">3</button>
-            <button class="num-btn" data-num="4">4</button>
-            <button class="num-btn" data-num="5">5</button>
-            <button class="num-btn" data-num="6">6</button>
-            <button class="num-btn" data-num="7">7</button>
-            <button class="num-btn" data-num="8">8</button>
-            <button class="num-btn" data-num="9">9</button>
-          </div>
-          <div class="helper-text" id="helper1">
-            Take a breath, think of your question, then tap the number that feels right.
-          </div>
-        </section>
+        <div class="helper-text" id="helper1">
+          Take a breath, think of your question, then tap the number that feels right.
+        </div>
+      </section>
 
-        <!-- SCREEN 2 -->
-        <section id="screen-pick" class="screen hidden">
-          <div class="step-title" id="step2-title">
-            2. Let one Hwatu card find you.
-          </div>
-          <div class="step-text" id="step2-text">
-            Three cards are waiting. When you’re ready, choose the one that pulls your eye first.
-          </div>
-          <div class="card-row">
-            <div class="card-slot small">
-              <button class="card-button" data-slot="0"></button>
-            </div>
-            <div class="card-slot small">
-              <button class="card-button" data-slot="1"></button>
-            </div>
-            <div class="card-slot small">
-              <button class="card-button" data-slot="2"></button>
-            </div>
-          </div>
-          <div class="helper-text" id="helper2">
-            Only the first card you pick will speak for this reading.
-          </div>
-        </section>
+      <!-- SCREEN 2 -->
+      <section id="screen-pick" class="screen hidden">
+        <div class="step-title" id="step2-title">2. Let one Hwatu card find you.</div>
+        <div class="step-text" id="step2-text">
+          Three cards are waiting. Choose the one that pulls your eye first.
+        </div>
 
-        <!-- SCREEN 3 -->
-        <section id="screen-result" class="screen hidden">
-          <div class="step-title" id="step3-title">
-            3. Your reading for this moment
-          </div>
-          <div class="result-card-wrapper">
-            <div id="result-card-slot"></div>
-          </div>
-          <button class="secondary-btn" id="again-btn">
-            Draw again <span>↻</span>
-          </button>
-        </section>
-      </div><!-- /.app-shell -->
-    </div><!-- /.app -->
-  </div><!-- /.app-scale-wrapper -->
+        <div class="card-row">
+          <div class="card-slot small"><button class="card-button" data-slot="0"></button></div>
+          <div class="card-slot small"><button class="card-button" data-slot="1"></button></div>
+          <div class="card-slot small"><button class="card-button" data-slot="2"></button></div>
+        </div>
 
-  <!-- 공통 뒷면 카드 템플릿 -->
-  <template id="card-back-template">
-    <div class="card">
-      <img src="images/hwatu/hwatu_card_back.png" alt="Hwatu card back" class="card-back-img" />
+        <div class="helper-text" id="helper2">
+          Only the first card you pick will speak for this reading.
+        </div>
+      </section>
+
+      <!-- SCREEN 3 -->
+      <section id="screen-result" class="screen hidden">
+        <div class="step-title" id="step3-title">3. Your reading for this moment</div>
+
+        <div class="result-card-wrapper">
+          <div id="result-card-slot"></div>
+        </div>
+
+        <button class="secondary-btn" id="again-btn">
+          Draw again <span>↻</span>
+        </button>
+      </section>
+
     </div>
-  </template>
+  </div>
+</div>
+
+<!-- 카드 뒷면 -->
+<template id="card-back-template">
+  <div class="card">
+    <img src="images/hwatu/hwatu_card_back.png" class="card-back-img" />
+  </div>
+</template>
 
 <script>
 /* ============================
