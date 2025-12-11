@@ -32,7 +32,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 12px;
+  padding: 20px 12px;         /* 화면 가장자리 기본 여백 */
   background:
     radial-gradient(circle at 10% 0%, #5846ff 0, transparent 55%),
     radial-gradient(circle at 80% 100%, #f74f7a33 0, transparent 60%),
@@ -144,6 +144,7 @@ body::before {
   overflow: hidden;
 }
 
+/* 헤더 */
 .app-header {
   text-align: center;
   margin-bottom: 14px;
@@ -280,7 +281,7 @@ body::before {
   opacity: 0.7;
 }
 
-/* 단순 뒷면 카드: 이미지 꽉 채우기 */
+/* 뒷면 카드 */
 .card {
   width: 230px;
   aspect-ratio: 3 / 5;
@@ -402,7 +403,7 @@ body::before {
   }
 }
 .card-3d.card-enter {
-  animation: card-rise-glow 0.8s ease-out forwards;
+  animation: card-rise-glow 0.8s.ease-out forwards;
 }
 
 /* subtle pulse */
@@ -456,7 +457,7 @@ body::before {
     0 0 18px rgba(129,116,255,0.9),
     0 0 40px rgba(255,138,230,0.65);
   text-shadow: 0 0 6px rgba(0,0,0,0.9);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s.ease;
 }
 .secondary-btn span { transition: transform 0.25s ease; }
 .secondary-btn:hover {
@@ -469,6 +470,24 @@ body::before {
 
 @media (max-height: 700px) {
   .reading-body { font-size: 1rem; }
+}
+
+/* 🔍 모바일에서 여백 좀 더 주고 카드 폭 줄이기 */
+@media (max-width: 480px) {
+  body {
+    padding: 16px 10px;             /* 화면 가장자리 여백 */
+  }
+  .app-shell {
+    max-width: 420px;
+    padding: 26px 14px 18px;        /* 카드랑 테두리 사이 여백 */
+  }
+  .card,
+  .card-3d {
+    width: min(220px, 72vw);        /* 카드가 화면에 꽉 차지 않게 */
+  }
+  .card-slot.small .card {
+    width: min(120px, 26vw);
+  }
 }
 </style>
 </head>
